@@ -1,0 +1,16 @@
+@tailwind base
+@tailwind components
+@tailwind utilities
+
+:root
+  @apply font-inter text-dark
+
+@layer utilities
+  .focus-ring
+    @apply focus:outline-none focus-visible:outline-accent focus-visible:outline-offset-2
+
+  .focus-ring-white
+    @apply focus:outline-none focus-visible:outline-white focus-visible:outline-offset-2
+
+  .desktop-container
+    @apply max-w-[61rem] mx-auto
