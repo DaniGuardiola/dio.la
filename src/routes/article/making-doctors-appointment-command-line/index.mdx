@@ -1,0 +1,299 @@
+---
+date: 2021/04/23
+title: Making a doctor's appointment from the command line
+description: Reverse-engineering an appointment-making app to create a doctor's appointment CLI.
+topics:
+  - react
+  - typescript
+---
+
+hello
+
+```ts twoslash
+// @errors: 2339
+const welcome = "Tudo bem gente?";
+const words = welcome.contains(" ");
+const welcome2 = "Tudo bem gente?";
+const words2 = welcome.contains(" ");
+const welcome3 = "Tudo bem gente?";
+const words3 = welcome.contains(" ");
+```
+
+```ts twoslash {1, 3-4}
+function greet(person: string) {
+  console.log(`Hello ${person},`);
+  console.log(`How do?`);
+}
+greet("Maddison");
+```
+
+```twoslash include main
+const a = 1;
+// - 1
+const b = "2";
+// - 2
+const c = 'string';
+```
+
+Let's talk a bit about `a`:
+
+```ts twoslash
+// @include: main-1
+```
+
+`a` can be added to anosther number
+
+```ts twoslash
+// @include: main-1
+// ---cut---
+const nextA = a + 13;
+```
+
+Look what happens when you add `a + b`
+
+```ts twoslash
+// @include: main-2
+// ---cut---
+const result = a + b;
+//    ^?
+```
+
+Finally here is `c`:
+
+```ts twoslash
+// @include: main
+// ---cut---
+c.toString();
+```
+
+import image from "./tmp.avif";
+
+Good one!!
+
+[![image alt lol](./tmp.avif)](./lmao)
+
+[link test](./lol)
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc finibus eget urna a dictum. Donec ac dui et dui cursus ullamcorper. Aenean consectetur cursus tristique. Nullam vehicula eros eget aliquet consequat. Nunc dictum odio vel pulvinar posuere. Fusce semper odio eget pharetra facilisis. Ut at nunc neque. Vivamus ullamcorper libero vel porttitor aliquet.
+
+```ts twoslash
+interface IdLabel {
+  id: number /* some fields */;
+}
+interface NameLabel {
+  name: string /* other fields */;
+}
+type NameOrId<T extends number | string> = T extends number
+  ? IdLabel
+  : NameLabel;
+// This comment should not be included
+
+// ---cut---
+function createLabel<T extends number | string>(idOrName: T): NameOrId<T> {
+  throw "unimplemented";
+}
+
+let a = createLabel("typescript");
+```
+
+# Heading 1
+
+> Note: you can also achieve this by doing this and that!
+>
+> Even with this and that:
+>
+> - Hello
+>   - I'm just a list
+>   - Bruh
+
+## Heading 2
+
+### Heading 3
+
+# Hello
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc finibus eget urna a dictum. Donec ac dui et dui cursus ullamcorper. Aenean consectetur cursus tristique. Nullam vehicula eros eget aliquet consequat. Nunc dictum odio vel pulvinar posuere. Fusce semper odio eget pharetra facilisis. Ut at nunc neque. Vivamus ullamcorper libero vel porttitor aliquet.
+
+Curabitur pharetra metus id ligula consectetur, eu imperdiet justo venenatis. Mauris vel diam in massa molestie dictum. Vestibulum sit amet aliquam justo. In in velit sit amet mi euismod imperdiet. Aliquam consequat elementum dolor, sed sagittis mauris gravida sed. Suspendisse luctus justo dignissim mollis rhoncus. Cras metus velit, vulputate nec massa vel, imperdiet molestie tellus. Phasellus vitae sagittis quam, rhoncus facilisis lacus. Nulla facilisis orci consectetur neque laoreet, vitae malesuada nibh finibus. Nulla leo lectus, pharetra ut lacus vulputate, pharetra porttitor metus.
+
+## Yoo
+
+Mauris mattis mattis elit, ultricies porttitor augue ullamcorper vitae. Donec aliquam sagittis eros, consequat convallis lorem posuere vestibulum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in egestas purus. Aliquam euismod lorem et porttitor finibus. Quisque vitae magna dolor. Aliquam nec lacus non urna facilisis porttitor ut nec ligula.
+
+### Bruh
+
+Phasellus varius purus tortor, ut tempor lectus dignissim et. Vivamus facilisis leo orci, eu fermentum mi finibus id. Integer et eleifend arcu. Aliquam ut lobortis diam. Nullam vestibulum vitae erat eget viverra. Proin id quam ligula. Pellentesque lorem enim, varius id vulputate eu, imperdiet id augue. Quisque ac est mi. Aliquam molestie ultricies lectus, ac consequat ipsum convallis molestie. Cras a nibh vitae nibh varius maximus nec vitae massa. Fusce eget rutrum odio. Sed non tortor pharetra, facilisis enim eget, consectetur turpis.
+
+### Hi there!
+
+Mauris mattis mattis elit, ultricies porttitor augue ullamcorper vitae. Donec aliquam sagittis eros, consequat convallis lorem posuere vestibulum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam in egestas purus. Aliquam euismod lorem et porttitor finibus. Quisque vitae magna dolor. Aliquam nec lacus non urna facilisis porttitor ut nec ligula.
+
+# Markdown test
+
+This a test of all markdown possibilities:
+
+---
+
+## Headings
+
+# h1 Heading 1
+
+## h2 Heading 2
+
+### h3 Heading 3
+
+#### h4 Heading 4
+
+##### h5 Heading 5
+
+###### h6 Heading 6
+
+---
+
+## Horizontal Rules
+
+---
+
+---
+
+---
+
+---
+
+## Emphasis
+
+**This is bold text**
+
+**This is bold text**
+
+_This is italic text_
+
+_This is italic text_
+
+~~Strikethrough~~
+
+---
+
+## Links
+
+[link text][1]
+
+[link with title][2]
+
+This is [an example](http://example.com/ "Title") inline link.
+
+[This link](http://example.net/) has no title attribute.
+
+---
+
+## Blockquotes
+
+> Blockquotes can also be nested...
+>
+> > ...by using additional greater-than signs right next to each other...
+> >
+> > > ...or with spaces between arrows.
+> > >
+> > > ...hello.
+> >
+> > bruh
+
+---
+
+## Indentation
+
+indentation 1-1
+
+indentation 1-2
+indentation 2-1
+
+---
+
+## Lists
+
+### Unordered
+
+- Create a list by starting a line with `+`, `-`, or `*`
+- Sub-lists are made by indenting 2 spaces:
+  - Marker character change forces new list start:
+    - Ac tristique libero volutpat at
+    * Facilisis in pretium nisl aliquet
+    - Nulla volutpat aliquam velit
+- Very easy!
+
+### Ordered
+
+#### Numers in sequence
+
+1. Lorem ipsum dolor sit amet
+2. Consectetur adipiscing elit
+3. Integer molestie lorem at massa
+
+#### Numers not in sequence
+
+1. You can use sequential numbers...
+1. ...or keep all the numbers as `1.`
+
+---
+
+## Images
+
+![Minion][3]
+![Stormtroopocat][4]
+
+Like links, Images also have a footnote style syntax
+
+![Alt text][5]
+
+With a reference later in the document defining the URL location:
+
+---
+
+## Tables
+
+| Option | Description                                                               |
+| ------ | ------------------------------------------------------------------------- |
+| data   | path to data files to supply the data that will be passed into templates. |
+| engine | engine to be used for processing templates. Handlebars is the default.    |
+| ext    | extension to be used for dest files.                                      |
+
+Right aligned columns
+
+| Option |                                                               Description |
+| -----: | ------------------------------------------------------------------------: |
+|   data | path to data files to supply the data that will be passed into templates. |
+| engine |    engine to be used for processing templates. Handlebars is the default. |
+|    ext |                                      extension to be used for dest files. |
+
+---
+
+## Code
+
+Inline `code`
+
+Indented code
+
+    // Some comments
+    line 1 of code
+    line 2 of code
+    line 3 of code
+
+Block code "fences"
+
+```
+Sample text here...
+```
+
+Syntax highlighting
+
+```json
+{ "json": true }
+```
+
+---
+
+[1]: http://dev.nodeca.com
+[2]: http://nodeca.github.io/pica/demo/ "title text!"
+[3]: https://octodex.github.com/images/dinotocat.png
+[4]: https://octodex.github.com/images/saritocat.png "The Stormtroopocat"
+[5]: https://octodex.github.com/images/daftpunktocat-thomas.gif "The Dojocat"

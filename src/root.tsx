@@ -1,5 +1,5 @@
 // @refresh reload
-import { A } from "@solidjs/router";
+import { A } from "solid-start";
 import clsx from "clsx";
 import {
   ComponentProps,
@@ -22,7 +22,7 @@ import {
 } from "solid-start";
 import "./root.sass";
 
-const SCROLL_OFFSET = 400;
+const SCROLL_OFFSET = 420;
 
 function NavLink(props: ComponentProps<typeof A>) {
   return (
@@ -68,7 +68,7 @@ function Header() {
 
   return (
     <header
-      class="fixed inset-x-0 top-0 bg-white select-none transition-[height] flex items-center"
+      class="fixed z-10 inset-x-0 top-0 bg-white select-none transition-[height] flex items-center"
       classList={{
         "h-[5rem] sm:h-[11.25rem]": !scrolled(),
         "h-[3.5rem] sm:h-[4.5rem]": scrolled(),
@@ -147,19 +147,19 @@ export default function Root() {
           crossorigin="anonymous"
         />
         <Link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto+Mono:wght@400;700&family=Roboto+Slab&display=swap"
           rel="stylesheet"
         />
       </Head>
       <Body>
         <ErrorBoundary>
+          <div id="skip-link-area" />
           <Header />
           <Suspense>
             <main class="pt-[5rem] sm:pt-[11.25rem]">
               <Routes>
                 <FileRoutes />
               </Routes>
-              <div class="h-[20000px]"></div>
             </main>
           </Suspense>
         </ErrorBoundary>

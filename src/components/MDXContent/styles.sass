@@ -1,0 +1,60 @@
+@use './code'
+
+.mdx-content
+  @include code.styles
+
+  @apply break-words text-[1rem]
+
+  & p
+    @apply my-[1.25em]
+
+  & h1
+    @apply font-bold text-[2.25rem] leading-[1.1] mt-[1.5em] mb-[1em]
+
+  & h2
+    @apply font-bold text-[1.5rem] leading-[1.3] mt-[2em] mb-[1em]
+
+  & h3
+    @apply text-[1.25rem]
+
+  & :is(h3, h4, h5, h6)
+    @apply font-semibold leading-[1.6] mt-[1.6em] mb-[.6em]
+
+  & :is(h4, h5, h6)
+    @apply text-[1rem]
+
+  & :is(h1, h2, h3, h4, h5, h6)
+    @apply focus-scroll-target
+
+    & + *
+      @apply mt-0
+
+  & img
+    @apply bg-white mx-auto my-[1.8em] rounded lg:rounded-lg shadow
+
+  & a
+    @apply text-accent hover:underline focus-ring rounded-sm focus-scroll-target
+
+    & img
+      @apply transition-shadow hover:shadow-lg
+
+  & blockquote
+    @apply relative overflow-hidden bg-gray-200 font-roboto-slab -mx-4 py-4 px-8 my-[1.25em] lg:rounded-lg
+
+    &::before
+      @apply content-[""] absolute inset-y-0 left-0 w-2 bg-gray-500
+
+    & p
+      @apply m-0
+
+    & blockquote
+      @apply my-[.8em] ml-1 overflow-visible
+
+      &:last-child
+        @apply mb-[-1em]
+
+  & hr
+    @apply my-[3em] border-t border-gray-200
+
+  // & :is(h1, h2, h3, h4, h5, h6) > a
+  //   @apply relative text-gray-900

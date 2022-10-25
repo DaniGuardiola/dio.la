@@ -1,12 +1,31 @@
 # To do
 
-- Topic search
 - Article view
+  - Skip links
+  - Proper focus rings/scroll margin
+  - Fix hot reload issue
+  - Finish shiki/twoslash styling
+  - Lists
+  - Headings as links
+  - Estimated reading time
+  - Format date in header
+  - For later:
+    - Tables
+    - ToC
+    - Topics
+    - Related or/and next/prev article links
+  - Headings as anchor links
+- Generate articles data from filesystem & frontmatters
 - About page
 - Head meta & titles
 - OG images (satori)
 - Deploy on Vercel
 - Write 10 initial articles
 - Write a nice README
+- 404 page
+- Error fallback
+- Favicon
+- RSS
 - Update domain and redirect everywhere
 - Update URL on social media, etc
+- Hire illustrator to make nice main images for articles (and some secondary illustrations as needed)

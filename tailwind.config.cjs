@@ -10,7 +10,11 @@ module.exports = {
         "subtle-white": "#ffffffd1",
       },
       colors: { accent: "#046b46" },
-      fontFamily: { inter: ['"Inter"', "sans-serif"] },
+      fontFamily: {
+        inter: ['"Inter"', "sans-serif"],
+        "roboto-mono": ['"Roboto Mono"', "monospace"],
+        "roboto-slab": ['"Roboto Slab"', "serif"],
+      },
     },
   },
   plugins: [],
