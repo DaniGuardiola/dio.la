@@ -17,6 +17,12 @@ export type ArticleMetadata = {
 
 export const ARTICLES: ArticleMetadata[] = [
   {
+    id: "a-polite-twitter-request",
+    date: "2022/10/26",
+    title: "Hello Twitter employee!",
+    description: "A polite request.",
+  },
+  {
     id: "the-world-of-design-tokens",
     date: "2022/06/12",
     title: "The world of Design Tokens",
