@@ -69,7 +69,7 @@ function ArticleHeader() {
             <img
               alt="This article's main image"
               src={metadata().imageUrl}
-              class="w-full object-cover aspect-[1.91/1] rounded shadow-lg"
+              class="bg-white w-full object-cover aspect-[1.91/1] rounded shadow-lg"
             />
           </div>
         </div>

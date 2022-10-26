@@ -10,13 +10,16 @@
     & .code-container
       @apply grow
 
+    & .line
+      @apply min-h-[1rem]
+
     // TS playground link
     & .code-container > a
       @apply transition-opacity ease-out opacity-0
       @apply absolute translate-x-[-.625rem] translate-y-[.625rem] text-[0] select-none
 
       &:is(:hover, :focus-visible)
-        @apply opacity-100 no-underline outline-white
+        @apply opacity-100 no-underline outline-white z-10
 
       &::after
         @apply content-["Open_in_playground"] text-[1rem]
@@ -43,20 +46,16 @@
       @apply block absolute -translate-x-0 -translate-y-3
       @apply text-[.8rem] select-none
 
-    &.shiki
+    // code highlights
+    & .dim
+      @apply m-0 p-0
+      @apply transition-opacity ease-out opacity-50
 
-      & .line
-        @apply min-h-[1rem]
+    &:hover .dim
+      @apply opacity-100
 
-      & .dim
-        @apply m-0 p-0
-        @apply transition-opacity ease-out opacity-50
-
-      &:hover .dim
-        @apply opacity-100
-
-      & .highlight
-        @apply bg-white/10 -mx-4 px-4 opacity-100
+    & .highlight
+      @apply bg-white/10 -mx-4 px-4 opacity-100
 
     &.twoslash
 
@@ -98,130 +97,42 @@
       & .code
         @apply ml-auto px-2 font-bold
 
-    // --- untested styles --- //
+    // type highlight
+    & .arrow
+      @apply bg-gray-50 relative w-2 h-2
+      @apply translate-x-[.1rem] translate-y-[-.25rem] rotate-45
 
-    .query
-      margin-bottom: 10px
-      color: #137998
-      display: inline-block
+    & .popover
+      @apply bg-gray-50 my-2 text-dark inline-block px-[.5rem] pt-0 pb-[.3rem] rounded
 
-    .arrow
-      /* Transparent background
-      background-color: #eee
-      position: relative
-      top: -7px
-      margin-left: 0.1rem
+    // completions
+    &:hover .inline-completions::before
+      @apply motion-safe:animate-[completion-cursor-blink_1s_steps(1)_infinite] duration-200
 
-      /* Edges
-      border-left: 1px solid #eee
-      border-top: 1px solid #eee
-      transform: translateY(25%) rotate(45deg)
-
-      /* Size
-      height: 8px
-      width: 8px
-
-    .popover
-      margin-bottom: 10px
-      background-color: #eee
-      color: #000
-      display: inline-block
-      padding: 0 0.5rem 0.3rem
-      margin-top: 10px
-      border-radius: 3px
-
-    .inline-completions ul.dropdown
-      display: inline-block
-      position: absolute
-      width: 240px
-      background-color: gainsboro
-      color: grey
-      padding-top: 4px
-      font-family: var(--code-font)
-      font-size: 0.8rem
-      margin: 0
-      padding: 0
-      border-left: 4px solid #4b9edd
-
+    & .inline-completions
       &::before
-        background-color: #4b9edd
-        width: 2px
-        position: absolute
-        top: -1.2rem
-        left: -3px
-        content: " "
+        @apply absolute content-['_'] w-0 ring-[.06rem] ring-white/90 scale-y-75 -translate-y-6 -translate-x-[.05rem]
+    
+      & ul.dropdown
+        @apply inline-block z-[5] absolute max-w-[15rem] translate-x-[calc(var(--scroll-x)*-1)]
+        @apply bg-gray-900 border border-gray-700 text-white/80 max-h-48 overflow-auto
 
-      li
-        overflow-x: hidden
-        padding-left: 4px
-        margin-bottom: 4px
+        & li
+          @apply overflow-hidden px-2 my-1 select-none cursor-pointer
 
-        &.deprecated
-          text-decoration: line-through
+          &:hover
+            @apply bg-blue-900
+          // TODO: highlight on hover
 
-        span
-          &.result-found
-            color: #4b9edd
+          &.deprecated
+            @apply line-through text-white/60
 
-          &.result
-            width: 100px
-            color: black
-            display: inline-block
+          & span
+            &.result-found
+              @apply text-blue-500 font-bold
 
-  .tag-container
-    position: relative
-
-    .twoslash-annotation
-      position: absolute
-      font-family: "JetBrains Mono", Menlo, Monaco, Consolas, Courier New, monospace
-      right: -10px
-
-      /** Default annotation text to 200px
-      width: 200px
-      color: #187abf
-      background-color: #fcf3d9 bb
-
-      p
-        text-align: left
-        font-size: 0.8rem
-        line-height: 0.9rem
-
-      svg
-        float: left
-        margin-left: -44px
-
-      &.left
-        right: auto
-        left: -200px
-
-        svg
-          float: right
-          margin-right: -5px
-
-  pre .logger
-    display: flex
-    align-items: center
-    color: black
-    padding: 6px
-    padding-left: 8px
-    width: calc(100% - 19px)
-    white-space: pre-wrap
-
-    svg
-      margin-right: 9px
-
-    &.error-log
-      background-color: #fee
-      border-left: 2px solid #bf1818
-
-    &.warn-log
-      background-color: #ffe
-      border-left: 2px solid #eae662
-
-    &.log-log
-      background-color: #e9e9e9
-      border-left: 2px solid #ababab
-
-      svg
-        margin-left: 6px
-        margin-right: 9px
+@keyframes completion-cursor-blink
+  0%
+    opacity: 1
+  50% 
+    opacity: 0

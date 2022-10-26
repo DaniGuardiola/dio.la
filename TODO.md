@@ -1,9 +1,7 @@
 # To do
 
 - Article view
-  - Finish shiki/twoslash styling
   - Lists
-  - Headings as links
   - Estimated reading time
   - Format date in header
 - About page
@@ -19,6 +17,7 @@
 - Article view
   - Fix/report hot reload issue
   - Tables
+  - Headings as links
   - ToC
   - Topics
   - Related or/and next/prev article links
@@ -34,3 +33,8 @@
 - Fix upstream shiki-twoslash issues:
   - ESM
   - remark: html raw
+- Fix/complete shiki-twoslash features (and then complete styles):
+  - inline code highlights
+  - logger
+  - annotations
+- Image fallbacks on error

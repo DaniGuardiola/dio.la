@@ -7,13 +7,35 @@ topics:
   - typescript
 ---
 
+```ts twoslash
+// @errors: 2304
+// @strict: false
+
+function compact(arr) {
+  if (orr.length > 10) return arr.trim(0, 10);
+  return arr;
+}
+// @log: test
+```
+
 hello
+
+```ts twoslash
+// @noErrors
+import * as solid from "solid-js";
+solid.cre;
+//       ^|
+```
+
+<div class="h-32" />
 
 ```ts twoslash
 // @errors: 2339
 const welcome = "Tudo bem gente?";
+// ---cut---
 const words = welcome.contains(" ");
 const welcome2 = "Tudo bem gente?";
+// ---cut-after---
 const words2 = welcome.contains(" ");
 const welcome3 = "Tudo bem gente?";
 const words3 = welcome.contains(" ");
@@ -56,6 +78,7 @@ Look what happens when you add `a + b`
 // ---cut---
 const result = a + b;
 //    ^?
+const someMoreCode = "just to test";
 ```
 
 Finally here is `c`:
