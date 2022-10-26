@@ -14,9 +14,11 @@ export function HeadMetadata(props: HeadMetadataProps) {
   return (
     <>
       <Title>dio.la - Dani Guardiola's blog</Title>
+      <Meta name="description" content={props.description} />
+      <Meta name="author" content="Dani Guardiola" />
 
       <Meta property="og:title" content={props.title} />
-      <Meta property="og:og:description" content={props.description} />
+      <Meta property="og:description" content={props.description} />
       <Meta property="og:locale" content="en_US" />
       <Meta property="og:type" content={props.type ?? "website"} />
       <Show when={props.url}>
