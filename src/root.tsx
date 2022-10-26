@@ -18,9 +18,8 @@ import {
   Meta,
   Routes,
   Scripts,
-  Title,
 } from "solid-start";
-import { OpenGraphMeta } from "./components/OpenGraphMeta";
+import { HeadMetadata } from "./components/HeadMetadata";
 import "./root.sass";
 
 const SCROLL_OFFSET = 420;
@@ -138,12 +137,10 @@ export default function Root() {
   return (
     <Html lang="en" prefix="og: http://ogp.me/ns#">
       <Head>
-        <Title>dio.la - Dani Guardiola's blog</Title>
-        <OpenGraphMeta
+        <HeadMetadata
           url="https://dio.la/"
           title="dio.la - Dani Guardiola's blog"
           description="Software engineering, web development, and life!"
-          twitterUsernameMode="site"
         />
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />

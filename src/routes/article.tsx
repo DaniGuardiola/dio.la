@@ -1,18 +1,21 @@
 import { Base, Link } from "@solidjs/meta";
 import { Show } from "solid-js";
 import { Outlet, useLocation } from "solid-start";
+import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
 import { findArticleMetadataById } from "~/data/articles";
 
 const TWITTER_USER = "daniguardio_la";
+const CANONICAL_DOMAIN = "dio.la";
 
 function ArticleHeader() {
   const location = useLocation();
   const articlePathname = () => location.pathname.replace(/\/*$/, "");
   const articleId = () => articlePathname().match(/\S*\/([\S]*)/)[1];
   const metadata = () => findArticleMetadataById(articleId());
-  const host = typeof window !== "undefined" ? window.location.host : "dio.la";
+  const host =
+    typeof window !== "undefined" ? window.location.host : CANONICAL_DOMAIN;
   const protocol =
     typeof window !== "undefined" ? window.location.protocol : "https";
   const articleUrl = () => `${protocol}//${host}${articlePathname()}`;
@@ -22,6 +25,13 @@ function ArticleHeader() {
     )}&url=${encodeURIComponent(articleUrl())}`;
   return (
     <>
+      <HeadMetadata
+        url={`https://${CANONICAL_DOMAIN}${articlePathname()}`}
+        title={`${metadata().title} | dio.la - Dani Guardiola's blog`}
+        description={metadata().description}
+        image={metadata().imageUrl} // TODO: support public dir path? (if starts with "/")
+        type="article"
+      />
       <Link
         href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto+Slab&display=swap"
         rel="stylesheet"

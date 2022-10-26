@@ -1,20 +1,20 @@
 import { Show } from "solid-js";
-import { Meta } from "solid-start";
+import { Meta, Title } from "solid-start";
 
-type HeadMetaProps = {
+type HeadMetadataProps = {
   title: string;
   description: string;
   /** @default "website" */
   type?: "website" | "article";
-  /** @default "creator" */
-  twitterUsernameMode?: "creator" | "site";
   url?: string;
   image?: string;
 };
 
-export function OpenGraphMeta(props: HeadMetaProps) {
+export function HeadMetadata(props: HeadMetadataProps) {
   return (
     <>
+      <Title>dio.la - Dani Guardiola's blog</Title>
+
       <Meta property="og:title" content={props.title} />
       <Meta property="og:og:description" content={props.description} />
       <Meta property="og:locale" content="en_US" />
@@ -28,7 +28,7 @@ export function OpenGraphMeta(props: HeadMetaProps) {
 
       <Meta name="twitter:card" content="summary_large_image" />
       <Meta
-        name={`twitter:${props.twitterUsernameMode}`}
+        name={`twitter:${props.type === "website" ? "site" : "creator"}`}
         content="@daniguardio_la"
       />
     </>
