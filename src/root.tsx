@@ -6,6 +6,7 @@ import {
   createEffect,
   createSignal,
   onCleanup,
+  Show,
   Suspense,
 } from "solid-js";
 import {
@@ -133,11 +134,42 @@ function Header() {
   );
 }
 
+type HeadMetaProps = {
+  title: string;
+  description: string;
+  url?: string;
+  image?: string;
+  /** @default "website" */
+  type?: "website" | "article";
+};
+
+function HeadMeta(props: HeadMetaProps) {
+  return (
+    <>
+      <Meta property="og:title" content={props.title} />
+      <Meta property="og:og:description" content={props.description} />
+      <Meta property="og:locale" content="en_US" />
+      <Show when={props.url}>
+        <Meta property="og:url" content={props.url} />
+      </Show>
+      <Show when={props.image}>
+        <Meta property="og:image" content={props.image} />
+      </Show>
+      <Meta property="og:type" content={props.type ?? "website"} />
+    </>
+  );
+}
+
 export default function Root() {
   return (
     <Html lang="en">
       <Head>
         <Title>dio.la - Dani Guardiola's blog</Title>
+        <HeadMeta
+          url="https://dio.la/"
+          title="dio.la - Dani Guardiola's blog"
+          description="Software engineering, web development, and life!"
+        />
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
         <Link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -147,7 +179,7 @@ export default function Root() {
           crossorigin="anonymous"
         />
         <Link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
           rel="stylesheet"
         />
       </Head>
