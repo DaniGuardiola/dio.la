@@ -21,6 +21,7 @@ specifiers:
   solid-mdx: ^0.0.6
   solid-start: ^0.2.0
   solid-start-node: ^0.2.0
+  solid-start-vercel: ^0.2.0
   tailwindcss: ^3.2.1
   typescript: 4.8.4
   undici: ^5.11.0
@@ -50,6 +51,7 @@ devDependencies:
   remark-shiki-twoslash: 3.1.0
   sass: 1.55.0
   solid-start-node: 0.2.0_ps2lpxk5hfnushqxoxo2mwt2xu
+  solid-start-vercel: 0.2.0_xjk2m5t4atnr5ix4w7nofudady
   tailwindcss: 3.2.1_postcss@8.4.18
   typescript: 4.8.4
   undici: 5.11.0
@@ -3900,6 +3902,21 @@ packages:
       vite: 3.1.8_sass@1.55.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /solid-start-vercel/0.2.0_xjk2m5t4atnr5ix4w7nofudady:
+    resolution: {integrity: sha512-T52nevyjLksHjaZIoAA4d/e6282tPcDC3j2Ui92Rz2ztFOENU2nwYfV3i9QaJ2EKRSpKTBLlsQdNszBkYDpWyA==}
+    peerDependencies:
+      solid-start: '*'
+      vite: '*'
+    dependencies:
+      '@rollup/plugin-commonjs': 22.0.2_rollup@2.79.1
+      '@rollup/plugin-json': 4.1.0_rollup@2.79.1
+      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.79.1
+      rollup: 2.79.1
+      solid-start: 0.2.0_5i6qjfkan6zv5pawawenwfkipy
+      terser: 5.15.1
+      vite: 3.1.8_sass@1.55.0
     dev: true
 
   /solid-start/0.2.0_5i6qjfkan6zv5pawawenwfkipy:

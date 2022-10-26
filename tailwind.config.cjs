@@ -6,7 +6,7 @@ module.exports = {
       screens: { xs: "380px" },
       textColor: {
         dark: "#1e1e1e",
-        subtle: "#8a8a8a",
+        subtle: "#6f6f6f",
         "subtle-white": "#ffffffd1",
       },
       colors: { accent: "#046b46" },

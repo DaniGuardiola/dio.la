@@ -1,21 +1,21 @@
 import { Base } from "@solidjs/meta";
 import { Show } from "solid-js";
-import { A, Outlet, useLocation } from "solid-start";
+import { Outlet, useLocation } from "solid-start";
 import { MDXContent } from "~/components/MDXContent";
-import { ArticleMetadata, findArticleMetadataById } from "~/data/articles";
+import { SkipLink, SkipLinks } from "~/components/SkipLinks";
+import { findArticleMetadataById } from "~/data/articles";
 
 const TWITTER_USER = "daniguardio_la";
 
 function ArticleHeader() {
   const location = useLocation();
-  const articlePathname = () => location.pathname;
+  const articlePathname = () => location.pathname.replace(/\/*$/, "");
   const articleId = () => articlePathname().match(/\S*\/([\S]*)/)[1];
   const metadata = () => findArticleMetadataById(articleId());
-  const articleUrl = () => {
-    const domain =
-      typeof window !== "undefined" ? window.location.hostname : "dio.la";
-    return `https://${domain}${articlePathname()}`;
-  };
+  const host = typeof window !== "undefined" ? window.location.host : "dio.la";
+  const protocol =
+    typeof window !== "undefined" ? window.location.protocol : "https";
+  const articleUrl = () => `${protocol}//${host}${articlePathname()}`;
   const tweetIntentUrl = () =>
     `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       `${metadata().title} by @${TWITTER_USER}`
@@ -23,10 +23,10 @@ function ArticleHeader() {
   return (
     <>
       <Show when={typeof window !== "undefined"}>
-        <Base href={`${window?.location.href}/`} />
+        <Base href={articleUrl()} />
       </Show>
       <header class="bg-accent pt-8 pb-6 text-white">
-        <div class="desktop-container px-4">
+        <div class="main-container px-4">
           <p class="font-roboto-mono text-[.875rem] text-subtle-white">
             {/* TODO: format */}
             {metadata().date}
@@ -35,7 +35,7 @@ function ArticleHeader() {
             <span class="font-bold"> · </span>
             <a
               href={tweetIntentUrl()}
-              class="hover:underline focus-ring-white rounded-sm"
+              class="hover:underline focus-ring-white focus-scroll-target rounded-sm"
               target="_blank"
               rel="noreferrer"
             >
@@ -51,7 +51,7 @@ function ArticleHeader() {
       <Show when={metadata().imageUrl}>
         <div class="relative">
           <div class="absolute top-0 inset-x-0 -z-10 bg-accent h-[4rem] xs:h-[6rem] sm:h-[9rem] lg:h-[12rem]" />
-          <div class="px-4 desktop-container">
+          <div class="px-4 main-container">
             <img
               alt="This article's main image"
               src={metadata().imageUrl}
@@ -61,20 +61,27 @@ function ArticleHeader() {
         </div>
       </Show>
     </>
+    // null
   );
 }
 
 export default function ArticleLayout() {
   return (
-    <div>
-      <article>
-        <ArticleHeader />
-        <div class="desktop-container p-4">
-          <MDXContent>
-            <Outlet />
-          </MDXContent>
-        </div>
-      </article>
-    </div>
+    <>
+      <SkipLinks
+        links={[{ id: "article-content", label: "article content" }]}
+      />
+      <div>
+        <article>
+          <ArticleHeader />
+          <div class="main-container p-4">
+            <SkipLink id="article-content" />
+            <MDXContent>
+              <Outlet />
+            </MDXContent>
+          </div>
+        </article>
+      </div>
+    </>
   );
 }

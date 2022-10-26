@@ -7,13 +7,13 @@
 
 @layer utilities
   .focus-ring
-    @apply focus:outline-transparent focus-visible:outline-accent focus-visible:outline-offset-2
+    @apply focus:outline-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2
 
   .focus-ring-white
-    @apply focus:outline-transparent focus-visible:outline-white focus-visible:outline-offset-2
+    @apply focus:outline-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2
 
-  .desktop-container
+  .main-container
     @apply max-w-[61rem] mx-auto
 
   .focus-scroll-target
-    @apply scroll-mt-[7rem] sm:scroll-mt-[13.25rem]
+    @apply scroll-mt-[7rem] sm:scroll-mt-[13.25rem] scroll-mb-8

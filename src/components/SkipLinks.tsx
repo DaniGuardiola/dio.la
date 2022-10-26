@@ -19,7 +19,7 @@ export function SkipLinks({ links }: SkipLinksProps) {
             href={`#${id}`}
             class={clsx(
               "[&:not(:focus-visible)]:sr-only",
-              "fixed top-0 left-0 z-10",
+              "fixed top-0 left-0 z-30",
               "bg-white border m-2 p-2 border-accent outline-none shadow rounded font-bold"
             )}
           >

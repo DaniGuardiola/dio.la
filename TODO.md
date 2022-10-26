@@ -1,8 +1,6 @@
 # To do
 
 - Article view
-  - Skip links
-  - Proper focus rings/scroll margin
   - Fix hot reload issue
   - Finish shiki/twoslash styling
   - Lists
@@ -14,6 +12,7 @@
     - ToC
     - Topics
     - Related or/and next/prev article links
+    - Turn typescript errors into links to https://ts-error-translator.vercel.app/ (see: https://github.com/mattpocock/ts-error-translator/blob/main/apps/web/src/pages/index.tsx#L91)
   - Headings as anchor links
 - Generate articles data from filesystem & frontmatters
 - About page

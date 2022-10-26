@@ -68,14 +68,14 @@ function Header() {
 
   return (
     <header
-      class="fixed z-10 inset-x-0 top-0 bg-white select-none transition-[height] flex items-center"
+      class="fixed z-20 inset-x-0 top-0 bg-white select-none transition-[height] flex items-center overflow-hidden"
       classList={{
         "h-[5rem] sm:h-[11.25rem]": !scrolled(),
         "h-[3.5rem] sm:h-[4.5rem]": scrolled(),
         "shadow-[0_2px_4px_rgba(0,0,0,.25)]": !atTop(),
       }}
     >
-      <div class="desktop-container px-4 w-full mx-auto flex">
+      <div class="main-container px-4 w-full mx-auto flex">
         <A
           href="/"
           aria-label="go to homepage"

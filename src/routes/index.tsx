@@ -284,7 +284,7 @@ function ArticleList(props: ArticleListProps) {
       <SkipLink id="article-list" />
       <section aria-label="articles" class="p-4 lg:pt-2">
         <TopicBanner />
-        <ul class="space-y-6">
+        <div class="space-y-6">
           <Switch>
             <Match when={!props.topic}>
               <For each={ARTICLES_BY_YEAR_SORTED}>
@@ -303,9 +303,15 @@ function ArticleList(props: ArticleListProps) {
                           {year}
                         </time>
                       </Show>
-                      <For each={articles}>
-                        {(article) => <ArticleItem {...article} />}
-                      </For>
+                      <ul class="space-y-6">
+                        <For each={articles}>
+                          {(article) => (
+                            <li>
+                              <ArticleItem {...article} />
+                            </li>
+                          )}
+                        </For>
+                      </ul>
                     </section>
                   );
                 }}
@@ -321,7 +327,7 @@ function ArticleList(props: ArticleListProps) {
               </For>
             </Match>
           </Switch>
-        </ul>
+        </div>
       </section>
     </>
   );

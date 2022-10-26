@@ -38,6 +38,10 @@
     & img
       @apply transition-shadow hover:shadow-lg
 
+    // chrome fix
+    &:focus-visible img
+      @apply outline outline-accent outline-offset-2
+
   & blockquote
     @apply relative overflow-hidden bg-gray-200 font-roboto-slab -mx-4 py-4 px-8 my-[1.25em] lg:rounded-lg
 

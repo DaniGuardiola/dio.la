@@ -8,6 +8,7 @@ import { nodeTypes } from "@mdx-js/mdx";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import rehypeExternalLinks from "rehype-external-links";
+import vercel from "solid-start-vercel";
 import { defineConfig } from "vite";
 
 export default defineConfig({
@@ -34,6 +35,6 @@ export default defineConfig({
       }),
       enforce: "pre",
     },
-    solid({ extensions: [".mdx"] }),
+    solid({ extensions: [".mdx"], adapter: vercel({ edge: true }) }),
   ],
 });

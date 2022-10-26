@@ -1,140 +1,109 @@
 @mixin styles
+  // inline code (`code`)
   & :not(.code-container) > code
-    @apply font-roboto-mono py-[.2em] px-[.4em] text-[85%] rounded-md bg-gray-200
+    @apply font-roboto-mono px-[.4em] py-[.2em] text-[85%] rounded-md bg-gray-200
 
+  // code block (```code```)
   & pre
-    @apply -mx-4 py-2 my-[1.25em] lg:rounded-lg
-    /* In theory shiki will overwrite these, but this is to make sure there are defaults regardless
-    background-color: #1E1E1E
-    color: black
+    @apply flex font-roboto-mono -mx-4 my-[1.25em] px-4 py-6 lg:rounded-lg bg-gray-900 text-black overflow-x-auto
 
-    /* All code samples get a grey border, twoslash ones get a different color
-    border-left: 1px solid #999
-    border-bottom: 1px solid #999
-    // margin-bottom: 3rem
+    & .code-container
+      @apply grow
 
-    /* Important to allow the code to move horizontally;
-    overflow-x: auto
-    // position: relative
+    // TS playground link
+    & .code-container > a
+      @apply transition-opacity ease-out opacity-0
+      @apply absolute translate-x-[-.625rem] translate-y-[.625rem] text-[0] select-none
 
-    &.shiki
-      overflow-x: auto
+      &:is(:hover, :focus-visible)
+        @apply opacity-100 no-underline outline-white
 
-      &:hover .dim
-        opacity: 1
+      &::after
+        @apply content-["Open_in_playground"] text-[1rem]
+        @apply focus-scroll-target rounded font-bold bg-white border-2 border-blue-500 px-[.375rem] text-blue-500 shadow
 
-      div
-        &.dim
-          opacity: 0.5
-          margin: 0
-          padding: 0
-
-        &.highlight
-          @apply bg-white/10
-          margin: 0
-          padding: 0
-          opacity: 1
-
-        &.line
-          min-height: 1rem
-
-      .language-id
-        display: none
-
-    &.twoslash
-      border-color: #719af4
-
-      &:hover .data-lsp
-        border-color: #747474
-
-      .data-lsp:hover::before
-        content: attr(data-lsp)
-        position: absolute
-        transform: translate(calc(var(--scroll-x) * -1), 1rem)
-        background-color: #3f3f3f
-        color: #fff
-        text-align: left
-        padding: 5px 8px
-        border-radius: 2px
-        font-family: "JetBrains Mono", Menlo, Monaco, Consolas, Courier New, monospace
-        font-size: 14px
-        white-space: pre-wrap
-        z-index: 100
+      &:is(:hover, :focus-visible)::after
+        @apply text-white bg-blue-500
 
     &:hover .code-container > a
-      opacity: 1
+      @apply opacity-100
 
-    .code-container
-      @apply m-4 inline-block w-[calc(100%-2rem)]
+    // language label
+    &:not(.twoslash) .code-container:not(:first-child)
+      @apply pt-5
 
-      > a
-        position: absolute
-        scroll-margin-bottom: 40px
-        transform: translate(0, 10px)
-        border-radius: 4px
-        border: 1px solid #719af4
-        padding: 0 8px
-        color: #719af4
-        text-decoration: none
-        opacity: 0
-        transition-timing-function: ease
-        transition: opacity 0.3s
+    & .language-id
+      @apply hidden
+      @apply transition-colors ease-out text-white/40
 
-        &:is(:hover, :focus-visible)
-          opacity: 1
-          color: white
-          background-color: #719af4
+    &:is(:hover, :focus-within) .language-id
+      @apply text-white/60
 
-    code
-      font-size: 15px
-      font-family: "JetBrains Mono", Menlo, Monaco, Consolas, Courier New, monospace
-      white-space: pre
-      -webkit-overflow-scrolling: touch
+    &:not(.twoslash) .language-id
+      @apply block absolute -translate-x-0 -translate-y-3
+      @apply text-[.8rem] select-none
 
-      a
-        text-decoration: none
+    &.shiki
 
-    .data-err
-      /* Extracted from VS Code
+      & .line
+        @apply min-h-[1rem]
+
+      & .dim
+        @apply m-0 p-0
+        @apply transition-opacity ease-out opacity-50
+
+      &:hover .dim
+        @apply opacity-100
+
+      & .highlight
+        @apply bg-white/10 -mx-4 px-4 opacity-100
+
+    &.twoslash
+
+      // type underline indicator
+      & .data-lsp
+        @apply border-b-[1px] border-dotted
+        @apply transition-colors ease-out border-transparent
+
+      &:hover .data-lsp
+        @apply border-white/50
+
+      // type info on hover
+      & .data-lsp:hover::before
+        @apply content-[attr(data-lsp)]
+        @apply absolute translate-x-[calc(var(--scroll-x)*-1)] translate-y-[1.1rem] z-10
+        @apply px-2 py-1 bg-gray-600 border-2 border-white rounded text-white text-left text-[.875rem] whitespace-pre-wrap
+
+    & code
+      @apply text-[.95rem] whitespace-pre
+
+      & a
+        @apply no-underline
+
+    // error underline
+    & .data-err
+      @apply pb-[.2rem]
+
+      // squiggly line, copied from VS Code
       background: url("data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%206%203'%20enable-background%3D'new%200%200%206%203'%20height%3D'3'%20width%3D'6'%3E%3Cg%20fill%3D'%23c94824'%3E%3Cpolygon%20points%3D'5.5%2C0%202.5%2C3%201.1%2C3%204.1%2C0'%2F%3E%3Cpolygon%20points%3D'4%2C0%206%2C2%206%2C0.6%205.4%2C0'%2F%3E%3Cpolygon%20points%3D'0%2C2%201%2C3%202.4%2C3%200%2C0.6'%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E") repeat-x bottom left
-      padding-bottom: 3px
+
+    // error message
+    & .error-behind
+      @apply hidden
+
+    & .error
+      @apply block -mx-4 mt-2 mb-1 p-1 pl-3 w-[calc(100%+2rem)] whitespace-pre-wrap
+      @apply flex gap-1 bg-red-100 text-dark border-l-4 border-red-700
+
+      & .code
+        @apply ml-auto px-2 font-bold
+
+    // --- untested styles --- //
 
     .query
       margin-bottom: 10px
       color: #137998
       display: inline-block
-
-    .error-behind
-      display: none
-
-    .error, .error-behind
-      margin-left: -1rem
-      margin-right: -1rem
-      margin-top: 8px
-      margin-bottom: 4px
-      padding: 6px
-      padding-left: 14px
-      width: calc(100% + 2rem)
-      white-space: pre-wrap
-
-    .error
-      display: block
-      // position: absolute
-      background-color: #fee
-      border-left: 4px solid #bf1818
-
-      /* Give the space to the error code
-      display: flex
-      align-items: center
-      color: black
-
-      .code
-        display: none
-
-    .error-behind
-      user-select: none
-      visibility: transparent
-      color: #fee
 
     .arrow
       /* Transparent background
@@ -199,19 +168,6 @@
             color: black
             display: inline-block
 
-  .dark-theme .markdown pre
-    background-color: #d8d8d8
-    border-color: #ddd
-    filter: invert(98%) hue-rotate(180deg)
-
-  .data-lsp
-    /* Ensures there's no 1px jump when the hover happens
-    border-bottom: 1px dotted transparent
-
-    /* Fades in unobtrusively
-    transition-timing-function: ease
-    transition: border-color 0.3s
-
   .tag-container
     position: relative
 
@@ -269,31 +225,3 @@
       svg
         margin-left: 6px
         margin-right: 9px
-
-  /** Don't show the language identifiers
-
-  /* Visually differentiates twoslash code samples
-
-  /** When you mouse over the pre, show the underlines
-
-  /** The tooltip-like which provides the LSP response
-
-  /* The try button
-
-  /* Respect no animations
-  @media (prefers-reduced-motion: reduce)
-    & pre .code-container > a
-      transition: none
-
-  /* Queries
-
-  /* Completion
-
-  /* Respect people's wishes to not have animations
-  @media (prefers-reduced-motion: reduce)
-    & .data-lsp
-      transition: none
-
-  /** Annotations support, providing a tool for meta commentary
-
-  /** Support for showing console log/warn/errors inline
