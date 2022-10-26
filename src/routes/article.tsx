@@ -1,4 +1,4 @@
-import { Base } from "@solidjs/meta";
+import { Base, Link } from "@solidjs/meta";
 import { Show } from "solid-js";
 import { Outlet, useLocation } from "solid-start";
 import { MDXContent } from "~/components/MDXContent";
@@ -22,6 +22,10 @@ function ArticleHeader() {
     )}&url=${encodeURIComponent(articleUrl())}`;
   return (
     <>
+      <Link
+        href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto+Slab&display=swap"
+        rel="stylesheet"
+      />
       <Show when={typeof window !== "undefined"}>
         <Base href={articleUrl()} />
       </Show>

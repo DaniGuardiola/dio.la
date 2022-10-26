@@ -147,7 +147,7 @@ export default function Root() {
           crossorigin="anonymous"
         />
         <Link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto+Mono:wght@400;700&family=Roboto+Slab&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700"
           rel="stylesheet"
         />
       </Head>
