@@ -132,7 +132,7 @@ function Highlights() {
 
   return (
     <section class="bg-accent select-none" aria-labelledby="highlights-heading">
-      <div class="desktop-container w-full px-4 py-8 gap-12 flex max-md:flex-col">
+      <div class="main-container w-full px-4 py-8 gap-12 flex max-md:flex-col">
         <div class="space-y-4">
           <h1 id="highlights-heading" class="text-[2rem] text-white">
             Highlights
@@ -162,7 +162,7 @@ function Topics() {
   return (
     <>
       <SkipLink id="topics" />
-      <section aria-label="topics" class="desktop-container lg:p-4">
+      <section aria-label="topics" class="main-container lg:p-4">
         <h1
           class={clsx(
             "max-lg:sr-only",
@@ -353,7 +353,7 @@ export default function Home() {
         <div
           class={clsx(
             "space-y-4",
-            "lg:flex lg:gap-x-12 lg:flex-row-reverse lg:desktop-container"
+            "lg:flex lg:gap-x-12 lg:flex-row-reverse lg:main-container"
           )}
         >
           <Topics />
