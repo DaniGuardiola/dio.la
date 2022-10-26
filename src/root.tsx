@@ -1,15 +1,14 @@
 // @refresh reload
-import { A } from "solid-start";
 import clsx from "clsx";
 import {
   ComponentProps,
   createEffect,
   createSignal,
   onCleanup,
-  Show,
   Suspense,
 } from "solid-js";
 import {
+  A,
   Body,
   ErrorBoundary,
   FileRoutes,
@@ -21,6 +20,7 @@ import {
   Scripts,
   Title,
 } from "solid-start";
+import { OpenGraphMeta } from "./components/OpenGraphMeta";
 import "./root.sass";
 
 const SCROLL_OFFSET = 420;
@@ -134,41 +134,16 @@ function Header() {
   );
 }
 
-type HeadMetaProps = {
-  title: string;
-  description: string;
-  url?: string;
-  image?: string;
-  /** @default "website" */
-  type?: "website" | "article";
-};
-
-function HeadMeta(props: HeadMetaProps) {
-  return (
-    <>
-      <Meta property="og:title" content={props.title} />
-      <Meta property="og:og:description" content={props.description} />
-      <Meta property="og:locale" content="en_US" />
-      <Show when={props.url}>
-        <Meta property="og:url" content={props.url} />
-      </Show>
-      <Show when={props.image}>
-        <Meta property="og:image" content={props.image} />
-      </Show>
-      <Meta property="og:type" content={props.type ?? "website"} />
-    </>
-  );
-}
-
 export default function Root() {
   return (
-    <Html lang="en">
+    <Html lang="en" prefix="og: http://ogp.me/ns#">
       <Head>
         <Title>dio.la - Dani Guardiola's blog</Title>
-        <HeadMeta
+        <OpenGraphMeta
           url="https://dio.la/"
           title="dio.la - Dani Guardiola's blog"
           description="Software engineering, web development, and life!"
+          twitterUsernameMode="site"
         />
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
