@@ -15,6 +15,7 @@
 # Later
 
 - Article view
+  - Test deprecated options in completions
   - Fix/report hot reload issue
   - Tables
   - Headings as links
@@ -38,3 +39,4 @@
   - logger
   - annotations
 - Image fallbacks on error
+- Analytics
