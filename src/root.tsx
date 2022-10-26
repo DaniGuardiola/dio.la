@@ -154,6 +154,11 @@ export default function Root() {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
           rel="stylesheet"
         />
+        <Link
+          href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto+Slab&display=swap"
+          as="style"
+          rel="preload"
+        />
       </Head>
       <Body>
         <ErrorBoundary>
