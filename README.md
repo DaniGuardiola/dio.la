@@ -1,6 +1,6 @@
 # dio.la
 
-> Dani Guardiola's - [dio.la](https://dio.la/)
+> Dani Guardiola's blog - [dio.la](https://dio.la/)
 >
 > [@daniguardio_la](https://twitter.com/daniguardio_la) on Twitter
 
