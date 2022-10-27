@@ -15,6 +15,7 @@ type SkipLinksProps = {
 };
 
 export function SkipLinks({ links }: SkipLinksProps) {
+  if (typeof window === "undefined") return;
   const skipLinkArea = document.getElementById("skip-link-area");
   if (!skipLinkArea) throw new Error("The element for skip links wasn't found");
   return (
