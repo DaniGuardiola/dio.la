@@ -55,7 +55,7 @@ function NavLink(props: ComponentProps<typeof A>) {
 }
 
 function Header() {
-  const [atTop, setAtTop] = createSignal(false);
+  const [atTop, setAtTop] = createSignal(true);
   const [scrolled, setScrolled] = createSignal(false);
 
   if (typeof window !== "undefined") {
