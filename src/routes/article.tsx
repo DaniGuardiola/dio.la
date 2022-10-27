@@ -1,6 +1,7 @@
 import { Base, Link } from "@solidjs/meta";
-import { createEffect, createSignal, Show } from "solid-js";
+import { createEffect, createMemo, createSignal, Show } from "solid-js";
 import { Outlet, useLocation } from "solid-start";
+import { format } from "date-fns";
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
@@ -39,6 +40,16 @@ function ArticleHeader(props: ArticleHeaderProps) {
     `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       `${props.metadata.title} by @${TWITTER_USERNAME}`
     )}&url=${encodeURIComponent(props.articleUrl)}`;
+
+  const date = createMemo(() => {
+    const date = new Date(props.metadata.date);
+    const isCurrentYear = date.getFullYear() === new Date().getFullYear();
+    return {
+      short: format(date, `MMM d${!isCurrentYear ? ", yyyy" : ""}`),
+      long: format(date, `MMMM do${!isCurrentYear ? ", yyyy" : ""}`),
+    };
+  });
+
   return (
     <>
       <Link
@@ -51,10 +62,11 @@ function ArticleHeader(props: ArticleHeaderProps) {
       <header class="bg-accent pt-8 pb-6 text-white">
         <div class="main-container px-4">
           <p class="font-roboto-mono text-[.875rem] text-subtle-white">
-            {/* TODO: format */}
-            {props.metadata.date}
+            <span class="sm:hidden">{date().short}</span>
+            <span class="max-sm:hidden">{date().long}</span>
             <span class="font-bold"> · </span>
-            {props.readingMinutes} minute read
+            {props.readingMinutes} min<span class="max-sm:hidden">ute</span>{" "}
+            read
             <span class="font-bold"> · </span>
             <a
               href={tweetIntentUrl()}

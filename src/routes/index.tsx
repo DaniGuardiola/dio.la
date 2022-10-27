@@ -204,7 +204,6 @@ function Topics() {
 function TopicBanner() {
   const [searchParams, setSearchParams] = useSearchParams();
   const topic = () => searchParams.topic;
-  const clearTopic = () => setSearchParams({ topic: undefined });
 
   return (
     <Show when={topic()}>
@@ -218,16 +217,15 @@ function TopicBanner() {
           <span class="font-bold">{`#${topic()}`}</span>
         </p>
         <div class="flex-grow" />
-        <button
-          type="button"
-          onclick={clearTopic}
+        <A
+          href="/"
           class={clsx(
             "border border-white p-2 lg:py-0 rounded focus-ring-white",
             "hover:bg-white hover:text-dark focus-visible:bg-white focus-visible:text-dark"
           )}
         >
           Clear filter
-        </button>
+        </A>
       </section>
     </Show>
   );

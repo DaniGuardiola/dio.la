@@ -2,8 +2,6 @@
 
 - Article view
   - Lists
-  - Estimated reading time
-  - Format date in header
 - About page
 - 404 page
 - Favicon
@@ -44,3 +42,5 @@
 - Green bg height transition on client-side navigation?
 - Fira code font for code blocks?
 - Go to top button in articles
+- Optimization: compute reading time when generating article metadata (from article content, maybe excluding JSX - remark should be useful for this) so it's available without javascript enabled (and before hydration)
+- Smaller font sizes on mobile?
