@@ -4,12 +4,10 @@ import { Outlet, useLocation } from "solid-start";
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
-import { findArticleMetadataById } from "~/data/articles";
+import { ArticleMetadata, findArticleMetadataById } from "~/data/articles";
+import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
 
-const TWITTER_USER = "daniguardio_la";
-const CANONICAL_DOMAIN = "dio.la";
-
-function ArticleHeader() {
+function useArticleData() {
   const location = useLocation();
   const articlePathname = () => location.pathname.replace(/\/*$/, "");
   const articleId = () => articlePathname().match(/\S*\/([\S]*)/)[1];
@@ -19,31 +17,34 @@ function ArticleHeader() {
   const protocol =
     typeof window !== "undefined" ? window.location.protocol : "https";
   const articleUrl = () => `${protocol}//${host}${articlePathname()}`;
+
+  return { metadata, articleUrl, articlePathname };
+}
+
+type ArticleHeaderProps = {
+  metadata: ArticleMetadata;
+  articleUrl: string;
+};
+
+function ArticleHeader(props: ArticleHeaderProps) {
   const tweetIntentUrl = () =>
     `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      `${metadata().title} by @${TWITTER_USER}`
-    )}&url=${encodeURIComponent(articleUrl())}`;
+      `${props.metadata.title} by @${TWITTER_USERNAME}`
+    )}&url=${encodeURIComponent(props.articleUrl)}`;
   return (
     <>
-      <HeadMetadata
-        url={`https://${CANONICAL_DOMAIN}${articlePathname()}`}
-        title={`${metadata().title} | dio.la - Dani Guardiola's blog`}
-        description={metadata().description}
-        image={metadata().imageUrl} // TODO: support public dir path? (if starts with "/")
-        type="article"
-      />
       <Link
         href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto+Slab&display=swap"
         rel="stylesheet"
       />
       <Show when={typeof window !== "undefined"}>
-        <Base href={articleUrl()} />
+        <Base href={props.articleUrl} />
       </Show>
       <header class="bg-accent pt-8 pb-6 text-white">
         <div class="main-container px-4">
           <p class="font-roboto-mono text-[.875rem] text-subtle-white">
             {/* TODO: format */}
-            {metadata().date}
+            {props.metadata.date}
             <span class="font-bold"> · </span>
             {/* TODO: implement */}5 minute read
             <span class="font-bold"> · </span>
@@ -56,19 +57,21 @@ function ArticleHeader() {
               tweet
             </a>
           </p>
-          <h1 class="font-roboto-slab text-[1.875rem]">{metadata().title}</h1>
+          <h1 class="font-roboto-slab text-[1.875rem]">
+            {props.metadata.title}
+          </h1>
           <p class="text-[1.125rem] text-subtle-white py-2">
-            {metadata().description}
+            {props.metadata.description}
           </p>
         </div>
       </header>
-      <Show when={metadata().imageUrl}>
+      <Show when={props.metadata.imageUrl}>
         <div class="relative">
           <div class="absolute top-0 inset-x-0 -z-10 bg-accent h-[4rem] xs:h-[6rem] sm:h-[9rem] lg:h-[12rem]" />
           <div class="px-4 main-container">
             <img
               alt="This article's main image"
-              src={metadata().imageUrl}
+              src={props.metadata.imageUrl}
               class="bg-white w-full object-cover aspect-[1.91/1] rounded shadow-lg"
             />
           </div>
@@ -80,14 +83,22 @@ function ArticleHeader() {
 }
 
 export default function ArticleLayout() {
+  const { metadata, articlePathname, articleUrl } = useArticleData();
   return (
     <>
+      <HeadMetadata
+        url={`https://${CANONICAL_DOMAIN}${articlePathname()}`}
+        title={metadata().title}
+        description={metadata().description}
+        image={metadata().imageUrl} // TODO: support public dir path? (if starts with "/")
+        type="article"
+      />
       <SkipLinks
         links={[{ id: "article-content", label: "article content" }]}
       />
       <div>
         <article>
-          <ArticleHeader />
+          <ArticleHeader metadata={metadata()} articleUrl={articleUrl()} />
           <div class="main-container p-4">
             <SkipLink id="article-content" />
             <MDXContent>

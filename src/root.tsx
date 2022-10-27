@@ -20,6 +20,7 @@ import {
   Scripts,
 } from "solid-start";
 import { HeadMetadata } from "./components/HeadMetadata";
+import { CANONICAL_DOMAIN, SITE_DESCRIPTION } from "./data/config";
 import "./root.sass";
 
 const SCROLL_OFFSET = 420;
@@ -138,9 +139,8 @@ export default function Root() {
     <Html lang="en" prefix="og: http://ogp.me/ns#">
       <Head>
         <HeadMetadata
-          url="https://dio.la/"
-          title="dio.la - Dani Guardiola's blog"
-          description="Software engineering, web development, and life!"
+          url={`https://${CANONICAL_DOMAIN}/`}
+          description={SITE_DESCRIPTION}
         />
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />

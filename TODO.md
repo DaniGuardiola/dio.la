@@ -7,6 +7,7 @@
 - About page
 - 404 page
 - Favicon
+- Default OG image
 - Write 10 initial articles
 - Update domain and redirect everywhere
 - Update URL on social media, etc
@@ -40,3 +41,4 @@
   - annotations
 - Image fallbacks on error
 - Analytics
+- Green bg height transition on client-side navigation?
