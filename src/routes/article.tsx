@@ -1,11 +1,14 @@
 import { Base, Link } from "@solidjs/meta";
-import { Show } from "solid-js";
+import { createEffect, createSignal, Show } from "solid-js";
 import { Outlet, useLocation } from "solid-start";
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
 import { ArticleMetadata, findArticleMetadataById } from "~/data/articles";
 import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
+
+// reading speed
+const WORDS_PER_MINUTE = 250;
 
 function useArticleData() {
   const location = useLocation();
@@ -28,6 +31,7 @@ function useArticleData() {
 type ArticleHeaderProps = {
   metadata: ArticleMetadata;
   articleUrl: string;
+  readingMinutes: number;
 };
 
 function ArticleHeader(props: ArticleHeaderProps) {
@@ -50,7 +54,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
             {/* TODO: format */}
             {props.metadata.date}
             <span class="font-bold"> · </span>
-            {/* TODO: implement */}5 minute read
+            {props.readingMinutes} minute read
             <span class="font-bold"> · </span>
             <a
               href={tweetIntentUrl()}
@@ -87,6 +91,15 @@ function ArticleHeader(props: ArticleHeaderProps) {
 
 export default function ArticleLayout() {
   const { metadata, articlePathname, articleUrl } = useArticleData();
+
+  let contentDiv: HTMLDivElement;
+  const [readingMinutes, setReadingMinutes] = createSignal(1);
+  createEffect(() => {
+    const words = contentDiv.textContent?.trim().split(/\s+/).length ?? 0;
+    const minutes = Math.max(1, Math.floor(words / WORDS_PER_MINUTE));
+    setReadingMinutes(minutes);
+  });
+
   return (
     <>
       <HeadMetadata
@@ -101,8 +114,12 @@ export default function ArticleLayout() {
       />
       <div>
         <article>
-          <ArticleHeader metadata={metadata()} articleUrl={articleUrl()} />
-          <div class="main-container p-4">
+          <ArticleHeader
+            metadata={metadata()}
+            articleUrl={articleUrl()}
+            readingMinutes={readingMinutes()}
+          />
+          <div class="main-container p-4" ref={contentDiv!}>
             <SkipLink id="article-content" />
             <MDXContent>
               <Outlet />

@@ -43,3 +43,4 @@
 - Analytics
 - Green bg height transition on client-side navigation?
 - Fira code font for code blocks?
+- Go to top button in articles
