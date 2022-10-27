@@ -10,6 +10,9 @@
     & .code-container
       @apply grow
 
+    & code
+      @apply whitespace-pre text-[.95rem] font-roboto-mono
+
     & .line
       @apply min-h-[1rem]
 
@@ -57,27 +60,19 @@
     & .highlight
       @apply bg-white/10 -mx-4 px-4 opacity-100
 
-    &.twoslash
+    // type underline indicator
+    & .data-lsp
+      @apply border-b-[1px] border-dotted
+      @apply transition-colors ease-out border-transparent
 
-      // type underline indicator
-      & .data-lsp
-        @apply border-b-[1px] border-dotted
-        @apply transition-colors ease-out border-transparent
+    &:hover .data-lsp
+      @apply border-white/50
 
-      &:hover .data-lsp
-        @apply border-white/50
-
-      // type info on hover
-      & .data-lsp:hover::before
-        @apply content-[attr(data-lsp)]
-        @apply absolute translate-x-[calc(var(--scroll-x)*-1)] translate-y-[1.1rem] z-10
-        @apply px-2 py-1 bg-gray-600 border-2 border-white rounded text-white text-left text-[.875rem] whitespace-pre-wrap
-
-    & code
-      @apply text-[.95rem] whitespace-pre
-
-      & a
-        @apply no-underline
+    // type info on hover
+    & .data-lsp:hover::before
+      @apply content-[attr(data-lsp)]
+      @apply absolute translate-x-[calc(var(--scroll-x)*-1)] translate-y-[1.1rem] z-10
+      @apply px-2 py-1 bg-gray-600 border-2 border-white rounded text-white text-left text-[.875rem] whitespace-pre-wrap
 
     // error underline
     & .data-err

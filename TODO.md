@@ -42,3 +42,4 @@
 - Image fallbacks on error
 - Analytics
 - Green bg height transition on client-side navigation?
+- Fira code font for code blocks?
