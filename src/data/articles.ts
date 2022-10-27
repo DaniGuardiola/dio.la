@@ -94,5 +94,7 @@ export const ARTICLES_BY_YEAR_SORTED = Object.entries(ARTICLES_BY_YEAR).sort(
 // -----
 
 export function findArticleMetadataById(id: string) {
-  return ARTICLES.find((article) => article.id === id);
+  const result = ARTICLES.find((article) => article.id === id);
+  if (!result) throw new Error(`Article with id "${id}" was not found`);
+  return result;
 }

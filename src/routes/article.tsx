@@ -10,7 +10,11 @@ import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
 function useArticleData() {
   const location = useLocation();
   const articlePathname = () => location.pathname.replace(/\/*$/, "");
-  const articleId = () => articlePathname().match(/\S*\/([\S]*)/)[1];
+  const articleId = () => {
+    const match = articlePathname().match(/\S*\/([\S]*)/);
+    if (!match) throw new Error("Missing article id");
+    return match[1];
+  };
   const metadata = () => findArticleMetadataById(articleId());
   const host =
     typeof window !== "undefined" ? window.location.host : CANONICAL_DOMAIN;
@@ -78,7 +82,6 @@ function ArticleHeader(props: ArticleHeaderProps) {
         </div>
       </Show>
     </>
-    // null
   );
 }
 

@@ -255,7 +255,7 @@ function ArticleItem(props: ArticleItemProps) {
           />
           <Show when={Boolean(props.topics)}>
             <ul class="flex items-center gap-2 overflow-hidden opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100">
-              <For each={props.topics.slice(0, 2)}>
+              <For each={props.topics?.slice(0, 2)}>
                 {(topic) => (
                   <li class="text-[.9rem] leading-none text-subtle">{`#${topic}`}</li>
                 )}
@@ -320,7 +320,7 @@ function ArticleList(props: ArticleListProps) {
             <Match when={props.topic}>
               <For
                 each={ARTICLES_SORTED.filter((article) =>
-                  article.topics.includes(props.topic as any)
+                  article.topics?.includes(props.topic as any)
                 )}
               >
                 {(article) => <ArticleItem {...article} includeYear="always" />}

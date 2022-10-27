@@ -20,10 +20,13 @@ import {
   Scripts,
 } from "solid-start";
 import { HeadMetadata } from "./components/HeadMetadata";
-import { CANONICAL_DOMAIN, SITE_DESCRIPTION } from "./data/config";
+import { SkipLinkArea } from "./components/SkipLinks";
+import {
+  CANONICAL_DOMAIN,
+  HEADER_SCROLL_OFFSET,
+  SITE_DESCRIPTION,
+} from "./data/config";
 import "./root.sass";
-
-const SCROLL_OFFSET = 420;
 
 function NavLink(props: ComponentProps<typeof A>) {
   return (
@@ -58,7 +61,9 @@ function Header() {
   if (typeof window !== "undefined") {
     function updateScrolled() {
       window.scrollY === 0 ? setAtTop(true) : setAtTop(false);
-      window.scrollY > SCROLL_OFFSET ? setScrolled(true) : setScrolled(false);
+      window.scrollY > HEADER_SCROLL_OFFSET
+        ? setScrolled(true)
+        : setScrolled(false);
     }
     createEffect(() => {
       updateScrolled();
@@ -162,7 +167,7 @@ export default function Root() {
       </Head>
       <Body>
         <ErrorBoundary>
-          <div id="skip-link-area" />
+          <SkipLinkArea />
           <Header />
           <Suspense>
             <main class="pt-[5rem] sm:pt-[11.25rem]">

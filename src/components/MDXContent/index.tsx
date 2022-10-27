@@ -9,7 +9,7 @@ type MDXContentProps = {
   children?: JSX.Element;
 };
 
-function DataLSP(props: ComponentProps<"div">) {
+function DataLSP(props: ComponentProps<"span">) {
   const lspAttr = () =>
     ((props as any).lsp as string).replaceAll("&quot;", '"');
   return (
@@ -21,7 +21,7 @@ function DataLSP(props: ComponentProps<"div">) {
   );
 }
 
-function DataErr(props: ComponentProps<"div">) {
+function DataErr(props: ComponentProps<"span">) {
   return <span {...props} class={clsx("data-err", props.class)} />;
 }
 

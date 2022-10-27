@@ -1,6 +1,10 @@
 import clsx from "clsx";
 import { For, Portal } from "solid-js/web";
 
+export function SkipLinkArea() {
+  return <div id="skip-link-area" />;
+}
+
 type SkipLinkData = {
   label: string;
   id: string;
@@ -11,8 +15,10 @@ type SkipLinksProps = {
 };
 
 export function SkipLinks({ links }: SkipLinksProps) {
+  const skipLinkArea = document.getElementById("skip-link-area");
+  if (!skipLinkArea) throw new Error("The element for skip links wasn't found");
   return (
-    <Portal mount={document.getElementById("skip-link-area")}>
+    <Portal mount={skipLinkArea}>
       <For each={links}>
         {({ id, label }) => (
           <a
