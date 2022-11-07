@@ -1,0 +1,204 @@
+---
+date: 2021/04/23
+title: "What is a node? - Lexical, explained (part 2)"
+description: Exploring lexical nodes and the node tree.
+topics:
+  - lexical
+---
+
+> **Lexical explained series**
+>
+> 1. [**Lexical explained:** an introduction to the Lexical text editor and the "Lexical, explained" series.](../lexical-explained)
+> 2. Lexical nodes (you are here).
+
+---
+
+Note: to make a clear distinction between static and instance members of classes, the following notation will be used throughout this article:
+
+- Static member: `Class::memberName`
+- Instance member: `Class.memberName`
+
+# What is a node?
+
+In Lexical, like in many other rich text editors and frameworks, the state of an editor at a given time is modeled as a node tree\*. Each node in this tree is called a "Lexical node".
+
+TODO: add an example node tree
+
+According to the docs, nodes not only "represent the underlying data model for what is stored in the editor" but they are also composed to "form the visual editor view". This means that nodes have multiple roles and responsibilities, from serialization to DOM representation.
+
+In Lexical, nodes are built as JavaScript classes. All of them extend the `LexicalNode` class (directly or indirectly), which implements the core functionality. Every node in an `EditorState` tree is an instance of a node class.
+
+> **\* Note:** technically, an `EditorState` contains a node tree **and** a selection state, but we're focusing on the node tree for this section.
+
+# Base nodes
+
+Lexical has five different base nodes that directly extend `LexicalNode`.
+
+Two of them are internal and cannot be extended: `RootNode` and `LineBreakNode`. The other three (`ElementNode`, `TextNode`, and `DecoratorNode`) are exposed from the `lexical` package, and can be extended to create other nodes.
+
+## `RootNode`
+
+All editor state trees have a "root" node or, in other words, a node that is at the top level and is the top-most parent of any other node in the tree.
+
+The root node is [automatically created for you](https://github.com/facebook/lexical/blob/7d4c87e28f74d15e724596b34b7f57f61be3af84/packages/lexical/src/LexicalEditorState.ts#L53-L55) when a new `EditorState` is created from scratch.
+
+## `LineBreakNode`
+
+A line break node is used to represent line breaks (duh) that exist "inline", between text nodes (or other inline nodes -NOTE: verify-).
+
+> As stated in the Lexical docs, line breaks should **always** be represented by `LineBreakNode`. You should **never** have `\n` in your text nodes.
+>
+> This is because `LineBreakNode` has been designed to "work consistently between browsers and operating systems".
+
+---
+
+Note that this is different from the perceived line breaks that exist between block-level nodes. For example, we might have some content in our editor that looks like this:
+
+```
+Lorem ipsum
+dolor sit amet
+```
+
+The node tree could be represented as a single paragraph node with a line break in between, like this:
+
+```
+root
+└── paragraph
+    ├── text "Lorem ipsum"
+    ├── line-break
+    └── text "dolor sit amet"
+```
+
+This could be visualized like this in HTML:
+
+```html
+<div id="root">
+  <p>
+    <span>Lorem ipsum</span>
+    <br />
+    <span>dolor sit amet</span>
+  </p>
+</div>
+```
+
+---
+
+However, the tree could also just have two separate paragraph nodes, like this:
+
+```
+root
+├── paragraph
+│   └── text "Lorem ipsum"
+└── paragraph
+    └── text "dolor sit amet"
+```
+
+In HTML:
+
+```html
+<div id="root">
+  <p>
+    <span>Lorem ipsum</span>
+  </p>
+  <p>
+    <span>dolor sit amet</span>
+  </p>
+</div>
+```
+
+---
+
+Let's unpack this:
+
+- In our first example, we have a line break node between two text nodes.
+  - This is possible because `LineBreakNode` is an **inline** node.
+  - A line break is a similar concept to `\n` in plain text, or `<br />` in HTML.
+  - This is often referred to as a "soft break", because it allows you to create a new line without creating a new block-level node (in this case, a paragraph).
+  - Most editors, including Lexical-based ones, allow you to create a line break by pressing `shift + enter`.
+- In our second example, we have two separate paragraph nodes.
+  - We're not explicitly declaring a line break in this case.
+  - Instead, the line-break is "implied" by the fact that we have two separate paragraph nodes.
+  - This happens because paragraph nodes are **block-level** nodes, so they always occupy their own line.
+  - In the case of paragraph nodes, pressing `enter` will create a new paragraph node, potentially splitting the current node into two depending on where the cursor or selection is.
+
+This is an important distinction to make, because it has an impact in the content that is actually presented.
+
+A good example of this is paragraph nodes that have some amount of vertical margin. That margin between block-level nodes is only present when you actually have two distinct nodes, and not when you have a line break between two text nodes.
+
+To illustrate the point, this is how the content might look like if we styled our paragraphs from the second example with a bit of vertical margin:
+
+```
+Lorem ipsum
+
+dolor sit amet
+```
+
+Compared to the original example, there is a significant visual difference in the perceived space between lines.
+
+## `ElementNode`
+
+The main purpose of element nodes is to be used as parents for other nodes, and they can be block-level or inline.
+
+`ElementNode` is not meant to be used directly -NOTE: verify-. Instead, it is used as a base for other nodes, such as `ParagraphNode` or `LinkNode`. The behavior of an element node can be customized by overriding certain methods in the node class, such as `isInline`, `canBeEmpty`, etc.
+
+## `TextNode`
+
+Text nodes are used to represent text content. They are always inline, and have a few properties specific to text, like format (bold, italic, underline...) or style (inline CSS styles). Read more about these properties in the [Lexical docs](https://lexical.dev/docs/concepts/nodes#textnode).
+
+Text nodes can be used directly or extended.
+
+## `DecoratorNode`
+
+This is probably the most powerful node in Lexical. It can be used to render an arbitrary view (like a React component) inside the editor.
+
+Like element nodes, decorator nodes can be block-level or inline. Unlike them though, they are _leaf nodes_, which means that they cannot contain any children.
+
+`DecoratorNode` cannot be used directly and needs to be extended.
+
+# Inline vs. block-level
+
+In this article, I've been mentioning the concepts of "inline" and "block-level" a lot, so let me briefly clarify what they mean.
+
+In HTML, block-level elements are elements that occupy their own line, and inline elements are elements that can be placed between other elements in the same line. Lexical is very similar in this regard.
+
+Note that line breaks (`\n`, `<br />` or `LineBreakNode`) are a litle weird in this sense, because they are technically inline nodes but they create a new line. You can think of this as the exception that confirms the rule.
+
+> MDN has good resources to learn about [block-level](https://developer.mozilla.org/en-US/docs/Web/HTML/Block-level_elements) and [inline](https://developer.mozilla.org/en-US/docs/Web/HTML/Inline_elements) elements in HTML.
+
+---
+
+Nodes have to follow some rules depending on this distinction when it comes to which node can be a child or sibling of a different node.
+
+For example, a `<p>` element (paragraph) is a block-level element, and a `<span>` element (text) is an inline element. You can have a few `<span>` elements inside a `<p>` element, but you can't have a `<p>` element inside a `<span>` element\*.
+
+_Why is that?_
+
+Because block-level nodes can contain **inline and block-level** nodes as children, but inline nodes can **only** contain other **inline** nodes.
+
+> \* Well, you _can_, but that doesn't mean that you _should_ and it is, in fact, invalid HTML.
+
+-NOTE: check if this is the case in Lexical and whether it's an error-
+
+-NOTE: check if there are also other constrains like "inline nodes can only be children of block-level nodes" or "inline and block nodes cannot be mixed together as siblings"-
+
+---
+
+In Lexical, nodes that extend `ElementNode` or `DecoratorNode` can signal whether they are inline or block-level by overriding the `isInline()` method (which by default [returns `false` for `ElementNode`](https://github.com/facebook/lexical/blob/269a168d1cdb24aa67b884609353fd9b90d17a7b/packages/lexical/src/nodes/LexicalElementNode.ts#L493-L495), and [`true` for `DecoratorNode`](https://github.com/facebook/lexical/blob/269a168d1cdb24aa67b884609353fd9b90d17a7b/packages/lexical/src/nodes/LexicalDecoratorNode.ts#L31-L33)). All other nodes are always inline (with the exception of the root node).
+
+# Hierarchy: parents, children, and siblings
+
+A tree is a data structure that represents a hierarchy of nodes. A node can be the "parent" of other nodes, and those nodes are referred to as their "children" or "child nodes".
+
+> Node up the chain (like a node's parents, or its parents' parents, or its parents' parents' parents, etc) can be referred to as "ancestors".
+>
+> Similarly, nodes down the chain (like a node's children, or its... you get the idea) can be referred to as "descendants".
+
+Note that not all nodes are created equal. In fact, only nodes that extend `ElementNode` (with the exception of `RootNode`) can contain children.
+
+Other nodes like `TextNode` (and nodes that extend it), `LineBreakNode`, or nodes extending `DecoratorNode` can't have any children. These are often referred to as "leaf nodes" (they are at the very end of a _tree_ branch, after all). You can verify this by looking at the [`$isLeafNode` function](https://github.com/facebook/lexical/blob/7d4c87e28f74d15e724596b34b7f57f61be3af84/packages/lexical/src/LexicalUtils.ts#L206-L210).
+
+Finally, "sibling nodes" are simply nodes that share the same parent. They are "siblings" of each other.
+
+# TODO: brief summary of type and key
+
+# TODO: brief explanation of how nodes are created and registered into the editor

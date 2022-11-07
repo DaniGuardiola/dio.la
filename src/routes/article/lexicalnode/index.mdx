@@ -1,0 +1,157 @@
+---
+date: 2021/04/23
+title: "LexicalNode: the core of all nodes - Lexical, explained (part 3)"
+description: Let's go under the hood and see what LexicalNode does for us.
+topics:
+  - lexical
+---
+
+# The core node: `LexicalNode`
+
+At this point you should have a good understanding of what nodes are, how they are composed together in the node tree, and what the few base nodes are.
+
+It's time to go deeper, and we're gonna start by learning about `LexicalNode`, which is at the core of all nodes, and implements all of the core features present in all of them.
+
+> `LexicalNode` is not meant to be used directly. Instead, it should always be extended. This doesn't mean that you should extend it yourself to build your nodes though, since Lexical provides higher level base nodes (that already extend `LexicalNode`) for you to extend.
+
+## Internal properties
+
+There are three very important internal properties: `__type`, `__parent`, and `__key`. They are initially set in the constructor:
+
+```ts twoslash {1-3}
+  constructor(key?: NodeKey) {
+    this.__type = this.constructor.getType();
+    this.__parent = null;
+    $setNodeKey(this, key);
+  }
+```
+
+Let's learn about them.
+
+### Type: the node's identity
+
+Every node class has a "type". For example, `TextNode` has the `text` type, `ParagraphNode` has the `paragraph` type, `LineBreakNode` has the `line-break` type, and so on, you get it.
+
+The type of a node is declared by overriding the `LexicalNode::getType()` static method. Internally, instances also have the `LexicalNode.__type` property, and a similar `LexicalNode.getType()` instance method.
+
+In fact, the `LexicalNode.__type` property is automatically assigned in the constructor, from the `LexicalNode::getType()` static method, which means that the static method is the source of truth:
+
+```ts twoslash {1}
+  constructor(key?: NodeKey) {
+    this.__type = this.constructor.getType();
+    this.__parent = null;
+    $setNodeKey(this, key);
+  }
+```
+
+The type of a node never changes.
+
+### Parent
+
+To do...
+
+### Key
+
+To do...
+
+## Writable nodes
+
+One of the most common operations in Lexical editors are node updates. For example, we might want to change the indentation (`ElementNode.__indent`) of an element node.
+
+These node updates are usually -NOTE: usually or always?- part of an editor update (`lexicalEditor.update()`), and can be achieved through "writable" nodes.
+
+Writable nodes can be obtained through the `lexicalNode.getWritable()` method, and they are **mutable**. This means that you can change their properties directly like in the example below, and the changes will be applied as part of the update.
+
+```ts twoslash
+const [editor] = getEditor();
+declare function getNode(): LexicalNode;
+// --cut--
+editor.update(() => {
+  const node = getNode();
+  const writableNode = node.getWritable();
+  writableNode.__indent = 2;
+});
+```
+
+## Internal properties
+
+These are the internal properties of a `LexicalNode` instance, used to track some very important information about the node.
+
+They are initially set in the constructor of the node class:
+
+```ts twoslash {1-3}
+  constructor(key?: NodeKey) {
+    this.__type = this.constructor.getType();
+    this.__parent = null;
+    $setNodeKey(this, key);
+  }
+```
+
+### `__type`
+
+The type of the node (e.g. `"text"` or `"paragraph"`).
+
+### `__key`
+
+The key of the node, like `"text"` or `"paragraph"`. It is set in the constructor:
+
+```ts twoslash {1}
+  constructor(key?: NodeKey) {
+    this.__type = this.constructor.getType();
+    this.__parent = null;
+    $setNodeKey(this, key);
+  }
+```
+
+### `__parent`
+
+To do...
+
+## Static methods
+
+These methods are called on the `LexicalNode` class itself. For example:
+
+```ts twoslash
+import { LexicalNode } from 'lexical'
+declare const paragraphNode: $createParagraphNode()
+// --cut--
+LexicalNode.clone(paragraphNode)
+```
+
+### `getType`
+
+To do...
+
+### `clone`
+
+To do...
+
+## The constructor
+
+To do...
+
+## Getters and traversers
+
+### `getType`, `getKey`, `getParent` and `getParentOrThrow`
+
+To do...
+
+### `getType`, `getKey`, `getParent` and `getParentOrThrow`
+
+To do...
+
+### `isAttached`
+
+To do...
+
+### `isSelected`, `selectPrevious` and `selectNext`
+
+To do...
+
+## View methods
+
+To do...
+
+## Setters and mutators
+
+To do...

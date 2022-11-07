@@ -1,7 +1,9 @@
+import { ArticleId, ARTICLES } from "./generated/articles";
+
 // types
 // -----
 
-export type Topic = "typescript" | "react" | "fun" | "reverse-engineering";
+export type Topic = "lexical";
 
 export type ArticleMetadata = {
   id: string;
@@ -15,46 +17,11 @@ export type ArticleMetadata = {
 // data
 // ----
 
-export const ARTICLES: ArticleMetadata[] = [
-  {
-    id: "a-polite-twitter-request",
-    date: "2022/10/26",
-    title: "Hello Twitter employee!",
-    description: "A polite request.",
-  },
-  {
-    id: "the-world-of-design-tokens",
-    date: "2022/06/12",
-    title: "The world of Design Tokens",
-    description:
-      "A collection of tools, projects, articles, and other resources involving the usage of Design Tokens.",
-    topics: ["typescript", "reverse-engineering"],
-  },
-  {
-    id: "making-doctors-appointment-command-line",
-    date: "2021/04/23",
-    title: "Making a doctor's appointment from the command line",
-    description:
-      "Reverse-engineering an appointment-making app to create a doctor's appointment CLI.",
-    topics: ["react", "fun"],
-    imageUrl:
-      "https://images.unsplash.com/photo-1666644235536-b3524428b331?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1113&q=80",
-  },
-  {
-    id: "reading-file-line-line-nodejs",
-    date: "2021/05/08",
-    title: "Reading a file line-by-line in Node.js",
-    description:
-      "Performance and memory benchmarks of different approaches to reading files line by line with JavaScript.",
-    topics: ["react", "reverse-engineering", "fun"],
-  },
-];
+const highlightsIds: ArticleId[] = ["test-article"];
 
-export const HIGHLIGHTS: ArticleMetadata[] = [
-  "the-world-of-design-tokens",
-  "making-doctors-appointment-command-line",
-  "reading-file-line-line-nodejs",
-].map(findArticleMetadataById);
+export const HIGHLIGHTS = highlightsIds.map(findArticleMetadataById);
+
+export { ARTICLES };
 
 // computed
 // --------

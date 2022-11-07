@@ -131,7 +131,7 @@ export default function ArticleLayout() {
             articleUrl={articleUrl()}
             readingMinutes={readingMinutes()}
           />
-          <div class="main-container p-4" ref={contentDiv!}>
+          <div class="article-container p-4" ref={contentDiv!}>
             <SkipLink id="article-content" />
             <MDXContent>
               <Outlet />

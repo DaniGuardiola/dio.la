@@ -1,7 +1,5 @@
 # To do
 
-- Article view
-  - Lists
 - About page
 - 404 page
 - Favicon
@@ -25,7 +23,6 @@
   - Headings as anchor links
 - Add schema.org stuff
 - Add draft option to articles (frontmatter), and create drafts.dio.la deployment to show them with env variable.
-- Generate articles data from filesystem & frontmatters
 - OG images (satori) for homepage and articles without defined image
 - Hire illustrator to make nice main images for articles (and some secondary illustrations as needed)
 - RSS
@@ -45,3 +42,4 @@
 - Optimization: compute reading time when generating article metadata (from article content, maybe excluding JSX - remark should be useful for this) so it's available without javascript enabled (and before hydration)
 - Smaller font sizes on mobile?
 - Figure out how to prevent stuff from jumping around on load
+- Add easter egg
