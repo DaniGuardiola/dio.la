@@ -65,3 +65,7 @@
 - A terminal logs design system
 - hacking regexp - linkedin
 - Reading a file line-by-line in Node.js
+- Services / tech I use
+- My setup
+- Colocation as a religion
+- Multi-select label magic
