@@ -58,13 +58,15 @@ function Header() {
   const [atTop, setAtTop] = createSignal(true);
   const [scrolled, setScrolled] = createSignal(false);
 
+  function updateScrolled() {
+    if (typeof window === "undefined") return;
+    window.scrollY === 0 ? setAtTop(true) : setAtTop(false);
+    window.scrollY > HEADER_SCROLL_OFFSET
+      ? setScrolled(true)
+      : setScrolled(false);
+  }
+
   if (typeof window !== "undefined") {
-    function updateScrolled() {
-      window.scrollY === 0 ? setAtTop(true) : setAtTop(false);
-      window.scrollY > HEADER_SCROLL_OFFSET
-        ? setScrolled(true)
-        : setScrolled(false);
-    }
     createEffect(() => {
       updateScrolled();
       window?.addEventListener("scroll", updateScrolled);
