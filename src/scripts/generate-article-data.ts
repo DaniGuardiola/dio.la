@@ -11,10 +11,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const ARTICLES_BASE_PATH = path.resolve(__dirname, "../routes/article");
-const OUTPUT_FILE_PATH = path.resolve(
-  __dirname,
-  "../data/generated/articles.ts"
-);
+const OUTPUT_DIR = path.resolve(__dirname, "../data/generated");
+const OUTPUT_FILE_PATH = path.resolve(__dirname, OUTPUT_DIR, "articles.ts");
 
 async function getArticleFilePaths() {
   const pathList = await fs.readdir(ARTICLES_BASE_PATH);
@@ -69,7 +67,8 @@ async function generateOutputFile(articleMetadataList: ArticleMetadata[]) {
     "\nexport const ARTICLES: ArticleMetadata[] =",
     JSON.stringify(articleMetadataList),
   ];
-  fs.writeFile(OUTPUT_FILE_PATH, parts.join("\n"));
+  await fs.mkdir(OUTPUT_DIR, { recursive: true });
+  await fs.writeFile(OUTPUT_FILE_PATH, parts.join("\n"));
   await autofixFile(OUTPUT_FILE_PATH);
   await formatFile(OUTPUT_FILE_PATH);
 }
