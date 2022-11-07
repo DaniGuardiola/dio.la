@@ -1,0 +1,67 @@
+- How to (properly) style your content (lists, headings, etc)
+- Chrome extension RPC
+- Easy skip links in Solid / React
+- Focus rings + scroll margins
+- Shiki twoslash
+- Lexical "modules"
+- Fishing for a Proxy (lexical editor)
+- A tale of default config types
+- Random id with base 36
+- Bitwise in JavaScript (example: lexical text format)
+- Splitting context and batching state
+- The open/closed pattern
+- How to calculate estimated reading time
+- Prolog and cousins
+- How I hacked a russian cybercriminal group
+- How to build a CPU emulator
+- An old attempt at og-images (vs. satori)
+- My Pop!\_OS setup script
+- Button groups, React context, and negative margins
+- Reverse engineering and hacking the Discord client - voice proximity chat
+- Cutting in line at the doctor
+- Self-life detector
+- Twitter plays Pokemon
+- Annoying a work mate (phone calls script)
+- Buscapiso script
+- SASS + Tailwind @apply
+- Manually typing classes and instances
+- Rendering Lexical without Lexical
+- Why Ariakit will win the headless UI wars
+- A workaround to the lack of TypeScript partial inference of generics (and `satisfies`)
+- Generating deterministic but varied colors for avatars
+- `useImageIsLoaded`
+- A collections system for React
+- A very simple way to animate a checkbox check
+- The React context register pattern and use-cases (example: useDialogViews)
+- Merging React props (and refs, and keys)
+- Detecting scroll overflow
+- CSS variables and JavaScript (example: --scroll)
+- How to download icons from Figma
+- Flattening SVG icon paths
+- SVG icon color slots
+- Encoding SVG icon size in a flattened path
+- Using :where to simplify icon sizing
+- A React component system for your design system
+- Encoding metadata in your Rect components
+- How to build a spinning loading indicator
+- How to create a "slottable" component in React
+- How menus and comboboxes can be composed together using Ariakit
+- How to learn accessibility
+- Understanding React and (React's) JSX types
+- Abstracting Ariakit
+- Building a React and Tailwind design system
+- Render props
+- The prop-piping pattern
+- React Polymorphism and types
+- Trick to center something (Atlas DialogLayout header)
+- Checking if something is overflowing e.g. to show a tooltip
+- Better interaction styles (:hover:active and useKeyboardActive)
+- Scheduling focus in React
+- useStaticValue
+- Design tokens with Tailwind
+- Downloading colors as design tokens from Figma styles
+- Using TS Morph to generate documentation from types and JSDocs
+- Generating and visualizing docs for component props
+- A terminal logs design system
+- hacking regexp - linkedin
+- Reading a file line-by-line in Node.js
