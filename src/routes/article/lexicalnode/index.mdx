@@ -18,7 +18,7 @@ It's time to go deeper, and we're gonna start by learning about `LexicalNode`, w
 
 There are three very important internal properties: `__type`, `__parent`, and `__key`. They are initially set in the constructor:
 
-```ts twoslash {1-3}
+```ts {1-3}
   constructor(key?: NodeKey) {
     this.__type = this.constructor.getType();
     this.__parent = null;
@@ -36,7 +36,7 @@ The type of a node is declared by overriding the `LexicalNode::getType()` static
 
 In fact, the `LexicalNode.__type` property is automatically assigned in the constructor, from the `LexicalNode::getType()` static method, which means that the static method is the source of truth:
 
-```ts twoslash {1}
+```ts {1}
   constructor(key?: NodeKey) {
     this.__type = this.constructor.getType();
     this.__parent = null;
@@ -62,7 +62,7 @@ These node updates are usually -NOTE: usually or always?- part of an editor upda
 
 Writable nodes can be obtained through the `lexicalNode.getWritable()` method, and they are **mutable**. This means that you can change their properties directly like in the example below, and the changes will be applied as part of the update.
 
-```ts twoslash
+```ts
 const [editor] = getEditor();
 declare function getNode(): LexicalNode;
 // --cut--
@@ -79,7 +79,7 @@ These are the internal properties of a `LexicalNode` instance, used to track som
 
 They are initially set in the constructor of the node class:
 
-```ts twoslash {1-3}
+```ts {1-3}
   constructor(key?: NodeKey) {
     this.__type = this.constructor.getType();
     this.__parent = null;
@@ -95,7 +95,7 @@ The type of the node (e.g. `"text"` or `"paragraph"`).
 
 The key of the node, like `"text"` or `"paragraph"`. It is set in the constructor:
 
-```ts twoslash {1}
+```ts {1}
   constructor(key?: NodeKey) {
     this.__type = this.constructor.getType();
     this.__parent = null;
@@ -111,7 +111,7 @@ To do...
 
 These methods are called on the `LexicalNode` class itself. For example:
 
-```ts twoslash
+```ts
 import { LexicalNode } from 'lexical'
 declare const paragraphNode: $createParagraphNode()
 // --cut--
