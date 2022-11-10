@@ -1,0 +1,186 @@
+---
+date: 2021/04/23
+title: "Lexical updates - Lexical, explained (part 3)"
+description: To do.
+topics:
+  - lexical
+---
+
+# What is an update?
+
+A Lexical state (an `EditorState` instance) holds two important pieces of data about the state of our editor:
+
+- The node tree.
+- The selection.
+
+An update is the process of updating the editor state, and more specifically, those two things.
+
+Updates are triggered indirectly in multiple situations. Here are some examples:
+
+- In response to events, like [when the user types text into the editor](https://github.com/facebook/lexical/blob/12a045e533b19e058d98e609873832cea2e3ac85/packages/lexical/src/LexicalEvents.ts#L600).
+- When calling the `LexicalEditor.focus` method, [an update is triggered to set the right selection state](https://github.com/facebook/lexical/blob/12a045e533b19e058d98e609873832cea2e3ac85/packages/lexical/src/LexicalEditor.ts#L818).
+- Some of the internal logic also needs to trigger updates, [here's an example in the `markAllNodesAsDirty` util](https://github.com/facebook/lexical/blob/12a045e533b19e058d98e609873832cea2e3ac85/packages/lexical/src/LexicalUtils.ts#L388).
+
+# Updating the state
+
+It is also possible to update the state directly, by calling the `LexicalEditor.update` method. Here's an example from the docs:
+
+```ts
+editor.update(() => {
+  // Get the RootNode from the EditorState.
+  const root = $getRoot();
+
+  // Get the selection from the EditorState.
+  const selection = $getSelection();
+
+  // Create a new ParagraphNode.
+  const paragraphNode = $createParagraphNode();
+
+  // Create a new TextNode.
+  const textNode = $createTextNode("Hello world");
+
+  // Append the text node to the paragraph.
+  paragraphNode.append(textNode);
+
+  // Finally, append the paragraph to the root.
+  root.append(paragraphNode);
+});
+```
+
+This is one of the most important features in Lexical: the ability to programatically update the state.
+
+For example, you could build an "insert" menu that allows you to insert nodes like images, videos, etc. These actions would be implemented through state updates\*.
+
+At this point, there are a few open questions:
+
+- What are these `$` methods? Is this PHP? jQuery?!?
+- We're not returning anything, and we're not calling any sort of `setState` functions so... how does the state actually get updated?
+- The `$getRoot()` function returns the editor root node, but how do we know which editor to get it from? There might be different editor instances in our page, but we're not passing anything to the function.
+- What is goING ON?!
+
+Okay, okay, don't go crazy just yet. There are really good answers to all of these questions. Spoiler alert: they're all related!
+
+We'll get to them in a bit, but we need to lay the groundwork first.
+
+> \* It's likely that an actual implementation would dispatch a command instead of directly updating the state, but even in that case, a registered listener for that event will still need to update the state.
+
+# _Updating_ the state?
+
+First of all: I've lied to you. Sorry about that. Let me explain.
+
+When introducing the concept of state updates, it's easier to think of state as something that is "updated". Conceptually, that's what happens anyway.
+
+In reality, the state is not updated: it's replaced. Every time an update happens, these are roughly the steps that are followed:
+
+- The current state is cloned. This cloned state becomes the "pending state".
+- The pending state becomes mutable. The update logic applies any changes to it.
+- Once all update logic is done, the pending state is "locked" (made immutable again).
+- The _pending_ state is set as the _current_ state, replacing the previous state.
+- Reconciliation happens and the resulting changes are applied to the DOM. More on this later.
+
+This should be starting to make sense, but it doesn't answer our questions yet. However, it already gives us a hint of what's going on: the pending state is mutable while the update logic is running.
+
+We still don't know exactly _how_ the pending state is mutated, but at least we know that it's possible. Let's go deeper.
+
+# Anatomy of an update
+
+To get a clearer picture of what's going on, let's create a simplified version of [the method that actually executes an update](https://github.com/facebook/lexical/blob/12a045e533b19e058d98e609873832cea2e3ac85/packages/lexical/src/LexicalUpdates.ts#L882) in Lexical.
+
+First of all, we need to know about the editor that's the target of this update, and the update callback that needs to be executed.
+
+> Note that since the `LexicalEditor.update` method is already being called on an editor instance, we already know that that's the target editor (`this`). However, the actual function that contains the update logic is separate from this method (the method calls this function internally though), so we need to receive it as an argument.
+
+```ts
+function beginUpdate(editor: LexicalEditor, updateFn: () => void);
+```
+
+Here's a skeleton implementation:
+
+```ts
+function beginUpdate(editor: LexicalEditor, updateFn: () => void) {
+  // Clone the current state and set it as the pending state.
+  editor._pendingEditorState = cloneEditorState(editor._currentEditorState);
+
+  // Enable mutability.
+  isReadOnlyMode = false;
+
+  // Execute the update callback.
+  updateFn();
+
+  // Disable mutability.
+  isReadOnlyMode = true;
+
+  // Commit pending updates.
+  commitPendingUpdates(editor);
+}
+```
+
+## Lexical scope
+
+Probably the first thing that stands out here is the `isReadOnlyMode` variable. Where is it coming from?
+
+The answer is very simple: it's defined at the module level. The `LexicalUpdates.ts` file contains both the `isReadOnlyMode` variable declaration and the update function:
+
+```ts
+let isReadOnlyMode = true;
+
+function beginUpdate(editor: LexicalEditor, updateFn: () => void) {
+  // ...
+  isReadOnlyMode = false;
+  // ...
+  isReadOnlyMode = true;
+}
+```
+
+This is useful due to **lexical scope**.
+
+> **Do not get confused here!** When we talk about _lexical scope_, we're talking about **JavaScript lexical scope**, which is a concept entirely unrelated to _Lexical_, the text editor framework.
+>
+> If you're unfamiliar with scopes in JavaScript, you should [learn about them](<](https://developer.mozilla.org/en-US/docs/Glossary/Scope)>) before you read on.
+
+Specifically, Lexical is taking advantage of _module scope_, which is the scope at which the variable is being declared. This means that we have access to the variable from anywhere in the module.
+
+There's something else going on here though. If you've used Lexical before, you might have run into an error that says something like "Cannot use method in read-only mode". This error is triggered, for example, if you try to call `node.insertAfter()` **outside** of an `editor.update()` callback.
+
+But how does `insertAfter()` know about the read-only mode state? `insertAfter()` is not declared in the same file as `isReadOnlyMode`, so it shouldn't have access to it... right?
+
+We'll need to dig a bit deeper.
+
+## Updates run synchronously
+
+Take another look at our `beginUpdate` function. Our little function is synchronous, which means that we can be sure about the order of operations. Let me illustrate this:
+
+```ts
+let isReadOnlyMode = true;
+
+function beginUpdate(editor: LexicalEditor, updateFn: () => void) {
+  // isReadOnlyMode is initially true, so that's the value here.
+  console.log(isReadOnlyMode); // > true
+
+  // If we set isReadOnlyMode to false...
+  isReadOnlyMode = false;
+  // ...it will be false at this point.
+  console.log(isReadOnlyMode); // > false
+
+  // And if we update it to true...
+  isReadOnlyMode = true;
+  // ...then it'll be true after.
+  console.log(isReadOnlyMode); // > true
+}
+```
+
+This is fairly standard stuff! The key takeaway here is that, by the time our update callback is called, `isReadOnlyMode` will be `false`, effectively signaling that the pending state is mutable at that time:
+
+```ts
+let isReadOnlyMode = true;
+
+function beginUpdate(editor: LexicalEditor, updateFn: () => void) {
+  isReadOnlyMode = false;
+  updateFn(); // While this function runs, isReadOnlyMode is false.
+  isReadOnlyMode = true;
+}
+```
+
+## Lexical scope can be accessed externally
+
+...
