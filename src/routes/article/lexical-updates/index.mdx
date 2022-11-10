@@ -56,9 +56,8 @@ At this point, there are a few open questions:
 - What are these `$` methods? Is this PHP? jQuery?!?
 - We're not returning anything, and we're not calling any sort of `setState` functions so... how does the state actually get updated?
 - The `$getRoot()` function returns the editor root node, but how do we know which editor to get it from? There might be different editor instances in our page, but we're not passing anything to the function.
-- What is goING ON?!
 
-Okay, okay, don't go crazy just yet. There are really good answers to all of these questions. Spoiler alert: they're all related!
+There are really good answers to all of these questions. Spoiler alert: they're all related!
 
 We'll get to them in a bit, but we need to lay the groundwork first.
 
@@ -75,8 +74,8 @@ In reality, the state is not updated: it's replaced. Every time an update happen
 - The current state is cloned. This cloned state becomes the "pending state".
 - The pending state becomes mutable. The update logic applies any changes to it.
 - Once all update logic is done, the pending state is "locked" (made immutable again).
-- The _pending_ state is set as the _current_ state, replacing the previous state.
-- Reconciliation happens and the resulting changes are applied to the DOM. More on this later.
+- The _pending_ state is set as the _current_ state, effectively replacing it.
+- Reconciliation happens and the resulting changes are applied to the DOM.
 
 This should be starting to make sense, but it doesn't answer our questions yet. However, it already gives us a hint of what's going on: the pending state is mutable while the update logic is running.
 
@@ -88,7 +87,9 @@ To get a clearer picture of what's going on, let's create a simplified version o
 
 First of all, we need to know about the editor that's the target of this update, and the update callback that needs to be executed.
 
-> Note that since the `LexicalEditor.update` method is already being called on an editor instance, we already know that that's the target editor (`this`). However, the actual function that contains the update logic is separate from this method (the method calls this function internally though), so we need to receive it as an argument.
+> Note that since the `LexicalEditor.update` method is already being called on an editor instance, we already know that that's the target editor (`this`).
+>
+> However, the actual function that runs the update is separate from this method (the method calls this function internally though), so we need to receive it as an argument.
 
 ```ts
 function beginUpdate(editor: LexicalEditor, updateFn: () => void);
