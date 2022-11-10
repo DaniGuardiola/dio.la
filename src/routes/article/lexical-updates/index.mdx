@@ -72,8 +72,8 @@ When introducing the concept of state updates, it's easier to think of state as 
 In reality, the state is not updated: it's replaced. Every time an update happens, these are roughly the steps that are followed:
 
 - The current state is cloned. This cloned state becomes the "pending state".
-- The pending state becomes mutable. The update logic applies any changes to it.
-- Once all update logic is done, the pending state is "locked" (made immutable again).
+- The pending state becomes mutable. The update callback applies changes to it.
+- Once the update callback is done, the pending state is "locked" (made immutable again).
 - The _pending_ state is set as the _current_ state, effectively replacing it.
 - Reconciliation happens and the resulting changes are applied to the DOM.
 
@@ -182,6 +182,53 @@ function beginUpdate(editor: LexicalEditor, updateFn: () => void) {
 }
 ```
 
-## Lexical scope can be accessed externally
+## Module scope can be accessed externally
 
-...
+Modules can expose values in their scope to the outside world through `export` statements. In fact, that's the point of a module! Modules usually look like this:
+
+```ts twoslash include module-one
+// @module: esnext
+// @filename: module-one.ts
+const somePrivateConstant = "my constant";
+let somePrivateVariable = "my variable";
+
+function somePrivateFunction() {
+  // ...
+}
+
+export const somePublicConstant = "my public constant";
+export let somePublicVariable = "my public variable";
+export function somePublicFunction() {
+  // ...
+}
+```
+
+```ts twoslash
+// @include: module-one
+```
+
+We can import public modules like this:
+
+```ts twoslash
+// @include: module-one
+// --cut--
+// @filename: module-two.ts
+import {
+  somePublicConstant,
+  somePublicVariable,
+  somePublicFunction,
+} from "./module-one";
+```
+
+Values that are not exported are private, because they cannot be imported from other modules.
+
+```ts twoslash
+// @include: module-one
+// --cut--
+// @filename: module-two.ts
+import {
+  somePrivateConstant,
+  somePrivateVariable,
+  somePrivateFunction,
+} from "./module-one";
+```
