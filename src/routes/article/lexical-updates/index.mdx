@@ -116,15 +116,15 @@ In reality, the state is not updated: it's replaced. Every time an update happen
 
 ---
 
-export const currentState = (
+export const CurrentState = () => (
   <span class="text-green-700 font-bold">current state</span>
 );
 
-export const pendingState = (
+export const PendingState = () => (
   <span class="text-orange-700 font-bold">pending state</span>
 );
 
-export const updateCallback = (
+export const UpdateCallback = () => (
   <span class="text-blue-700 font-bold">update callback</span>
 );
 
@@ -132,11 +132,11 @@ export const checkmark = <span class="text-green-500 font-bold">✔</span>;
 
 export const lock = "🔒";
 
-- The {currentState} is **cloned**. This cloned state becomes the "{pendingState}".
-- The {pendingState} becomes {checkmark} **mutable**.
-  - The {updateCallback} applies its **changes** to it (in other words: it _mutates_ it).
-- Once the {updateCallback} is done, the {pendingState} is {lock} **locked** (made immutable).
-- The {pendingState} is set as the {currentState}, effectively replacing it.
+- The {<CurrentState />} is **cloned**. This cloned state becomes the "{<PendingState />}".
+- The {<PendingState />} becomes {checkmark} **mutable**.
+  - The {<UpdateCallback />} applies its **changes** to it (in other words: it _mutates_ it).
+- Once the {<UpdateCallback />} is done, the {<PendingState />} is {lock} **locked** (made immutable).
+- The {<PendingState />} is set as the {<CurrentState />}, effectively replacing it.
 - Reconciliation happens and the resulting changes are applied to the DOM.
 
 ---
