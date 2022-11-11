@@ -2,7 +2,7 @@ lockfileVersion: 5.4
 
 patchedDependencies:
   shiki-twoslash@3.1.0:
-    hash: fanyevepg725q5hrjl2n7ipuey
+    hash: 7m3u5z67xwyeyigadxpgxeqmqq
     path: patches/shiki-twoslash@3.1.0.patch
 
 specifiers:
@@ -4588,7 +4588,7 @@ packages:
       fenceparser: 1.1.1
       regenerator-runtime: 0.13.10
       shiki: 0.10.1
-      shiki-twoslash: 3.1.0_fanyevepg725q5hrjl2n7ipuey
+      shiki-twoslash: 3.1.0_7m3u5z67xwyeyigadxpgxeqmqq
       tslib: 2.1.0
       typescript: 4.8.4
       unist-util-visit: 2.0.3
@@ -4723,7 +4723,7 @@ packages:
     resolution: {integrity: sha512-8o/QEhSSRb1a5i7TFR0iM4G16Z0vYB2OQVs4G3aAFXjn3T6yEx8AZxy1PgDF7I00LZHYA3WxaSYIf5e5sAX8Rw==}
     dev: true
 
-  /shiki-twoslash/3.1.0_fanyevepg725q5hrjl2n7ipuey:
+  /shiki-twoslash/3.1.0_7m3u5z67xwyeyigadxpgxeqmqq:
     resolution: {integrity: sha512-uDqrTutOIZzyHbo103GsK7Vvc10saK1XCCivnOQ1NHJzgp3FBilEpftGeVzVSMOJs+JyhI7whkvhXV7kXQ5zCg==}
     dependencies:
       '@typescript/twoslash': 3.1.0
