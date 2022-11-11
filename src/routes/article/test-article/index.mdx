@@ -5,6 +5,23 @@ description: Nothing to see here, keep walking.
 ---
 
 ```ts twoslash
+// @module: esnext
+// @filename: maths.ts
+export function absolute(num: number) {
+  if (num < 0) return num * -1;
+  return num;
+}
+
+// @filename: index.ts
+import { absolute } from "./maths";
+const value = absolute(-1);
+```
+
+```ts twoslash
+// @include: main
+```
+
+```ts twoslash
 // @errors: 2304
 // @strict: false
 

@@ -1,37 +1,76 @@
 ---
 date: 2021/04/23
-title: "Lexical updates - Lexical, explained (part 3)"
-description: To do.
+title: "State updates and the lexical scope"
+description: Lexical, explained - part 3.
 topics:
   - lexical
 ---
 
 # What is an update?
 
-A Lexical state (an `EditorState` instance) holds two important pieces of data about the state of our editor:
+A Lexical state (`EditorState`) holds two important pieces of data: the current **node tree** and the **selection state**. This state is considered the source of truth.
 
-- The node tree.
-- The selection.
+The state is the source of truth for the editor, not the DOM. The DOM is computed from the state and not the other way around. A fancier way to say it is that **"the view (DOM) is a function of the state (`EditorState`)"**.
 
-An update is the process of updating the editor state, and more specifically, those two things.
+```ts twoslash
+import type { EditorState } from "lexical";
+declare function renderToDOM(state: EditorState): HTMLElement;
+declare const editorState: EditorState;
+// ---cut---
+// This is pseudo code!
+renderToDOM(editorState);
+```
 
-Updates are triggered indirectly in multiple situations. Here are some examples:
+When we update the state, we are changing the node tree or the selection state. Once these changes are applied, Lexical computes the differences between the previous and new state, and applies them to the DOM in a process called "reconciliation".
+
+```ts twoslash
+import type { EditorState } from "lexical";
+type DOMDiff = "imagine this is a DOM diff :)";
+declare function compareStates(
+  previousState: EditorState,
+  newState: EditorState
+): DOMDiff;
+declare function applyDiffToDOM(diff: DOMDiff): void;
+declare const previousState: EditorState;
+declare const newState: EditorState;
+// ---cut---
+// This is pseudo code!
+const domDiff = compareStates(previousState, newState);
+applyDiffToDOM(domDiff);
+```
+
+For example, if our previous state had _three_ paragraphs, and the new one has _two_, a paragraph needs to be removed. This resembles the concept of "virtual DOM" from other projects like React, although in practice there are many differences.
+
+---
+
+Lexical triggers updates internally in multiple situations. Some examples:
 
 - In response to events, like [when the user types text into the editor](https://github.com/facebook/lexical/blob/12a045e533b19e058d98e609873832cea2e3ac85/packages/lexical/src/LexicalEvents.ts#L600).
-- When calling the `LexicalEditor.focus` method, [an update is triggered to set the right selection state](https://github.com/facebook/lexical/blob/12a045e533b19e058d98e609873832cea2e3ac85/packages/lexical/src/LexicalEditor.ts#L818).
-- Some of the internal logic also needs to trigger updates, [here's an example in the `markAllNodesAsDirty` util](https://github.com/facebook/lexical/blob/12a045e533b19e058d98e609873832cea2e3ac85/packages/lexical/src/LexicalUtils.ts#L388).
+- When `LexicalEditor.focus` is called, [in order to set the right selection state](https://github.com/facebook/lexical/blob/12a045e533b19e058d98e609873832cea2e3ac85/packages/lexical/src/LexicalEditor.ts#L818).
+- In some of the internal logic, [like the `markAllNodesAsDirty` util](https://github.com/facebook/lexical/blob/12a045e533b19e058d98e609873832cea2e3ac85/packages/lexical/src/LexicalUtils.ts#L388).
 
-# Updating the state
+# `editor.update()`
 
-It is also possible to update the state directly, by calling the `LexicalEditor.update` method. Here's an example from the docs:
+It is also possible to update the state manually, by calling the `LexicalEditor.update` method with a callback. Here's an example from the docs:
 
-```ts
+```ts twoslash
+import {
+  createEditor,
+  $getRoot,
+  $getSelection,
+  $createParagraphNode,
+  $createTextNode,
+} from "lexical";
+const config = {
+  namespace: "MyEditor",
+  theme: {},
+  onError: console.error,
+};
+const editor = createEditor(config);
+// ---cut---
 editor.update(() => {
   // Get the RootNode from the EditorState.
   const root = $getRoot();
-
-  // Get the selection from the EditorState.
-  const selection = $getSelection();
 
   // Create a new ParagraphNode.
   const paragraphNode = $createParagraphNode();
@@ -47,21 +86,25 @@ editor.update(() => {
 });
 ```
 
-This is one of the most important features in Lexical: the ability to programatically update the state.
+This is one of the most important features in Lexical: the ability to **programatically update the state**.
 
-For example, you could build an "insert" menu that allows you to insert nodes like images, videos, etc. These actions would be implemented through state updates\*.
+For example, if you want to build an "insert" menu to add nodes like images or videos, you need to update the state.\*.
+
+> \* It's likely that an actual implementation of this would dispatch a command instead of directly updating the state, but even in that case, there'll still be a listener for that command that updates the state.
+
+---
 
 At this point, there are a few open questions:
 
-- What are these `$` methods? Is this PHP? jQuery?!?
-- We're not returning anything, and we're not calling any sort of `setState` functions so... how does the state actually get updated?
-- The `$getRoot()` function returns the editor root node, but how do we know which editor to get it from? There might be different editor instances in our page, but we're not passing anything to the function.
+> ❓ **What are these `$` methods?** Is this PHP? jQuery?!?
+
+> ❓ We're not returning anything, and we're not calling any sort of `setState` functions so... **how does the state actually get updated?**
+
+> ❓ **How does `$getRoot()` know which editor to use?** There might be different editor instances in our page, but we're not passing anything to the function, so which editor root should it return?
 
 There are really good answers to all of these questions. Spoiler alert: they're all related!
 
 We'll get to them in a bit, but we need to lay the groundwork first.
-
-> \* It's likely that an actual implementation would dispatch a command instead of directly updating the state, but even in that case, a registered listener for that event will still need to update the state.
 
 # _Updating_ the state?
 
@@ -71,11 +114,32 @@ When introducing the concept of state updates, it's easier to think of state as 
 
 In reality, the state is not updated: it's replaced. Every time an update happens, these are roughly the steps that are followed:
 
-- The current state is cloned. This cloned state becomes the "pending state".
-- The pending state becomes mutable. The update callback applies changes to it.
-- Once the update callback is done, the pending state is "locked" (made immutable again).
-- The _pending_ state is set as the _current_ state, effectively replacing it.
+---
+
+export const currentState = (
+  <span class="text-green-700 font-bold">current state</span>
+);
+
+export const pendingState = (
+  <span class="text-orange-700 font-bold">pending state</span>
+);
+
+export const updateCallback = (
+  <span class="text-blue-700 font-bold">update callback</span>
+);
+
+export const checkmark = <span class="text-green-500 font-bold">✔</span>;
+
+export const lock = "🔒";
+
+- The {currentState} is **cloned**. This cloned state becomes the "{pendingState}".
+- The {pendingState} becomes {checkmark} **mutable**.
+  - The {updateCallback} applies its **changes** to it (in other words: it _mutates_ it).
+- Once the {updateCallback} is done, the {pendingState} is {lock} **locked** (made immutable).
+- The {pendingState} is set as the {currentState}, effectively replacing it.
 - Reconciliation happens and the resulting changes are applied to the DOM.
+
+---
 
 This should be starting to make sense, but it doesn't answer our questions yet. However, it already gives us a hint of what's going on: the pending state is mutable while the update logic is running.
 
@@ -83,24 +147,24 @@ We still don't know exactly _how_ the pending state is mutated, but at least we 
 
 # Anatomy of an update
 
-To get a clearer picture of what's going on, let's create a simplified version of [the method that actually executes an update](https://github.com/facebook/lexical/blob/12a045e533b19e058d98e609873832cea2e3ac85/packages/lexical/src/LexicalUpdates.ts#L882) in Lexical.
-
-First of all, we need to know about the editor that's the target of this update, and the update callback that needs to be executed.
-
-> Note that since the `LexicalEditor.update` method is already being called on an editor instance, we already know that that's the target editor (`this`).
->
-> However, the actual function that runs the update is separate from this method (the method calls this function internally though), so we need to receive it as an argument.
-
-```ts
-function beginUpdate(editor: LexicalEditor, updateFn: () => void);
-```
+To get a clearer picture of what's going on, let's create a simplified version of [the method that executes an update](https://github.com/facebook/lexical/blob/12a045e533b19e058d98e609873832cea2e3ac85/packages/lexical/src/LexicalUpdates.ts#L882) in Lexical.
 
 Here's a skeleton implementation:
 
-```ts
-function beginUpdate(editor: LexicalEditor, updateFn: () => void) {
+```ts twoslash
+import type { LexicalEditor } from "lexical";
+import { cloneEditorState } from "lexical/LexicalEditorState";
+
+let isReadOnlyMode = true;
+declare function commitPendingUpdates(editor: LexicalEditor): void;
+// ---cut---
+export function updateEditor(editor: LexicalEditor, updateFn: () => void) {
+  // Get the current state.
+  const currentEditorState = editor._editorState;
+  //    ^?
+
   // Clone the current state and set it as the pending state.
-  editor._pendingEditorState = cloneEditorState(editor._currentEditorState);
+  editor._pendingEditorState = cloneEditorState(currentEditorState);
 
   // Enable mutability.
   isReadOnlyMode = false;
@@ -116,16 +180,49 @@ function beginUpdate(editor: LexicalEditor, updateFn: () => void) {
 }
 ```
 
-## Lexical scope
+There are two distinct phases:
 
-Probably the first thing that stands out here is the `isReadOnlyMode` variable. Where is it coming from?
+1. **Update phase:** the state is cloned and made mutable. The update callback is executed.
+2. **Commit phase:** the new state replaces the old one, and reconciliation happens.
+
+> **Reconciliation** is the process of comparing the current state with the pending state, and applying the necessary changes to the DOM.
+
+The second step happens entirely inside our `commitPendingUpdates` function. Here's an extremely simplified representation of what it does:
+
+```ts twoslash
+import type { LexicalEditor, EditorState } from "lexical";
+declare function reconcileDOM(
+  currentState: EditorState,
+  pendingState: EditorState
+): void;
+// ---cut---
+export function commitPendingUpdates(editor: LexicalEditor) {
+  // Get the current state.
+  const currentState = editor._editorState;
+
+  // Get the pending state.
+  const pendingState = editor._pendingEditorState!;
+
+  // Reconcile the DOM.
+  reconcileDOM(currentState, pendingState);
+
+  // Set the pending state as the current state.
+  editor._editorState = pendingState;
+}
+```
+
+# The lexical scope
+
+Something that stands out here is the `isReadOnlyMode` variable. Where is it coming from?
 
 The answer is very simple: it's defined at the module level. The `LexicalUpdates.ts` file contains both the `isReadOnlyMode` variable declaration and the update function:
 
-```ts
+```ts twoslash {1, 5, 7}
+import type { LexicalEditor } from "lexical";
+// ---cut---
 let isReadOnlyMode = true;
 
-function beginUpdate(editor: LexicalEditor, updateFn: () => void) {
+export function updateEditor(editor: LexicalEditor, updateFn: () => void) {
   // ...
   isReadOnlyMode = false;
   // ...
@@ -141,7 +238,31 @@ This is useful due to **lexical scope**.
 
 Specifically, Lexical is taking advantage of _module scope_, which is the scope at which the variable is being declared. This means that we have access to the variable from anywhere in the module.
 
-There's something else going on here though. If you've used Lexical before, you might have run into an error that says something like "Cannot use method in read-only mode". This error is triggered, for example, if you try to call `node.insertAfter()` **outside** of an `editor.update()` callback.
+There's something else going on here though. If you've used Lexical before, you might have run into this error while trying to call a method like `node.insertAfter()` **outside** of an `editor.update()` callback:
+
+```ts twoslash
+import type { NodeKey } from "lexical";
+import { createEditor, $getNodeByKey, $createParagraphNode } from "lexical";
+
+const config = {
+  namespace: "MyEditor",
+  theme: {},
+  onError: console.error,
+};
+const editor = createEditor(config);
+declare const key: NodeKey;
+const node = $getNodeByKey(key)!;
+const paragraph = $createParagraphNode();
+// ---cut---
+// this is fine
+editor.update(() => {
+  node.insertAfter(paragraph);
+});
+
+// this fails
+node.insertAfter(paragraph);
+// error: "Cannot use method in read-only mode"
+```
 
 But how does `insertAfter()` know about the read-only mode state? `insertAfter()` is not declared in the same file as `isReadOnlyMode`, so it shouldn't have access to it... right?
 
@@ -149,33 +270,32 @@ We'll need to dig a bit deeper.
 
 ## Updates run synchronously
 
-Take another look at our `beginUpdate` function. Our little function is synchronous, which means that we can be sure about the order of operations. Let me illustrate this:
+Take another look at our `updateEditor` function. Our little function is synchronous, which means that we can be sure about the order of operations. Let me illustrate this:
 
-```ts
+```ts twoslash
+import type { LexicalEditor } from "lexical";
+// ---cut---
 let isReadOnlyMode = true;
 
-function beginUpdate(editor: LexicalEditor, updateFn: () => void) {
-  // isReadOnlyMode is initially true, so that's the value here.
+export function updateEditor(editor: LexicalEditor, updateFn: () => void) {
   console.log(isReadOnlyMode); // > true
 
-  // If we set isReadOnlyMode to false...
   isReadOnlyMode = false;
-  // ...it will be false at this point.
   console.log(isReadOnlyMode); // > false
 
-  // And if we update it to true...
   isReadOnlyMode = true;
-  // ...then it'll be true after.
   console.log(isReadOnlyMode); // > true
 }
 ```
 
 This is fairly standard stuff! The key takeaway here is that, by the time our update callback is called, `isReadOnlyMode` will be `false`, effectively signaling that the pending state is mutable at that time:
 
-```ts
+```ts twoslash {4-5}
+import type { LexicalEditor } from "lexical";
+// ---cut---
 let isReadOnlyMode = true;
 
-function beginUpdate(editor: LexicalEditor, updateFn: () => void) {
+export function updateEditor(editor: LexicalEditor, updateFn: () => void) {
   isReadOnlyMode = false;
   updateFn(); // While this function runs, isReadOnlyMode is false.
   isReadOnlyMode = true;
@@ -184,21 +304,21 @@ function beginUpdate(editor: LexicalEditor, updateFn: () => void) {
 
 ## Module scope can be accessed externally
 
-Modules can expose values in their scope to the outside world through `export` statements. In fact, that's the point of a module! Modules usually look like this:
+Modules can expose values in their scope to the outside world through `export` statements. In fact, that's their point!
 
-```ts twoslash include module-one
+```twoslash include module-one
 // @module: esnext
 // @filename: module-one.ts
-const somePrivateConstant = "my constant";
-let somePrivateVariable = "my variable";
+const privateConst = "my constant";
+let privateLet = "my variable";
 
-function somePrivateFunction() {
+function privateFunction() {
   // ...
 }
 
-export const somePublicConstant = "my public constant";
-export let somePublicVariable = "my public variable";
-export function somePublicFunction() {
+export const publicConst = "my public constant";
+export let publicLet = "my public variable";
+export function publicFunction() {
   // ...
 }
 ```
@@ -207,28 +327,215 @@ export function somePublicFunction() {
 // @include: module-one
 ```
 
-We can import public modules like this:
+We can import **public** modules like this:
 
 ```ts twoslash
 // @include: module-one
-// --cut--
+// ---cut---
 // @filename: module-two.ts
-import {
-  somePublicConstant,
-  somePublicVariable,
-  somePublicFunction,
-} from "./module-one";
+import { publicConst, publicLet, publicFunction } from "./module-one";
 ```
 
-Values that are not exported are private, because they cannot be imported from other modules.
+Values that are not exported cannot be imported from other modules (they are **"private"**).
 
 ```ts twoslash
+// @errors: 2459
 // @include: module-one
-// --cut--
+// ---cut---
 // @filename: module-two.ts
-import {
-  somePrivateConstant,
-  somePrivateVariable,
-  somePrivateFunction,
-} from "./module-one";
+import { privateConst, privateLet, privateFunction } from "./module-one";
 ```
+
+---
+
+Let's look at the `isReadOnlyMode` variable again. It's not exported, we cannot use it directly from other modules:
+
+```ts twoslash {2, 7, 10-12}
+// @errors: 2459
+// @filename: LexicalUpdates.ts
+let isReadOnlyMode = true; // no "export" keyword!
+
+export function updateEditor() {}
+
+// @filename: a-module-somewhere.ts
+import { isReadOnlyMode } from "./LexicalUpdates";
+
+function $mutateStateSomehow() {
+  if (isReadOnlyMode) {
+    throw new Error("Cannot use method in read-only mode");
+  }
+}
+```
+
+However, we can still create a function in our module that returns it. That's exactly what Lexical does:
+
+```ts twoslash {4-6, 9, 12-14}
+// @filename: LexicalUpdates.ts
+let isReadOnlyMode = true;
+
+export function isCurrentlyReadOnlyMode(): boolean {
+  return isReadOnlyMode;
+}
+
+// @filename: a-module-somewhere.ts
+import { isCurrentlyReadOnlyMode } from "./LexicalUpdates";
+
+function $mutateStateSomehow() {
+  if (isCurrentlyReadOnlyMode()) {
+    throw new Error("Cannot use method in read-only mode");
+  }
+}
+```
+
+In fact, Lexical goes a step further with a function that performs this check and throws the error for us:
+
+```ts twoslash {4-8, 11, 14}
+// @noErrors
+// @filename: LexicalUpdates.ts
+let isReadOnlyMode = true;
+
+export function errorOnReadOnly(): void {
+  if (isReadOnlyMode) {
+    throw new Error("Cannot use method in read-only mode.");
+  }
+}
+
+// @filename: a-module-somewhere.ts
+import { errorOnReadOnly } from "./LexicalUpdates";
+
+function $mutateStateSomehow() {
+  errorOnReadOnly();
+}
+```
+
+## Module scope + synchronous execution = win
+
+It's time to connect the dots!
+
+In the previous section, we created `$mutateStateSomehow`. When this function is called, it checks the value of `isReadOnlyMode` from the `LexicalUpdates.ts` module.
+
+This function is intended to be called inside of the `updateEditor` (through `editor.update()`), like this:
+
+```ts twoslash
+import {
+  createEditor,
+  $getRoot,
+  $getSelection,
+  $createParagraphNode,
+  $createTextNode,
+} from "lexical";
+const config = {
+  namespace: "MyEditor",
+  theme: {},
+  onError: console.error,
+};
+const editor = createEditor(config);
+function $mutateStateSomehow() {}
+// ---cut---
+editor.update(() => {
+  $mutateStateSomehow();
+});
+```
+
+Remember, our update callback is executed synchronously, and right before `isReadOnlyMode`:
+
+```ts twoslash {4-5}
+import type { LexicalEditor } from "lexical";
+// ---cut---
+let isReadOnlyMode = true;
+
+export function updateEditor(editor: LexicalEditor, updateFn: () => void) {
+  isReadOnlyMode = false;
+  updateFn(); // $mutateStateSomehow is executed at this point.
+  isReadOnlyMode = true;
+}
+```
+
+This means that, when `$mutateStateSomehow` is called, `isReadOnlyMode` will be `false`, and the error will not be thrown.
+
+---
+
+Lexical is exploiting these behaviors to create a "global state" of sorts, in this case to track whether the editor is in read-only mode at some point in time. Functions that wish to mutate the state can perform this check through this technique.
+
+We can answer the first question now:
+
+> ❓ **What are these `$` methods?**
+>
+> **\>** The `$` prefix is a convention that the Lexical team uses to denote functions that depend on the `LexicalUpdate.ts` lexical scope and, therefore, can only be called inside of the `editor.update()` callback\*.
+
+Simple as that!
+
+> \* Technically, there's also `editor.read()`, which depends on the lexical scope in the same way.
+
+## Other variables
+
+The other questions are easy to answer now. Using the same technique, we can track which **editor** and **editor state** is currently "active" (i.e. the target of the current operation).
+
+```ts twoslash {1-3, 5, 9, 22, 35, 39-53}
+import type { EditorState, LexicalEditor } from "lexical";
+import { cloneEditorState } from "lexical/LexicalEditorState";
+declare function commitPendingUpdates(editor: LexicalEditor): void;
+// ---cut---
+let isReadOnlyMode = true;
+let activeEditorState: null | EditorState = null;
+let activeEditor: null | LexicalEditor = null;
+
+export function isCurrentlyReadOnlyMode(): boolean {
+  return isReadOnlyMode;
+}
+
+export function getActiveEditorState(): EditorState {
+  if (activeEditorState === null) {
+    throw new Error(
+      "Unable to find an active editor state." +
+        "State helpers or node methods can only be used " +
+        "synchronously during the callback of " +
+        "editor.update() or editorState.read()."
+    );
+  }
+
+  return activeEditorState;
+}
+
+export function getActiveEditor(): LexicalEditor {
+  if (activeEditor === null) {
+    throw new Error(
+      "Unable to find an active editor. " +
+        "This method can only be used " +
+        "synchronously during the callback of " +
+        "editor.update()."
+    );
+  }
+
+  return activeEditor;
+}
+
+export function updateEditor(editor: LexicalEditor, updateFn: () => void) {
+  const currentEditorState = editor._editorState;
+  editor._pendingEditorState = cloneEditorState(currentEditorState);
+
+  // Set lexically scoped variables.
+  isReadOnlyMode = false;
+  activeEditor = editor;
+  activeEditorState = editor._pendingEditorState;
+
+  // Execute the update callback.
+  updateFn();
+
+  // Reset lexically scoped variables.
+  isReadOnlyMode = true;
+  activeEditor = null;
+  activeEditorState = null;
+
+  // Commit pending updates.
+  commitPendingUpdates(editor);
+}
+```
+
+With these, the answers become clear:
+
+> ❓ **How does the state actually get updated?**
+>
+> **\>** The active state is stored in `activeEditorState`. This state will be mutable during the `editor.update()` callback, so it can be modified. Once the callback is done, the state will be locked and
+
+> ❓ **How does `$getRoot()` know which editor to use?** There might be different editor instances in our page, but we're not passing anything to the function, so which editor root should it return?

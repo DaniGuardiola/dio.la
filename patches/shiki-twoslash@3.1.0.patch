@@ -1,0 +1,13 @@
+diff --git a/dist/shiki-twoslash.cjs.development.js b/dist/shiki-twoslash.cjs.development.js
+index a70b3813ea4b56890f7e51519dd1df9115a509fe..703a11de35d32842247585260f3da5e45bc44c48 100644
+--- a/dist/shiki-twoslash.cjs.development.js
++++ b/dist/shiki-twoslash.cjs.development.js
+@@ -88,7 +88,7 @@ function createHighlightedString(ranges, text, targetedWord) {
+         // The LSP response lives inside a dom attribute, which _can_ have < inside it, so switch them ahead of time.
+         var lsp = htmlAttrReplacer(r.lsp || "");
+         var underLineTargetedWord = r.lsp === targetedWord ? "style=⇯border-bottom: solid 2px lightgrey;⇯" : "";
+-        return close ? tag("/data-lsp") : tag("data-lsp lsp=\xBF" + lsp + "\xBF " + underLineTargetedWord);
++        return close ? tag("/data-lsp") : tag("data-lsp lsp=\xBF" + lsp.replace(/\n/g, '--LINEBREAK--') + "\xBF " + underLineTargetedWord);
+ 
+       case "query":
+         return tag((close ? "/" : "") + "data-highlight");

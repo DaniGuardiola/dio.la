@@ -5,7 +5,8 @@
 
   // code block (```code```)
   & pre
-    @apply flex font-roboto-mono -mx-4 my-[1.25em] px-4 py-6 lg:rounded-lg bg-gray-900 text-black overflow-x-auto
+    @apply article-rounded
+    @apply flex font-roboto-mono -mx-4 my-[1.25em] px-4 py-6 bg-gray-900 text-black overflow-x-auto
 
     & .code-container
       @apply grow
@@ -62,7 +63,7 @@
 
     // type underline indicator
     & .data-lsp
-      @apply border-b-[1px] border-dotted
+      @apply border-b-[1px] border-dotted whitespace-pre
       @apply transition-colors ease-out border-transparent
 
     &:hover .data-lsp
