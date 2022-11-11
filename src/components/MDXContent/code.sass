@@ -72,7 +72,7 @@
     // type info on hover
     & .data-lsp:hover::before
       @apply content-[attr(data-lsp)]
-      @apply absolute translate-x-[calc(var(--scroll-x)*-1)] translate-y-[1.1rem] z-10
+      @apply absolute translate-x-[calc(var(--scroll-x)*-1)] translate-y-[1.3rem] z-10
       @apply px-2 py-1 bg-gray-600 border-2 border-white rounded text-white text-left text-[.875rem] whitespace-pre-wrap
 
     // error underline
@@ -110,8 +110,8 @@
         @apply absolute content-['_'] w-0 ring-[.06rem] ring-white/90 scale-y-75 -translate-y-6 -translate-x-[.05rem]
     
       & ul.dropdown
-        @apply inline-block z-[5] absolute max-w-[15rem] translate-x-[calc(var(--scroll-x)*-1)]
-        @apply bg-gray-900 border border-gray-700 text-white/80 max-h-48 overflow-auto
+        @apply inline-block z-[5] absolute max-w-[15rem] translate-x-[calc(var(--scroll-x)*-1)] -translate-y-[1rem]
+        @apply bg-gray-900 border border-gray-700 text-white/80 max-h-48 overflow-auto list-none
 
         & li
           @apply overflow-hidden px-2 my-1 select-none cursor-pointer

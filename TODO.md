@@ -44,3 +44,4 @@
 - Figure out how to prevent stuff from jumping around on load
 - Add easter egg
 - Allow type highlights to overflow code blocks
+- Fix twoslash errors for multi-file snippets

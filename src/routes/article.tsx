@@ -77,7 +77,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
               tweet
             </a>
           </p>
-          <h1 class="font-roboto-slab text-[1.875rem]">
+          <h1 class="font-roboto-slab text-[2.5rem] leading-[1.2]">
             {props.metadata.title}
           </h1>
           <p class="text-[1.125rem] text-subtle-white py-2">

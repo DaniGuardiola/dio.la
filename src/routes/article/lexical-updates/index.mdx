@@ -2,6 +2,7 @@
 date: 2021/04/23
 title: "State updates and the lexical scope"
 description: Lexical, explained - part 3.
+imageUrl: /open-graph/lexical-updates.png
 topics:
   - lexical
 ---
@@ -12,34 +13,15 @@ A Lexical state (`EditorState`) holds two important pieces of data: the current 
 
 The state is the source of truth for the editor, not the DOM. The DOM is computed from the state and not the other way around. A fancier way to say it is that **"the view (DOM) is a function of the state (`EditorState`)"**.
 
-```ts twoslash
-import type { EditorState } from "lexical";
-declare function renderToDOM(state: EditorState): HTMLElement;
-declare const editorState: EditorState;
-// ---cut---
-// This is pseudo code!
-renderToDOM(editorState);
-```
+![view as a function of the state](./state-to-dom.png)
 
-When we update the state, we are changing the node tree or the selection state. Once these changes are applied, Lexical computes the differences between the previous and new state, and applies them to the DOM in a process called "reconciliation".
+When we update the state, we are changing the node tree or the selection state. Once these changes are applied, Lexical computes the differences between the previous and new state, and then applies them to the DOM in a process called "reconciliation".
 
-```ts twoslash
-import type { EditorState } from "lexical";
-type DOMDiff = "imagine this is a DOM diff :)";
-declare function compareStates(
-  previousState: EditorState,
-  newState: EditorState
-): DOMDiff;
-declare function applyDiffToDOM(diff: DOMDiff): void;
-declare const previousState: EditorState;
-declare const newState: EditorState;
-// ---cut---
-// This is pseudo code!
-const domDiff = compareStates(previousState, newState);
-applyDiffToDOM(domDiff);
-```
+![state update and reconciliation](./state-update.png)
 
-For example, if our previous state had _three_ paragraphs, and the new one has _two_, a paragraph needs to be removed. This resembles the concept of "virtual DOM" from other projects like React, although in practice there are many differences.
+In this example, our previous state had two paragraphs, while the new one only has one. After comparing the states, we know that the second paragraph needs to be removed, so we remove it from the DOM.
+
+This resembles the concept of "virtual DOM" from other projects like React, although in practice there are many differences.
 
 ---
 
@@ -88,7 +70,7 @@ editor.update(() => {
 
 This is one of the most important features in Lexical: the ability to **programatically update the state**.
 
-For example, if you want to build an "insert" menu to add nodes like images or videos, you need to update the state.\*.
+For example, if you want to build an "insert" menu to add nodes like images or videos, you need to update the state\*.
 
 > \* It's likely that an actual implementation of this would dispatch a command instead of directly updating the state, but even in that case, there'll still be a listener for that command that updates the state.
 
@@ -96,25 +78,23 @@ For example, if you want to build an "insert" menu to add nodes like images or v
 
 At this point, there are a few open questions:
 
-> ❓ **What are these `$` methods?** Is this PHP? jQuery?!?
+> - **What are these `$` methods?** Is this PHP? jQuery?!?
+> - We're not returning anything, and we're not calling any sort of `setState` functions so... **how does the state actually get updated?**
+> - **How does `$getRoot()` know which node tree to use?** There might be different editor instances in our page (each with its own state), but we're not passing anything to the function, so which editor root should it return?
 
-> ❓ We're not returning anything, and we're not calling any sort of `setState` functions so... **how does the state actually get updated?**
+There are really good answers to all of these questions. Spoiler alert: _they're all related!_
 
-> ❓ **How does `$getRoot()` know which editor to use?** There might be different editor instances in our page, but we're not passing anything to the function, so which editor root should it return?
+We'll get to them soon, but we need to lay the groundwork first.
 
-There are really good answers to all of these questions. Spoiler alert: they're all related!
+# The update lifecycle
 
-We'll get to them in a bit, but we need to lay the groundwork first.
+When learning about state updates, it's easier to think of state as something that is "updated". Conceptually, that's what happens anyway.
 
-# _Updating_ the state?
-
-First of all: I've lied to you. Sorry about that. Let me explain.
-
-When introducing the concept of state updates, it's easier to think of state as something that is "updated". Conceptually, that's what happens anyway.
-
-In reality, the state is not updated: it's replaced. Every time an update happens, these are roughly the steps that are followed:
+In reality, the state is not _updated_: it's _replaced_. In fact, editor states are immutable by default: they cannot be changed directly. That's why we need an update function!
 
 ---
+
+These are roughly the steps that happen when the update function is executed:
 
 export const CurrentState = () => (
   <span class="text-green-700 font-bold">current state</span>
@@ -134,14 +114,16 @@ export const lock = "🔒";
 
 - The {<CurrentState />} is **cloned**. This cloned state becomes the "{<PendingState />}".
 - The {<PendingState />} becomes {checkmark} **mutable**.
-  - The {<UpdateCallback />} applies its **changes** to it (in other words: it _mutates_ it).
+- The {<UpdateCallback />} applies **changes** to the {<PendingState />}.
 - Once the {<UpdateCallback />} is done, the {<PendingState />} is {lock} **locked** (made immutable).
-- The {<PendingState />} is set as the {<CurrentState />}, effectively replacing it.
 - Reconciliation happens and the resulting changes are applied to the DOM.
+- The {<PendingState />} is set as the {<CurrentState />}, effectively replacing it.
+
+// TODO: image (or even gif?)
 
 ---
 
-This should be starting to make sense, but it doesn't answer our questions yet. However, it already gives us a hint of what's going on: the pending state is mutable while the update logic is running.
+This should be starting to make sense, but it doesn't answer our questions yet. However, it already gives us a hint of what's going on: the pending state is mutable while the update callback is running.
 
 We still don't know exactly _how_ the pending state is mutated, but at least we know that it's possible. Let's go deeper.
 
@@ -469,7 +451,7 @@ Simple as that!
 
 ## Other variables
 
-The other questions are easy to answer now. Using the same technique, we can track which **editor** and **editor state** is currently "active" (i.e. the target of the current operation).
+The remaining questions are easy to answer now. Using the same technique, we can track which **editor** and **editor state** is currently "active" (i.e. the target of the current operation).
 
 ```ts twoslash {1-3, 5, 9, 22, 35, 39-53}
 import type { EditorState, LexicalEditor } from "lexical";
@@ -539,3 +521,9 @@ With these, the answers become clear:
 > **\>** The active state is stored in `activeEditorState`. This state will be mutable during the `editor.update()` callback, so it can be modified. Once the callback is done, the state will be locked and
 
 > ❓ **How does `$getRoot()` know which editor to use?** There might be different editor instances in our page, but we're not passing anything to the function, so which editor root should it return?
+
+```ts twoslash
+// @noErrors
+import { $ } from "lexical";
+//        ^|
+```

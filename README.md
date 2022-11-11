@@ -27,5 +27,5 @@ Welcome to my blog's source code!
 
 - Fully accessible - try keyboard navigation (tab) or a screen reader!
 - Responsive to all screen sizes.
-- Lightweight, performant and optimized - near perfect [Lighthouse](https://developer.chrome.com/docs/lighthouse/) score.
+- Lightweight, performant and optimized - near-perfect [Lighthouse](https://developer.chrome.com/docs/lighthouse/) score.
 - Search engine and social media friendly.
