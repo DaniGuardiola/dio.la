@@ -8,8 +8,13 @@ import { nodeTypes } from "@mdx-js/mdx";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import rehypeExternalLinks from "rehype-external-links";
+// @ts-expect-error No types.
 import vercel from "solid-start-vercel";
+// @ts-expect-error No types.
+import node from "solid-start-node";
 import { defineConfig } from "vite";
+
+const isVercel = process.env.VERCEL === "1";
 
 export default defineConfig({
   plugins: [
@@ -35,6 +40,9 @@ export default defineConfig({
       }),
       enforce: "pre",
     },
-    solid({ extensions: [".mdx"], adapter: vercel({ edge: true }) }),
+    solid({
+      extensions: [".mdx"],
+      adapter: isVercel ? vercel({ edge: true }) : node(),
+    }),
   ],
 });
