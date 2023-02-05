@@ -14,6 +14,7 @@
 # Later
 
 - Defer / selectively loady LaTeX CSS
+- Make tags in article list clickable
 - Article view
   - Test deprecated options in completions
   - Fix/report hot reload issue

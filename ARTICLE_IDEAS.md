@@ -1,3 +1,4 @@
+- "abc" base using maths
 - How to (properly) style your content (lists, headings, etc)
 - Chrome extension RPC
 - Easy skip links in Solid / React
@@ -69,3 +70,5 @@
 - My setup
 - Colocation as a religion
 - Multi-select label magic
+- exclusive-hover and targeted-hover
+- When things just fit (Solid.js, architecture, etc)
