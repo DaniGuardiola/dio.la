@@ -9,7 +9,8 @@ import {
   ALLOWED_TOPICS,
   ArticleMetadata,
   REQUIRED_METADATA_FIELDS,
-} from "~/data/articles";
+  // } from "~/data/articles";
+} from "../data/articles";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
