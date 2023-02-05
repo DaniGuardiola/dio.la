@@ -6,7 +6,11 @@ import prettier from "prettier";
 import { ESLint } from "eslint";
 
 import type { ArticleMetadata } from "~/data/articles";
-import { ALLOWED_TOPICS, REQUIRED_ARTICLE_FIELDS } from "~/data/config";
+import {
+  ALLOWED_TOPICS,
+  DRAFTS_DOMAIN,
+  REQUIRED_ARTICLE_FIELDS,
+} from "~/data/config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,7 +21,7 @@ const OUTPUT_FILE_PATH = path.resolve(__dirname, OUTPUT_DIR, "articles.ts");
 
 const DRAFTS_ENABLED =
   process.env.NODE_ENV === "development" ||
-  process.env.DRAFTS_ENABLED === "true";
+  process.env.VITE_VERCEL_URL === DRAFTS_DOMAIN;
 
 async function getArticleFilePaths() {
   const pathList = await fs.readdir(ARTICLES_BASE_PATH);
