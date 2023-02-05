@@ -3,7 +3,7 @@
   "scripts": {
     "dev:watch": "NODE_ENV='development' pnpm watch",
     "dev": "concurrently --kill-others 'pnpm dev:watch' 'solid-start dev'",
-    "gen:article-data": "node --experimental-specifier-resolution=node --loader ts-paths-esm-loader src/scripts/generate-article-data.ts",
+    "gen:article-data": "node --experimental-specifier-resolution=node --loader ts-paths-esm-loader/transpile-only src/scripts/generate-article-data.ts",
     "gen": "pnpm gen:article-data",
     "build": "pnpm gen && solid-start build",
     "start": "solid-start start",
