@@ -23,6 +23,8 @@ const DRAFTS_ENABLED =
   process.env.NODE_ENV === "development" ||
   process.env.VITE_VERCEL_URL === DRAFTS_DOMAIN;
 
+console.log(process.env.VITE_VERCEL_URL);
+
 async function getArticleFilePaths() {
   const pathList = await fs.readdir(ARTICLES_BASE_PATH);
   const promises = pathList.map(async (fileOrDirPath) => {
