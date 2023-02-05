@@ -5,12 +5,8 @@ import { fileURLToPath } from "node:url";
 import prettier from "prettier";
 import { ESLint } from "eslint";
 
-import {
-  ALLOWED_TOPICS,
-  ArticleMetadata,
-  REQUIRED_METADATA_FIELDS,
-  // } from "~/data/articles";
-} from "../data/articles";
+import type { ArticleMetadata } from "~/data/articles";
+import { ALLOWED_TOPICS, REQUIRED_ARTICLE_FIELDS } from "~/data/config";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,7 +34,7 @@ async function getArticleFilePaths() {
 }
 
 function validateMetadata({ id, ...data }: ArticleMetadata) {
-  if (REQUIRED_METADATA_FIELDS.some((key) => !(key in data) || key === ""))
+  if (REQUIRED_ARTICLE_FIELDS.some((key) => !(key in data) || key === ""))
     throw new Error(
       `Missing or empty required metadata fields in article with id "${id}"`
     );

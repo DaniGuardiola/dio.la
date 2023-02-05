@@ -1,13 +1,10 @@
+import { ALLOWED_TOPICS } from "./config";
 import { ArticleId, ARTICLES } from "./generated/articles";
 
-// config
-// ------
-
-export const ALLOWED_TOPICS = ["fun", "lexical"] as const;
+// types
+// -----
 
 export type Topic = (typeof ALLOWED_TOPICS)[number];
-
-export const REQUIRED_METADATA_FIELDS = ["date", "title", "description"];
 
 export type ArticleMetadata = {
   id: string;
