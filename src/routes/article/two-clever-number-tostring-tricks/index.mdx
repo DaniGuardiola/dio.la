@@ -1,0 +1,391 @@
+---
+date: 2021/10/26
+title: Two clever number .toString() tricks
+description: Misusing the radix parameter for evil purposes is easy and fun... and it can go wrong!
+topics:
+  - js
+  - fun
+draft: true
+---
+
+# `.toString()` and number bases
+
+JavaScript's [`Number.prototype.toString()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toString) method is pretty self-explanatory: it converts a number to a string.
+
+```ts twoslash
+const thirteen = (13).toString();
+//    ^?
+```
+
+It takes a `radix` parameter that allows you to specify a target [number base](https://en.wikipedia.org/wiki/Radix). The default value is `10`, but you can pass any integer from `2` to `36`.
+
+```ts twoslash
+Number.prototype.toString();
+//               ^?
+```
+
+This allows us to convert numbers to binary, octal, hexadecimal, and so on.
+
+```ts twoslash
+const number = 13;
+
+// decimal (default)
+number.toString(10); // 13
+
+// binary
+number.toString(2); // 1101
+
+// octal
+number.toString(8); // 15
+
+// hexadecimal
+number.toString(16); // d
+```
+
+# A brief look at radixes
+
+Before we move on, it's important to understand how radixes work.
+
+- A [**number base**/**radix**](https://en.wikipedia.org/wiki/Radix), in simplified terms, is a set of digits you can use to represent numbers. For example, the decimal base (or base 10) uses the digits `0` to `9`. The binary base (or base 2) uses the digits `0` and `1`. And so on. The decimal base is the most common one.
+- We start counting at `0` and go from there, until we run out of digits. For example, in decimal, we would count like this: `0, 1, 2, 3, 4, 5, 6, 7, 8, 9`. In binary: `0, 1`.
+- Once we run out, we "wrap" (start over), but adding a digit to the left. For example, in decimal, we would do: `...8, 9, 10, 11...`. In binary: `0, 1, 10, 11...`.
+- This goes on until we need to wrap again, e.g. in decimal: `...19, 20, 21...` and later `...99, 100, 101...`. In binary: `...11, 100, 101...`. This is called [**positional notation**](https://en.wikipedia.org/wiki/Positional_notation).
+- In more technical terms, what is happening is that each digit represents a _power of the base_, starting with the power of 0 (the rightmost digit) and going up from there. For example, in decimal, the number `123` is equivalent to `1 * 10^2 + 2 * 10^1 + 3 * 10^0`. In binary, the number `101` is equivalent to `1 * 2^2 + 0 * 2^1 + 1 * 2^0`.
+
+> **Etymological fun fact #1:** "radix" is Latin for "root", which can be considered a synonym for "base", arithmetically speaking - [source](https://en.wikipedia.org/wiki/Radix#Etymology).
+
+What if our radix is greater than 10? There are only ten symbols in the Hindu–Arabic numeral system most of us use (`0` through `9`), so what now?
+
+## The alphabet to the rescue
+
+Let's take hexadecimal (base 16) as an example. We have to count to 16 until we need to wrap, so what goes after the digit `9`? The answer is the letters `a` through `f`. This is how we count in hexadecimal:
+
+```
+decimal | hexadecimal
+0       | 0
+1       | 1
+2       | 2
+3       | 3
+4       | 4
+5       | 5
+6       | 6
+7       | 7
+8       | 8
+9       | 9
+10      | a
+^ we wrap in the decimal base at this point
+11      | b
+12      | c
+13      | d
+14      | e
+15      | f
+16      | 10
+          ^ and we wrap here in the hexadecimal base
+17      | 11
+18      | 12
+19      | 13
+```
+
+> **Etymological fun fact #2:** "hexadecimal" comes from the Greek prefix "hexa-" ("six") and the Latin word "decimus" ("tenth") - [source](https://www.etymonline.com/word/hexadecimal).
+
+In the [Latin alphabet](https://en.wikipedia.org/wiki/Latin_alphabet) (the one that is used here), there are 26 letters (`a` through `z`), but we're only using up to `f` so far. However, we could extend our range to `z` if we wanted to.
+
+This explains why the maximum value for the `radix` parameter is `36` (10 numerical digits + 26 letters).
+
+```
+symbol |  0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f  g  h  i  ... u  v  w  x  y  z
+base   |     2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 ... 31 32 33 34 35 36
+name   |     ^ binary    octal ^     ^ decimal         ^ hexadecimal
+```
+
+With all this fresh in our minds, it's time to start exploiting this for our evil and nefarious purposes.
+
+# Trick #1: generating random strings
+
+If you need a truly random and secure string, with proper statistical distribution... well, keep looking, this is not it!
+
+But if you're looking for a quick and dirty way to generate random strings, this is for you.
+
+```ts twoslash
+function createId() {
+  return Math.random().toString(36).substring(2, 7);
+}
+```
+
+I got this from a StackOverflow answer, and it's pretty clever. Let's break it down.
+
+```ts twoslash
+// we obtain a random number between 0 and 1
+const randomN = Math.random(); // e.g. 0.4419112336693552
+
+// we convert it to a string with base 36
+// this means that we'll be using the digits 0-9 and the letters a-z
+const inBase36 = randomN.toString(36); // e.g. "0.fwpt6fj4pz"
+
+// and for the final touch, we cut off the "0." part
+const randomString = inBase36.substring(2, 7); // e.g. "fwpt6"
+
+// note that we're also cutting off at the 7th character, which
+// means that the resulting string will be 5 characters long (7 - 2)
+```
+
+This method, in addition to being insecure, has an additional drawback. The generated string may be shorter than the desired length because the result of `Math.random().toString(36)` is not guaranteed to have a fixed number of digits.
+
+Normally, the length will be around 11-14, which without the "0." part will be 9-12 characters long. But if you're unlucky, it might be shorter.
+
+However, this is a pretty decent and cheap method if your use case doesn't require perfection. For example, we use it at [Guide](https://guide.co/) to generate unique IDs in our [design system (Atlas)](https://atlas.guide.co/), for rendering and other purposes. It powers our `useId`\* React hook!
+
+> \* Yes, we're not on React 18 yet.
+
+# Trick #2: alphabetical indicators for ordered lists
+
+Alright so hear me out. The ID trick was just a warm-up. It's pretty cool, but now we're gonna amp up the nerdiness to 11. Sorry not sorry.
+
+This is a trick of my own, and it's probably been done before, but I couldn't find it anywhere else (there are probably better ways to do this too!). It's also worth noting that I probably wouldn't have thought of it if I didn't know about the ID trick.
+
+## The problem
+
+Here's the goal: we need to render indicators for an ordered list, but we want them to be alphabetical instead of numerical. For example, we want to render `a`, `b`, `c`, etc. instead of `1`, `2`, `3`, etc.
+
+This is common in nested lists, in fact that's the way it works on my own blog, for example:
+
+1. First item.
+   1. First nested item.
+   2. Second nested item.
+      1. Test
+   3. Third nested item.
+
+Things get interesting once we start having to wrap around, for example: `...x, y, z, aa, ab, ac...`. Or even: `...zx, zy, zz, aaa, aab, aac...`.
+
+Does this ring a bell? It should, because this looks very similar to a number base, more specifically base 26 (but only using letters)! This is not a coincidence, we're gonna _base_ our solution upon this fact (pun intended).
+
+> **Etymological fun fact #3:** "alphabetical" comes from the Greek "ἀλφάβητος" (alphabētos), which was made from the first two letters of the Greek alphabet, alpha (α) and beta (β) - [source](https://en.wikipedia.org/wiki/Alphabet#Etymology).
+
+## Base 26 vs. the "abc" base
+
+Let's refer to our custom "number base" as the "abc" base.
+
+There are two main differences between the standard base 26 and the "abc" base:
+
+### The digits
+
+- In base 26, we use the numbers `0` to `9` and the letters `a` to `p`.
+- In the "abc" base, we use the letters `a` to `z`.
+
+Here's a comparison:
+
+```
+decimal | base 26 | "abc" base
+0       | 0       | a
+1       | 1       | b
+2       | 2       | c
+3       | 3       | d
+...
+8       | 8       | i
+9       | 9       | j
+10      | a       | k
+11      | b       | l
+...
+22      | m       | w
+23      | n       | x
+24      | o       | y
+25      | p       | z
+```
+
+So far so good. But this is when things get weird.
+
+### Wrapping around
+
+During my initial attempt to solve this, I was caught off-guard by something. Let's continue the example above, and observe what happens when we "wrap".
+
+```
+decimal | base 26 | "abc" base
+25      | p       | z
+26      | 10      | aa
+27      | 11      | ab
+...
+51      | 1p      | az
+52      | 20      | ba
+53      | 21      | bb
+...
+675     | pp      | zz
+676     | 100     | aaa
+677     | 101     | aab
+677     | 102     | aac
+```
+
+Notice something off? Let's pick some numbers and compare them digit by digit:
+
+```
+   base 26 | 0 1 2 | p 10 11 | 1p 20 21 | pp 100 101
+"abc" base | a b c | z aa ab | az ba bb | zz aaa aab
+```
+
+Do you see it? I'll give you a moment in case you wanna crack it on your own. Scroll down when you're ready for the reveal!
+
+<p class="h-[100rem] flex justify-center items-center font-bold text-xl">
+  ⚠️  Spoilers ahead ⚠️ 
+</p>
+
+HI AGAIN!!1 I already thought you were never coming back, _phew_! 😅
+
+Alright, let's do the reveal. Check out the digits I highlighted:
+
+```
+   base 26 | 0 1 2 | p 10 11 | 1p 20 21 | pp 100 101
+"abc" base | a b c | z aa ab | az ba bb | zz aaa aab
+                       ^  ^    ^  ^  ^       ^   ^
+```
+
+Naively, we'd expect the digit `a` to equal `0` in base 26. But in these instances, it equals `1`! Similarly, we'd expect `b=1`, `c=2`, etc.
+
+What happens here is that if **the "abc" base is not an actual numerical base**. If it was (and, therefore, if it followed proper positional notation), it would look like this when "wrapping": `...x, y, z, ba, bb, bc...`.
+
+Our previous comparison would look like this:
+
+```
+   base 26 | 0 1 2 | p 10 11 | 1p 20 21 | pp 100 101
+"abc" base | a b c | z ba bb | bz ca cb | zz baa bab
+```
+
+You can see that here, the digits do correspond one-to-one to the digits in base 26: `a=0`, `b=1`, `c=2`, `z=p` etc.
+
+This becomes clearer if we pad the values with some zeros on the left (or a's in the case of the "abc" base). These zeros don't change the value of the number, but they help to visualize this behavior:
+
+```
+   base 26 | 000 001 002 | 00p 010 011 | 01p 020 021 | 0pp 100 101
+"abc" base | aaa aab aac | aaz aba abb | abz aca acb | azz baa bab
+```
+
+So why is the "abc" base _"wrong"_?
+
+Well, the answer is that... it's not wrong, it's just not a numerical base! Math 🤖 has nothing to do with it. It's all about the **<span class="text-red-500">f</span><span class="text-orange-500">e</span><span class="text-yellow-500">e</span><span class="text-green-500">l</span><span class="text-blue-500">s</span>**, [_bruuuh_](https://www.youtube.com/watch?v=4_X1rhOq6BU).
+
+It's a human convention that we use for lists because they would look weird otherwise. For example, consider this:
+
+```
+1. Welcome to my list.
+
+     a. It's definitely a list.
+     b. It has many items.
+     ...
+     y. Wow!
+     z. Such item!
+    ba. Many list!
+    bb. Co-co-co-combo breaker!
+
+2. More stuff here, idk.
+3. K bye.
+```
+
+It looks... wrong, right? Like we skipped something... If we were using numbers, it'd feel a bit like this:
+
+```
+ 1. Another list? Really?
+ 2. You really don't have anything better to do?
+ ...
+ 8. I'm bored.
+ 9. Copilot wrote some of these items for me lol.
+20. Wtf, 20?!?
+21. I'm out.
+```
+
+In reality, mathematically speaking, we haven't skipped anything. But it still feels wrong, so we don't jump to `ba` after `z`. We jump to `aa` instead.
+
+That's it!
+
+## The solution
+
+Okay, let's get to coding.
+
+In our function, we're gonna receive a zero-based decimal index, and we'll return the corresponding "abc" base value.
+
+The plan is:
+
+1. Convert from decimal to base 26. E.g. `51` -> `1p`.
+2. Convert each of the digits from base 26 to "abc" base. E.g. `1` -> `b` and `p` -> `z`.
+   1. We'll need to correct the wrapping behavior. E.g. `1p` -> `az` (not `bz`).
+
+### 1. Decimal to base 26
+
+```ts twoslash {2}
+function getAlphabeticalIndicator(index: number) {
+  return index.toString(26); // convert to base 26
+}
+```
+
+### 2. Base 26 digits to "abc" base
+
+```ts twoslash {6-13}
+const ALPHABET = "abcdefghijklmnopqrstuvwxyz".split("");
+
+function getAlphabeticalIndicator(index: number) {
+  return index
+    .toString(26) // convert to base 26
+    .split("") // split into digits
+    .map((digit) => {
+      // convert to decimal
+      const decimalDigit = parseInt(digit, 26);
+      // replace with the corresponding letter
+      return ALPHABET[decimalDigit];
+    })
+    .join(""); // join back into a string
+}
+```
+
+The [`parseInt`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt) function takes an optional `radix` argument, which we can use to transform our base 26 digit into decimal.
+
+### 2a. Correcting for wrapping
+
+```ts twoslash {11-23}
+const ALPHABET = "abcdefghijklmnopqrstuvwxyz".split("");
+
+function getAlphabeticalIndicator(index: number) {
+  return index
+    .toString(26) // convert to base 26
+    .split("") // split into digits
+    .map((digit, digitIndex, digits) => {
+      // convert to decimal
+      const decimalDigit = parseInt(digit, 26);
+
+      // correct the wrapping behavior
+      const letterIndex =
+        // if this is the leftmost digit
+        digitIndex === 0 &&
+        // and there is more than one digit in the number
+        digits.length > 1
+          ? // subtract 1 from the letter index (e.g. b -> a)
+            decimalDigit - 1
+          : // otherwise, it's fine
+            decimalDigit;
+
+      // replace with the corresponding letter
+      return ALPHABET[letterIndex];
+    })
+    .join(""); // join back into a string
+}
+```
+
+Done! ...or is it?
+
+## WIP math stuff
+
+All indexes are zero-based.
+
+- $x$ = input index.
+- $s$ = size of the collection of available symbols (e.g. `a, b, c, ..., z`).
+- $p$ = digit position from the right.
+- $y$ = index of the symbol in the collection.
+
+For the domain: $\set{x \in \mathbb{W} | x \geq o}$,
+
+we can describe the algorithm with the function:
+
+$f(x,s,p)=\lfloor \frac{x-o}{s^p} \rfloor \mod s$,
+
+where: $o=\sum_{n=0}^p s^{n}-1$.
+
+$o$ is the "digit offset", which compensates for two things:
+
+- Zero-based input index ($-1$).
+- Leading undefined values ($\sum_{n=0}^p s^{n}$).

@@ -3,14 +3,17 @@
 - About page
 - 404 page
 - Favicon
+- Footer
 - Default OG image
-- Write 10 initial articles
+- Write/schedule 10 initial articles
+- Fix title `undefined` issue in OG data
 - Update domain and redirect everywhere
 - Update URL on social media, etc
 - Launch!!!
 
 # Later
 
+- Defer / selectively loady LaTeX CSS
 - Article view
   - Test deprecated options in completions
   - Fix/report hot reload issue
@@ -45,3 +48,7 @@
 - Add easter egg
 - Allow type highlights to overflow code blocks
 - Fix twoslash errors for multi-file snippets
+- Fix hydration issue
+- Setup eslint
+  - Solid
+  - Autofixable import order

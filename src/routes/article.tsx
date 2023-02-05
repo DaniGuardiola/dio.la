@@ -59,7 +59,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
       <Show when={typeof window !== "undefined"}>
         <Base href={props.articleUrl} />
       </Show>
-      <header class="bg-accent pt-8 pb-6 text-white">
+      <header class="bg-accent pt-8 pb-6 text-white break-words">
         <div class="main-container px-4">
           <p class="font-roboto-mono text-[.875rem] text-subtle-white">
             <span class="sm:hidden">{date().short}</span>

@@ -15,6 +15,9 @@ module.exports = {
         "roboto-mono": ['"Roboto Mono"', "monospace"],
         "roboto-slab": ['"Roboto Slab"', "serif"],
       },
+      listStyleType: {
+        "lower-latin": "lower-latin",
+      },
     },
   },
   plugins: [],

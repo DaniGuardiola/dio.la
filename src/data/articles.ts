@@ -1,9 +1,13 @@
 import { ArticleId, ARTICLES } from "./generated/articles";
 
-// types
-// -----
+// config
+// ------
 
-export type Topic = "lexical";
+export const ALLOWED_TOPICS = ["fun", "lexical"] as const;
+
+export type Topic = (typeof ALLOWED_TOPICS)[number];
+
+export const REQUIRED_METADATA_FIELDS = ["date", "title", "description"];
 
 export type ArticleMetadata = {
   id: string;
@@ -12,6 +16,7 @@ export type ArticleMetadata = {
   description: string;
   topics?: Topic[];
   imageUrl?: string;
+  draft?: boolean;
 };
 
 // data

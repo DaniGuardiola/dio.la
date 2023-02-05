@@ -13,5 +13,9 @@
     "paths": {
       "~/*": ["./src/*"]
     }
+  },
+  "ts-node": {
+    "esm": true,
+    "swc": true
   }
 }

@@ -1,13 +1,45 @@
+import "./styles.sass";
+import "katex/dist/katex.min.css";
+
 import clsx from "clsx";
 import { ComponentProps, createSignal, JSX } from "solid-js";
 import { MDXProvider } from "solid-mdx";
 import { A } from "solid-start";
 import pDebounce from "p-debounce";
-import "./styles.sass";
+import { Dynamic } from "solid-js/web";
 
-type MDXContentProps = {
-  children?: JSX.Element;
-};
+const KATEX_TAGS = [
+  "math",
+  "annotation",
+  "semantics",
+  "mtext",
+  "mn",
+  "mo",
+  "mi",
+  "mspace",
+  "mover",
+  "munder",
+  "munderover",
+  "msup",
+  "msub",
+  "msubsup",
+  "mfrac",
+  "mroot",
+  "msqrt",
+  "mtable",
+  "mtr",
+  "mtd",
+  "mlabeledtr",
+  "mrow",
+  "menclose",
+  "mstyle",
+  "mpadded",
+  "mphantom",
+  "mglyph",
+  "svg",
+  "line",
+  "path",
+];
 
 function DataLSP(props: ComponentProps<"span">) {
   const lspAttr = () =>
@@ -45,6 +77,14 @@ function Pre(props: ComponentProps<"pre">) {
   );
 }
 
+function stub<T extends string>(component: T) {
+  return function StubComponent(props: ComponentProps<T>) {
+    return <Dynamic component={component} {...props} />;
+  };
+}
+
+type MDXContentProps = { children?: JSX.Element };
+
 export function MDXContent(props: MDXContentProps) {
   return (
     <div class="mdx-content">
@@ -54,6 +94,10 @@ export function MDXContent(props: MDXContentProps) {
           "data-lsp": DataLSP,
           "data-err": DataErr,
           pre: Pre,
+          ...KATEX_TAGS.reduce(
+            (obj, component) => ({ ...obj, [component]: stub(component) }),
+            {}
+          ),
         }}
       >
         {props.children}

@@ -5,7 +5,11 @@ import { fileURLToPath } from "node:url";
 import prettier from "prettier";
 import { ESLint } from "eslint";
 
-import type { ArticleMetadata } from "~/data/articles";
+import {
+  ALLOWED_TOPICS,
+  ArticleMetadata,
+  REQUIRED_METADATA_FIELDS,
+} from "~/data/articles";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +17,10 @@ const __dirname = path.dirname(__filename);
 const ARTICLES_BASE_PATH = path.resolve(__dirname, "../routes/article");
 const OUTPUT_DIR = path.resolve(__dirname, "../data/generated");
 const OUTPUT_FILE_PATH = path.resolve(__dirname, OUTPUT_DIR, "articles.ts");
+
+const DRAFTS_ENABLED =
+  process.env.NODE_ENV === "development" ||
+  process.env.DRAFTS_ENABLED === "true";
 
 async function getArticleFilePaths() {
   const pathList = await fs.readdir(ARTICLES_BASE_PATH);
@@ -28,22 +36,51 @@ async function getArticleFilePaths() {
   );
 }
 
+function validateMetadata({ id, ...data }: ArticleMetadata) {
+  if (REQUIRED_METADATA_FIELDS.some((key) => !(key in data) || key === ""))
+    throw new Error(
+      `Missing or empty required metadata fields in article with id "${id}"`
+    );
+
+  if (data.topics && !Array.isArray(data.topics))
+    throw new Error(`Topics must be an array, article id: "${id}"`);
+
+  let invalidTopic;
+  if (
+    data.topics &&
+    data.topics.every((topic) => {
+      const invalid = !ALLOWED_TOPICS.includes(topic);
+      if (invalid) invalidTopic = topic;
+      return invalid;
+    })
+  )
+    throw new Error(
+      `Invalid topic "${invalidTopic}" in article with id "${id}"`
+    );
+}
+
 async function getArticleMetadata(articlePath: string) {
   const fileContents = await fs.readFile(articlePath, "utf8");
-  const { data } = matter(fileContents);
+  const { data } = matter(fileContents) as unknown as {
+    data: Omit<ArticleMetadata, "id">;
+  };
   const id = articlePath
     .replace(/\/index.mdx$/, "")
     .split("/")
     .at(-1)
     ?.replace(/\.mdx$/, "");
   if (!id) throw new Error("Could not obtain article ID");
+  validateMetadata({ id, ...data });
   return { id, ...data } as ArticleMetadata;
 }
 
 async function getArticleMetadataList() {
   const articleFilePaths = await getArticleFilePaths();
   const promises = articleFilePaths.map(getArticleMetadata);
-  return Promise.all(promises);
+  const metadataList = await Promise.all(promises);
+  return DRAFTS_ENABLED
+    ? metadataList
+    : metadataList.filter((metadata) => !metadata.draft);
 }
 
 async function formatFile(filepath: string) {

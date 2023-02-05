@@ -4,10 +4,12 @@ import remarkShikiTwoslash from "remark-shiki-twoslash";
 import remarkGfm from "remark-gfm";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxImages from "remark-mdx-images";
+import remarkMath from "remark-math";
 import { nodeTypes } from "@mdx-js/mdx";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import rehypeExternalLinks from "rehype-external-links";
+import rehypeKatex from "rehype-katex";
 // @ts-expect-error No types.
 import vercel from "solid-start-vercel";
 // @ts-expect-error No types.
@@ -31,11 +33,13 @@ export default defineConfig({
           remarkGfm,
           remarkFrontmatter,
           remarkMdxImages,
+          remarkMath,
         ],
         rehypePlugins: [
           [rehypeRaw, { passThrough: nodeTypes }],
           rehypeSlug,
           [rehypeExternalLinks, { target: "_blank", rel: ["noreferrer"] }],
+          rehypeKatex,
         ],
       }),
       enforce: "pre",

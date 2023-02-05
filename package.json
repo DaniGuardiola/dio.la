@@ -1,11 +1,12 @@
 {
   "name": "dio.la",
   "scripts": {
-    "dev": "concurrently --kill-others 'pnpm watch' 'solid-start dev'",
-    "start": "solid-start start",
-    "gen:article-data": "ts-node --esm src/scripts/generate-article-data.ts",
+    "dev:watch": "NODE_ENV='development' pnpm watch",
+    "dev": "concurrently --kill-others 'pnpm dev:watch' 'solid-start dev'",
+    "gen:article-data": "node --experimental-specifier-resolution=node --loader ./ts-node-loader.js src/scripts/generate-article-data.ts",
     "gen": "pnpm gen:article-data",
     "build": "pnpm gen && solid-start build",
+    "start": "solid-start start",
     "watch:article-data": "watch 'pnpm gen:article-data' src/routes/article",
     "watch": "pnpm watch:article-data"
   },
@@ -23,22 +24,27 @@
     "concurrently": "^7.6.0",
     "eslint": "^8.33.0",
     "gray-matter": "^4.0.3",
+    "katex": "^0.16.4",
     "lexical": "^0.7.7",
     "postcss": "^8.4.21",
     "prettier": "^2.8.3",
     "rehype-external-links": "^2.0.1",
+    "rehype-katex": "^6.0.2",
     "rehype-raw": "^6.1.1",
     "rehype-slug": "^5.1.0",
     "remark-frontmatter": "^4.0.1",
     "remark-gfm": "^3.0.1",
+    "remark-math": "^5.1.1",
     "remark-mdx-images": "^2.0.0",
     "remark-shiki-twoslash": "^3.1.0",
     "rollup": "^3.13.0",
     "sass": "^1.58.0",
+    "solid-mdx": "^0.0.6",
     "solid-start-node": "^0.2.19",
     "solid-start-vercel": "^0.2.19",
     "tailwindcss": "^3.2.4",
     "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.2",
     "typescript": "4.9.5",
     "undici": "^5.17.1",
     "vite": "^4.1.1",
@@ -52,18 +58,15 @@
     "date-fns": "^2.29.3",
     "p-debounce": "^4.0.0",
     "solid-js": "^1.6.10",
-    "solid-mdx": "^0.0.6",
     "solid-start": "^0.2.19"
   },
   "engines": {
     "node": ">=16"
   },
-  "ts-node": {
-    "swc": true
-  },
   "pnpm": {
     "patchedDependencies": {
-      "shiki-twoslash@3.1.0": "patches/shiki-twoslash@3.1.0.patch"
+      "shiki-twoslash@3.1.0": "patches/shiki-twoslash@3.1.0.patch",
+      "hast-util-to-estree@2.2.1": "patches/hast-util-to-estree@2.2.1.patch"
     }
   }
 }
