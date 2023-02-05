@@ -1,0 +1,18 @@
+name: Update drafts branch from main
+run-name: Syncing drafts branch with main 🚀
+on:
+  push:
+    branches:
+      - main
+jobs:
+  sync-drafts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Synchronize Branch
+        uses: jojomatik/sync-branch@v2.0.1
+        with:
+          source: "main"
+          target: "drafts"
+          strategy: "force"
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}."
