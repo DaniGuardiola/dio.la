@@ -47,7 +47,7 @@ function validateMetadata({ id, ...data }: ArticleMetadata) {
   let invalidTopic;
   if (
     data.topics &&
-    data.topics.every((topic) => {
+    data.topics.some((topic) => {
       const invalid = !ALLOWED_TOPICS.includes(topic);
       if (invalid) invalidTopic = topic;
       return invalid;
@@ -63,11 +63,9 @@ async function getArticleMetadata(articlePath: string) {
   const { data } = matter(fileContents) as unknown as {
     data: Omit<ArticleMetadata, "id">;
   };
-  const id = articlePath
-    .replace(/\/index.mdx$/, "")
-    .split("/")
-    .at(-1)
-    ?.replace(/\.mdx$/, "");
+  const filename = path.parse(articlePath).name;
+  const id =
+    filename === "index" ? path.basename(path.dirname(articlePath)) : filename;
   if (!id) throw new Error("Could not obtain article ID");
   validateMetadata({ id, ...data });
   return { id, ...data } as ArticleMetadata;

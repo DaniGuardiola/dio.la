@@ -1,0 +1,30 @@
+---
+draft: true
+date: 2021/10/26
+title: The unexpected complexity of list letter markers
+description: Using math to solve the x, y, z, aa, ab, ac... problem.
+topics:
+  - js
+  - fun
+  - math
+---
+
+All indexes are zero-based.
+
+- $x$ = input index.
+- $s$ = size of the collection of available symbols (e.g. `a, b, c, ..., z`).
+- $p$ = digit position from the right.
+- $y$ = index of the symbol in the collection.
+
+For the domain: $\set{x \in \mathbb{W} | x \geq o}$,
+
+we can describe the algorithm with the function:
+
+$f(x,s,p)=\lfloor \frac{x-o}{s^p} \rfloor \mod s$,
+
+where: $o=\sum_{n=0}^p s^{n}-1$.
+
+$o$ is the "digit offset", which compensates for two things:
+
+- Zero-based input index ($-1$).
+- Leading undefined values ($\sum_{n=0}^p s^{n}$).

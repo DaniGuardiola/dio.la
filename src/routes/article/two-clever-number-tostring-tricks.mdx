@@ -2,7 +2,7 @@
 draft: true
 date: 2021/10/26
 title: Two clever number .toString() tricks
-description: Misusing the radix parameter for evil purposes is easy and fun... and it can go wrong!
+description: Misusing the radix parameter for evil purposes is fun and easy... and it can go wrong!
 topics:
   - js
   - fun
@@ -139,9 +139,7 @@ However, this is a pretty decent and cheap method if your use case doesn't requi
 
 # Trick #2: alphabetical indicators for ordered lists
 
-Alright so hear me out. The ID trick was just a warm-up. It's pretty cool, but now we're gonna amp up the nerdiness to 11. Sorry not sorry.
-
-This is a trick of my own, and it's probably been done before, but I couldn't find it anywhere else (there are probably better ways to do this too!). It's also worth noting that I probably wouldn't have thought of it if I didn't know about the ID trick.
+This is a tale of a trick that went wrong. Sometimes trying to be clever goes wrong! It is still an interesting story, though. I promise!
 
 ## The problem
 
@@ -223,13 +221,11 @@ Notice something off? Let's pick some numbers and compare them digit by digit:
 
 Do you see it? I'll give you a moment in case you wanna crack it on your own. Scroll down when you're ready for the reveal!
 
-<p class="h-[100rem] flex justify-center items-center font-bold text-xl">
+<p class="h-[75rem] flex justify-center items-center font-bold text-xl">
   ⚠️  Spoilers ahead ⚠️ 
 </p>
 
-HI AGAIN!!1 I already thought you were never coming back, _phew_! 😅
-
-Alright, let's do the reveal. Check out the digits I highlighted:
+Alright, here we go. Check out the digits I highlighted:
 
 ```
    base 26 | 0 1 2 | p 10 11 | 1p 20 21 | pp 100 101
@@ -266,33 +262,28 @@ It's a human convention that we use for lists because they would look weird othe
 ```
 1. Welcome to my list.
 
-     a. It's definitely a list.
-     b. It has many items.
+     a. It's a nice list.
      ...
      y. Wow!
      z. Such item!
     ba. Many list!
-    bb. Co-co-co-combo breaker!
-
-2. More stuff here, idk.
-3. K bye.
+    bb. Combo breaker!
 ```
 
 It looks... wrong, right? Like we skipped something... If we were using numbers, it'd feel a bit like this:
 
 ```
  1. Another list? Really?
- 2. You really don't have anything better to do?
  ...
  8. I'm bored.
- 9. Copilot wrote some of these items for me lol.
+ 9. Copilot wrote some of this lol.
 20. Wtf, 20?!?
 21. I'm out.
 ```
 
-In reality, mathematically speaking, we haven't skipped anything. But it still feels wrong, so we don't jump to `ba` after `z`. We jump to `aa` instead.
+In reality, mathematically speaking, we haven't skipped anything in our first list. But it still feels wrong, so we don't jump to `ba` after `z`. We jump to `aa` instead.
 
-That's it!
+That's all there is to it!
 
 ## The solution
 
@@ -300,7 +291,7 @@ Okay, let's get to coding.
 
 In our function, we're gonna receive a zero-based decimal index, and we'll return the corresponding "abc" base value.
 
-The plan is:
+Since the "abc" base is very similar to base 26, we'll try to use it to make the process easier. The plan is:
 
 1. Convert from decimal to base 26. E.g. `51` -> `1p`.
 2. Convert each of the digits from base 26 to "abc" base. E.g. `1` -> `b` and `p` -> `z`.
@@ -366,26 +357,57 @@ function getAlphabeticalIndicator(index: number) {
 }
 ```
 
-Done! ...or is it?
+Done! But there's a problem...
 
-## WIP math stuff
+## When trying to be clever goes wrong
 
-All indexes are zero-based.
+Our code has an unfortunate bug. If we log our results in a sequence, we'll see this:
 
-- $x$ = input index.
-- $s$ = size of the collection of available symbols (e.g. `a, b, c, ..., z`).
-- $p$ = digit position from the right.
-- $y$ = index of the symbol in the collection.
+```
+yx
+yy
+yz
+aaa
+aab
+aac
+```
 
-For the domain: $\set{x \in \mathbb{W} | x \geq o}$,
+Notice that? We skipped `za` to `zz`! 😱
 
-we can describe the algorithm with the function:
+This happens because we're shifting the leftmost digit by `-1`, meaning that every letter will become the previous one, e.g. `b` -> `a`. The problem with that is that, when the time to wrap comes, we'll have skipped a number from the sequence.
 
-$f(x,s,p)=\lfloor \frac{x-o}{s^p} \rfloor \mod s$,
+Let's visualize this with the decimal base instead of base 26 so that it's easier to grasp. Normally, the sequence goes like this:
 
-where: $o=\sum_{n=0}^p s^{n}-1$.
+```
+...98, 99, 100, 101...
+```
 
-$o$ is the "digit offset", which compensates for two things:
+However, applying our rules to "correct" the output, we're shifting the leftmost digit down by one, so that becomes:
 
-- Zero-based input index ($-1$).
-- Leading undefined values ($\sum_{n=0}^p s^{n}$).
+```
+...88, 89, 000, 001...
+```
+
+Notice how we're skipping the `9` in the tens position? That's exactly what's happening to our "abc" base. We're skipping the `z`. That's no good.
+
+I could try to find a fix, but, honestly, it doesn't seem worth it to keep stretching this hack anymore. It's time to move to a better solution.
+
+## The actual solution
+
+I had nothing better to do on a particular Saturday night, so I decided to use some math to properly model and solve the problem.
+
+At the end of the day, it was misusing math that caused the problem in the first place, so I figured I'd try to use proper math to solve it. Maybe that will restore my karma.
+
+I will be publishing an article about this soon, but here's a quick teaser:
+
+---
+
+For the domain $\set{x \in \mathbb{W} | x \geq o}$,
+
+we can describe the algorithm with the function $f(x,s,p)=\lfloor \frac{x-o}{s^p} \rfloor \mod s$,
+
+where $o=\sum_{n=0}^p s^{n}-1$.
+
+---
+
+Thanks for reading and I'll see you in the next one! 👋
