@@ -51,7 +51,7 @@ Before we move on, it's important to understand how radixes work.
 - We start counting at `0` and go from there, until we run out of digits. For example, in decimal, we would count like this: `0, 1, 2, 3, 4, 5, 6, 7, 8, 9`. In binary: `0, 1`.
 - Once we run out, we "wrap" (start over), but adding a digit to the left. For example, in decimal, we would do: `...8, 9, 10, 11...`. In binary: `0, 1, 10, 11...`.
 - This goes on until we need to wrap again, e.g. in decimal: `...19, 20, 21...` and later `...99, 100, 101...`. In binary: `...11, 100, 101...`. This is called [**positional notation**](https://en.wikipedia.org/wiki/Positional_notation).
-- In more technical terms, what is happening is that each digit represents a _power of the base_, starting with the power of 0 (the rightmost digit) and going up from there. For example, in decimal, the number `123` is equivalent to `1 * 10^2 + 2 * 10^1 + 3 * 10^0`. In binary, the number `101` is equivalent to `1 * 2^2 + 0 * 2^1 + 1 * 2^0`.
+- In more technical terms, what is happening is that each digit represents a _power of the base_, starting with the power of 0 (the rightmost digit) and going up from there. For example, in decimal, the number $123$ is equivalent to $1 \cdot 10^2 + 2 \cdot 10^1 + 3 \cdot 10^0$. In binary, the number $101$ is equivalent to $1 \cdot 2^2 + 0 \cdot 2^1 + 1 \cdot 2^0$.
 
 > **Etymological fun fact #1:** "radix" is Latin for "root", which can be considered a synonym for "base", arithmetically speaking - [source](https://en.wikipedia.org/wiki/Radix#Etymology).
 
