@@ -72,3 +72,5 @@
 - Multi-select label magic
 - exclusive-hover and targeted-hover
 - When things just fit (Solid.js, architecture, etc)
+- Deploying the same branch twice in Vercel
+- Remark, rehype & co for dummies

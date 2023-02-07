@@ -145,6 +145,8 @@ export default function Root() {
   return (
     <Html lang="en" prefix="og: http://ogp.me/ns#">
       <Head>
+        <Link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <Link rel="icon" type="image/png" href="/favicon.png" />
         <HeadMetadata
           url={`https://${CANONICAL_DOMAIN}/`}
           description={SITE_DESCRIPTION}
