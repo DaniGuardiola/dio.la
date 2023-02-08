@@ -1,6 +1,6 @@
 export function isDrafts() {
   if (typeof window !== "undefined")
-    return window.location.host.startsWith("/drafts");
+    return window.location.host.startsWith("drafts.");
 
   const { NODE_ENV, VITE_VERCEL_ENV } = process.env;
   return (
