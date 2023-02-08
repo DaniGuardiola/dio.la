@@ -2,6 +2,8 @@ import { Show } from "solid-js";
 import { Meta, Title } from "solid-start";
 import { BASE_PAGE_TITLE, NAME, TWITTER_USERNAME } from "~/data/config";
 
+const DEFAULT_IMAGE = "/open-graph/default.png";
+
 type HeadMetadataProps = {
   description: string;
   title?: string;
@@ -27,10 +29,7 @@ export function HeadMetadata(props: HeadMetadataProps) {
       <Show when={props.url}>
         <Meta property="og:url" content={props.url} />
       </Show>
-      <Show when={props.image}>
-        {/* TODO: default image */}
-        <Meta property="og:image" content={props.image} />
-      </Show>
+      <Meta property="og:image" content={props.image ?? DEFAULT_IMAGE} />
 
       <Meta name="twitter:card" content="summary_large_image" />
       <Meta

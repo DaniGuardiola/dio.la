@@ -1,34 +1,28 @@
 # To do
 
 - About page
-- 404 page
-- Favicon
 - Footer
-- Default OG image
 - Write/schedule 10 initial articles
-- Fix title `undefined` issue in OG data
 - Update domain and redirect everywhere
 - Update URL on social media, etc
 - Launch!!!
 
 # Later
 
-- Defer / selectively loady LaTeX CSS
+- Defer / selectively load LaTeX CSS
 - Make tags in article list clickable
 - Article view
-  - Go up button
+  - Go to top button
   - Test deprecated options in completions
   - Fix/report hot reload issue
   - Tables
-  - Headings as links
   - ToC
   - Topics
   - Related or/and next/prev article links
   - Turn typescript errors into links to https://ts-error-translator.vercel.app/ (see: https://github.com/mattpocock/ts-error-translator/blob/main/apps/web/src/pages/index.tsx#L91)
   - Headings as anchor links
 - Add schema.org stuff
-- Add draft option to articles (frontmatter), and create drafts.dio.la deployment to show them with env variable.
-- OG images (satori) for homepage and articles without defined image
+- OG images (satori) for articles without defined image
 - Hire illustrator to make nice main images for articles (and some secondary illustrations as needed)
 - RSS
 - Error fallback
@@ -43,7 +37,6 @@
 - Analytics
 - Green bg height transition on client-side navigation?
 - Fira code font for code blocks?
-- Go to top button in articles
 - Optimization: compute reading time when generating article metadata (from article content, maybe excluding JSX - remark should be useful for this) so it's available without javascript enabled (and before hydration)
 - Smaller font sizes on mobile?
 - Figure out how to prevent stuff from jumping around on load
