@@ -27,6 +27,7 @@ import {
   SITE_DESCRIPTION,
 } from "./data/config";
 import "./root.sass";
+import { isDrafts } from "./utils";
 
 function NavLink(props: ComponentProps<typeof A>) {
   return (
@@ -141,16 +142,12 @@ function Header() {
   );
 }
 
-const { VITE_VERCEL_ENV } = process.env;
-const IS_DRAFTS =
-  VITE_VERCEL_ENV && ["preview", "development"].includes(VITE_VERCEL_ENV);
-
 export default function Root() {
   return (
     <Html lang="en" prefix="og: http://ogp.me/ns#">
       <Head>
         {/* prevent indexing drafts website */}
-        {IS_DRAFTS && <Meta name="robots" content="noindex" />}
+        {isDrafts() && <Meta name="robots" content="noindex" />}
         <Link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <Link rel="icon" type="image/png" href="/favicon.png" />
         <HeadMetadata

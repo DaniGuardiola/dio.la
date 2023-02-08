@@ -7,6 +7,7 @@ import { ESLint } from "eslint";
 
 import type { ArticleMetadata } from "~/data/articles";
 import { ALLOWED_TOPICS, REQUIRED_ARTICLE_FIELDS } from "~/data/config";
+import { isDrafts } from "~/utils";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,12 +15,6 @@ const __dirname = path.dirname(__filename);
 const ARTICLES_BASE_PATH = path.resolve(__dirname, "../routes/article");
 const OUTPUT_DIR = path.resolve(__dirname, "../data/generated");
 const OUTPUT_FILE_PATH = path.resolve(__dirname, OUTPUT_DIR, "articles.ts");
-
-const { NODE_ENV, VITE_VERCEL_ENV } = process.env;
-
-const DRAFTS_ENABLED =
-  NODE_ENV === "development" ||
-  (VITE_VERCEL_ENV && ["preview", "development"].includes(VITE_VERCEL_ENV));
 
 async function getArticleFilePaths() {
   const pathList = await fs.readdir(ARTICLES_BASE_PATH);
@@ -75,7 +70,7 @@ async function getArticleMetadataList() {
   const articleFilePaths = await getArticleFilePaths();
   const promises = articleFilePaths.map(getArticleMetadata);
   const metadataList = await Promise.all(promises);
-  return DRAFTS_ENABLED
+  return isDrafts()
     ? metadataList
     : metadataList.filter((metadata) => !metadata.draft);
 }
