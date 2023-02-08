@@ -20,7 +20,7 @@
 - Button groups, React context, and negative margins
 - Reverse engineering and hacking the Discord client - voice proximity chat
 - Cutting in line at the doctor
-- Self-life detector
+- Self-like detector
 - Twitter plays Pokemon
 - Annoying a work mate (phone calls script)
 - Buscapiso script
@@ -77,3 +77,4 @@
 - Solid Start + MDX
 - Solid Start + MDX + shiki-twoslash
 - How remark / rehype works
+- solid-satori
