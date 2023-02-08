@@ -141,10 +141,16 @@ function Header() {
   );
 }
 
+const IS_DRAFTS =
+  process.env.VITE_VERCEL_URL?.startsWith("drafts") ||
+  location.host.startsWith("drafts");
+
 export default function Root() {
   return (
     <Html lang="en" prefix="og: http://ogp.me/ns#">
       <Head>
+        {/* prevent indexing drafts website */}
+        {IS_DRAFTS && <Meta name="robots" content="noindex" />}
         <Link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <Link rel="icon" type="image/png" href="/favicon.png" />
         <HeadMetadata
