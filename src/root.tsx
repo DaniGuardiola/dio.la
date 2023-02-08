@@ -141,9 +141,10 @@ function Header() {
   );
 }
 
+const { VITE_VERCEL_ENV } = process.env;
 const IS_DRAFTS =
-  process.env.VITE_VERCEL_URL?.startsWith("drafts") ||
-  location.host.startsWith("drafts");
+  (VITE_VERCEL_ENV && ["preview", "development"].includes(VITE_VERCEL_ENV)) ||
+  location?.host.startsWith("drafts");
 
 export default function Root() {
   return (
