@@ -144,7 +144,7 @@ function Header() {
 const { VITE_VERCEL_ENV } = process.env;
 const IS_DRAFTS =
   (VITE_VERCEL_ENV && ["preview", "development"].includes(VITE_VERCEL_ENV)) ||
-  location?.host.startsWith("drafts");
+  window?.location.host.startsWith("drafts");
 
 export default function Root() {
   return (
