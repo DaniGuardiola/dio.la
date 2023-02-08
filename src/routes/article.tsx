@@ -1,4 +1,5 @@
 import { Base, Link } from "@solidjs/meta";
+import clsx from "clsx";
 import { format } from "date-fns";
 import { createEffect, createMemo, createSignal, Show } from "solid-js";
 import { Outlet, useLocation, useNavigate } from "solid-start";
@@ -13,6 +14,7 @@ import {
 } from "~/data/articles";
 import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
+import { articleScrolled } from "~/utils/page-scroll";
 
 // reading speed
 const WORDS_PER_MINUTE = 250;
@@ -130,6 +132,25 @@ function ArticleHeader(props: ArticleHeaderProps) {
   );
 }
 
+export function GoToTopButton() {
+  return (
+    <button
+      aria-label="scroll to the top"
+      class={clsx(
+        `fixed bottom-4 right-4 lg:bottom-8 lg:right-8
+            bg-accent text-white p-3 lg:p-4 rounded-xl font-roboto-mono shadow-lg
+              transition-[transform,opacity] ease-out
+              hover:-translate-y-2 active:-translate-y-1
+              focus:outline-none focus-visible:-translate-y-2 focus-visible:outline-offset-2 focus-visible:outline-accent`,
+        articleScrolled() ? "opacity-100" : "opacity-0"
+      )}
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+    >
+      scroll(TOP)
+    </button>
+  );
+}
+
 export default function ArticleLayout() {
   const articleData = useArticleData();
   if (articleData === "not-found")
@@ -172,6 +193,7 @@ export default function ArticleLayout() {
           </div>
         </article>
       </div>
+      <GoToTopButton />
     </>
   );
 }

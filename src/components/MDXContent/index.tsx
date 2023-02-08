@@ -76,6 +76,18 @@ function Pre(props: ComponentProps<"pre">) {
   );
 }
 
+function YoutubeVideo(props: { id: string }) {
+  return (
+    <iframe
+      class="w-full aspect-video"
+      src={`https://www.youtube-nocookie.com/embed/${props.id}`}
+      title="YouTube video player"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    />
+  );
+}
+
 function stub<T extends string>(component: T) {
   return function StubComponent(props: ComponentProps<T>) {
     return <Dynamic component={component} {...props} />;
@@ -93,6 +105,7 @@ export function MDXContent(props: MDXContentProps) {
           "data-lsp": DataLSP,
           "data-err": DataErr,
           pre: Pre,
+          YoutubeVideo,
           ...KATEX_TAGS.reduce(
             (obj, component) => ({ ...obj, [component]: stub(component) }),
             {}

@@ -2,13 +2,7 @@
 import "./root.sass";
 
 import clsx from "clsx";
-import {
-  type ComponentProps,
-  createEffect,
-  createSignal,
-  onCleanup,
-  Suspense,
-} from "solid-js";
+import { type ComponentProps, Suspense } from "solid-js";
 import {
   A,
   Body,
@@ -24,12 +18,9 @@ import {
 
 import { HeadMetadata } from "./components/HeadMetadata";
 import { SkipLinkArea } from "./components/SkipLinks";
-import {
-  CANONICAL_DOMAIN,
-  HEADER_SCROLL_OFFSET,
-  SITE_DESCRIPTION,
-} from "./data/config";
+import { CANONICAL_DOMAIN, SITE_DESCRIPTION } from "./data/config";
 import { isDrafts } from "./utils/is-drafts";
+import { headerScrolled, scrolledAtTop } from "./utils/page-scroll";
 
 function NavLink(props: ComponentProps<typeof A>) {
   return (
@@ -58,32 +49,13 @@ function NavLink(props: ComponentProps<typeof A>) {
 }
 
 function Header() {
-  const [atTop, setAtTop] = createSignal(true);
-  const [scrolled, setScrolled] = createSignal(false);
-
-  function updateScrolled() {
-    if (typeof window === "undefined") return;
-    window.scrollY === 0 ? setAtTop(true) : setAtTop(false);
-    window.scrollY > HEADER_SCROLL_OFFSET
-      ? setScrolled(true)
-      : setScrolled(false);
-  }
-
-  if (typeof window !== "undefined") {
-    createEffect(() => {
-      updateScrolled();
-      window?.addEventListener("scroll", updateScrolled);
-      onCleanup(() => window?.removeEventListener("scroll", updateScrolled));
-    });
-  }
-
   return (
     <header
       class="fixed z-20 inset-x-0 top-0 bg-white select-none transition-[height] flex items-center overflow-hidden"
       classList={{
-        "h-[5rem] sm:h-[11.25rem]": !scrolled(),
-        "h-[3.5rem] sm:h-[4.5rem]": scrolled(),
-        "shadow-[0_2px_4px_rgba(0,0,0,.25)]": !atTop(),
+        "h-[5rem] sm:h-[11.25rem]": !headerScrolled(),
+        "h-[3.5rem] sm:h-[4.5rem]": headerScrolled(),
+        "shadow-[0_2px_4px_rgba(0,0,0,.25)]": !scrolledAtTop(),
       }}
     >
       <div class="main-container px-4 w-full mx-auto flex">
@@ -101,8 +73,8 @@ function Header() {
               "sm:transition-[font-size]"
             )}
             classList={{
-              "sm:text-[5.375rem]": !scrolled(),
-              "sm:text-[3rem]": scrolled(),
+              "sm:text-[5.375rem]": !headerScrolled(),
+              "sm:text-[3rem]": headerScrolled(),
             }}
           >
             <span class="group-hover:underline">dio</span>
@@ -117,8 +89,8 @@ function Header() {
               "text-[1.4375rem] transition-[height,opacity]"
             )}
             classList={{
-              "h-[2.1875rem]": !scrolled(),
-              "h-0 opacity-0": scrolled(),
+              "h-[2.1875rem]": !headerScrolled(),
+              "h-0 opacity-0": headerScrolled(),
             }}
           >
             Dani Guardio<span class="text-accent">la</span>’s blog

@@ -68,13 +68,16 @@
     @apply list-decimal
 
   & :is(ul, ol)
-    @apply my-[1em] list-inside last:mb-0
+    @apply my-[2em] list-outside pl-5 last:mb-0
 
     & li
       @apply my-[.5em]
 
+      & p
+        @apply my-[1em]
+
     & :is(ul, ol)
-      @apply my-0 pl-10
+      @apply my-0
 
   & ol li li
     @apply list-lower-latin

@@ -5,6 +5,7 @@ export const NAME = "Dani Guardiola";
 export const TWITTER_USERNAME = "daniguardio_la";
 export const CANONICAL_DOMAIN = "dio.la";
 export const HEADER_SCROLL_OFFSET = 420;
+export const ARTICLE_SCROLL_OFFSET = 690;
 export const ALLOWED_TOPICS = [
   "js",
   "fun",

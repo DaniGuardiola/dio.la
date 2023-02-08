@@ -12,7 +12,6 @@
 - Defer / selectively load LaTeX CSS
 - Make tags in article list clickable
 - Article view
-  - Go to top button
   - Test deprecated options in completions
   - Fix/report hot reload issue
   - Tables
@@ -38,10 +37,10 @@
 - Fira code font for code blocks?
 - Optimization: compute reading time when generating article metadata (from article content, maybe excluding JSX - remark should be useful for this) so it's available without javascript enabled (and before hydration)
 - Smaller font sizes on mobile?
-- Figure out how to prevent stuff from jumping around on load
 - Add easter egg
 - Allow type highlights to overflow code blocks
 - Fix twoslash errors for multi-file snippets
 - Fix hydration issue
 - Dark theme
 - Co-locate article og images
+- Javascript-less header collapse? (position sticky?)
