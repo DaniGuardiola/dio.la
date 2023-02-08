@@ -43,7 +43,4 @@
 - Allow type highlights to overflow code blocks
 - Fix twoslash errors for multi-file snippets
 - Fix hydration issue
-- Setup eslint
-  - Solid
-  - Autofixable import order
 - Dark theme

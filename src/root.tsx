@@ -1,7 +1,9 @@
 // @refresh reload
+import "./root.sass";
+
 import clsx from "clsx";
 import {
-  ComponentProps,
+  type ComponentProps,
   createEffect,
   createSignal,
   onCleanup,
@@ -19,6 +21,7 @@ import {
   Routes,
   Scripts,
 } from "solid-start";
+
 import { HeadMetadata } from "./components/HeadMetadata";
 import { SkipLinkArea } from "./components/SkipLinks";
 import {
@@ -26,7 +29,6 @@ import {
   HEADER_SCROLL_OFFSET,
   SITE_DESCRIPTION,
 } from "./data/config";
-import "./root.sass";
 import { isDrafts } from "./utils/is-drafts";
 
 function NavLink(props: ComponentProps<typeof A>) {

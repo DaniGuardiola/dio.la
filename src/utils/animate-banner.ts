@@ -1,4 +1,4 @@
-import { createSignal, JSX, onMount } from "solid-js";
+import { createSignal, type JSX, onMount } from "solid-js";
 
 const ANIMATION_DURATION = 150;
 

@@ -1,7 +1,6 @@
-import { A, useSearchParams } from "solid-start";
 import clsx from "clsx";
 import {
-  ComponentProps,
+  type ComponentProps,
   createMemo,
   For,
   Match,
@@ -9,17 +8,19 @@ import {
   splitProps,
   Switch,
 } from "solid-js";
+import { A, useSearchParams } from "solid-start";
+
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
 import {
-  HIGHLIGHTS,
-  ArticleMetadata,
-  TOPICS_SORTED,
+  type ArticleMetadata,
   ARTICLES_BY_YEAR_SORTED,
   ARTICLES_SORTED,
-  Topic,
+  HIGHLIGHTS,
+  type Topic,
+  TOPICS_SORTED,
 } from "~/data/articles";
-import { useAnimateBanner } from "~/utils/animate-banner";
 import { ALLOWED_TOPICS } from "~/data/config";
+import { useAnimateBanner } from "~/utils/animate-banner";
 
 // article url
 // -----------

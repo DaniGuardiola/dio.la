@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import solid from "solid-start/vite";
-import mdx from "@mdx-js/rollup";
-import remarkShikiTwoslash from "remark-shiki-twoslash";
-import remarkGfm from "remark-gfm";
-import remarkFrontmatter from "remark-frontmatter";
-import remarkMdxImages from "remark-mdx-images";
-import remarkMath from "remark-math";
 import { nodeTypes } from "@mdx-js/mdx";
-import rehypeRaw from "rehype-raw";
-import rehypeSlug from "rehype-slug";
+import mdx from "@mdx-js/rollup";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
-import vercel from "solid-start-vercel";
+import rehypeRaw from "rehype-raw";
+import rehypeSlug from "rehype-slug";
+import remarkFrontmatter from "remark-frontmatter";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import remarkMdxImages from "remark-mdx-images";
+import remarkShikiTwoslash from "remark-shiki-twoslash";
+import solid from "solid-start/vite";
 // @ts-expect-error No types.
 import node from "solid-start-node";
+import vercel from "solid-start-vercel";
 import { defineConfig } from "vite";
 
 const isVercel = process.env.VERCEL === "1";

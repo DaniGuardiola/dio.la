@@ -1,5 +1,6 @@
 import { Show } from "solid-js";
 import { Meta, Title } from "solid-start";
+
 import { BASE_PAGE_TITLE, NAME, TWITTER_USERNAME } from "~/data/config";
 
 const DEFAULT_IMAGE = "/open-graph/default.png";

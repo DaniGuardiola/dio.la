@@ -1,12 +1,13 @@
 import { Base, Link } from "@solidjs/meta";
+import { format } from "date-fns";
 import { createEffect, createMemo, createSignal, Show } from "solid-js";
 import { Outlet, useLocation, useNavigate } from "solid-start";
-import { format } from "date-fns";
+
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
 import {
-  ArticleMetadata,
+  type ArticleMetadata,
   articleMetadataExists,
   findArticleMetadataById,
 } from "~/data/articles";

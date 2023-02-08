@@ -1,5 +1,5 @@
-import { ALLOWED_TOPICS } from "./config";
-import { ArticleId, ARTICLES } from "./generated/articles";
+import { type ALLOWED_TOPICS } from "./config";
+import { type ArticleId, ARTICLES } from "./generated/articles";
 
 // types
 // -----

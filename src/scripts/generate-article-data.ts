@@ -1,9 +1,10 @@
-import matter from "gray-matter";
-import path from "node:path";
 import fs from "node:fs/promises";
+import path from "node:path";
 import { fileURLToPath } from "node:url";
-import prettier from "prettier";
+
 import { ESLint } from "eslint";
+import matter from "gray-matter";
+import prettier from "prettier";
 
 import type { ArticleMetadata } from "~/data/articles";
 import { ALLOWED_TOPICS, REQUIRED_ARTICLE_FIELDS } from "~/data/config";
