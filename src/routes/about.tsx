@@ -5,6 +5,7 @@ import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
 import { CANONICAL_DOMAIN } from "~/data/config";
+import { useAnimateBanner } from "~/utils/animate-banner";
 
 const TITLE = "About me";
 const DESCRIPTION =
@@ -13,13 +14,19 @@ const PATHNAME = "/about";
 const IMAGE_URL: string | undefined = undefined;
 
 function Header() {
+  const { animateBannerRef, animateBannerStyle } = useAnimateBanner();
+
   return (
     <>
       <Link
         href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto+Slab&display=swap"
         rel="stylesheet"
       />
-      <header class="bg-accent pt-8 pb-6 text-white">
+      <header
+        ref={animateBannerRef}
+        style={animateBannerStyle()}
+        class="bg-accent pt-8 pb-6 text-white"
+      >
         <div class="main-container px-4">
           <h1 class="font-roboto-slab text-[1.875rem]">{TITLE}</h1>
           <p class="text-[1.125rem] text-subtle-white py-2">{DESCRIPTION}</p>

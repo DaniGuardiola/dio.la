@@ -8,7 +8,8 @@
     "build": "pnpm gen && solid-start build",
     "start": "solid-start start",
     "watch:article-data": "watch 'pnpm gen:article-data' src/routes/article",
-    "watch": "pnpm watch:article-data"
+    "watch": "pnpm watch:article-data",
+    "lint": "eslint --ignore-path .gitignore ."
   },
   "type": "module",
   "devDependencies": {
@@ -16,18 +17,19 @@
     "@mdx-js/rollup": "^2.2.1",
     "@swc/core": "^1.3.32",
     "@types/eslint": "^8.21.0",
-    "@types/node": "^18.11.19",
+    "@types/node": "^18.13.0",
     "@types/prettier": "^2.7.2",
-    "@typescript-eslint/eslint-plugin": "^5.50.0",
-    "@typescript-eslint/parser": "^5.50.0",
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "@typescript-eslint/parser": "^5.51.0",
     "autoprefixer": "^10.4.13",
     "concurrently": "^7.6.0",
     "eslint": "^8.33.0",
+    "eslint-plugin-solid": "^0.9.4",
     "gray-matter": "^4.0.3",
     "katex": "^0.16.4",
     "lexical": "^0.7.7",
     "postcss": "^8.4.21",
-    "prettier": "^2.8.3",
+    "prettier": "^2.8.4",
     "rehype-external-links": "^2.0.1",
     "rehype-katex": "^6.0.2",
     "rehype-raw": "^6.1.1",
@@ -40,14 +42,14 @@
     "rollup": "^3.14.0",
     "sass": "^1.58.0",
     "solid-mdx": "^0.0.6",
-    "solid-start-node": "^0.2.19",
-    "solid-start-vercel": "^0.2.19",
+    "solid-start-node": "^0.2.20",
+    "solid-start-vercel": "^0.2.20",
     "tailwindcss": "^3.2.4",
     "ts-node": "^10.9.1",
     "ts-paths-esm-loader": "^1.4.1",
     "tsconfig-paths": "^4.1.2",
     "typescript": "4.9.5",
-    "undici": "^5.17.1",
+    "undici": "^5.18.0",
     "vite": "^4.1.1",
     "watch": "^1.0.2",
     "yaml": "^2.2.1"
@@ -59,7 +61,7 @@
     "date-fns": "^2.29.3",
     "p-debounce": "^4.0.0",
     "solid-js": "^1.6.10",
-    "solid-start": "^0.2.19"
+    "solid-start": "^0.2.20"
   },
   "engines": {
     "node": ">=16"

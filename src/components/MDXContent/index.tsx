@@ -41,9 +41,8 @@ const KATEX_TAGS = [
   "path",
 ];
 
-function DataLSP(props: ComponentProps<"span">) {
-  const lspAttr = () =>
-    ((props as any).lsp as string).replaceAll("&quot;", '"');
+function DataLSP(props: ComponentProps<"span"> & { lsp: string }) {
+  const lspAttr = () => props.lsp.replaceAll("&quot;", '"');
   return (
     <span
       {...props}
@@ -67,7 +66,7 @@ function Pre(props: ComponentProps<"pre">) {
   return (
     <pre
       {...props}
-      onscroll={(event) => setScrollXDebounced(event.currentTarget.scrollLeft)}
+      onScroll={(event) => setScrollXDebounced(event.currentTarget.scrollLeft)}
       style={
         typeof props.style === "string"
           ? `--scroll-x:${scrollX()}px;${props.style}`

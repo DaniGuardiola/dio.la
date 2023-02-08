@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import { createSignal, Show } from "solid-js";
-import { For, Portal } from "solid-js/web";
+import { createSignal, Show, For } from "solid-js";
+import { Portal } from "solid-js/web";
 
 const [skipLinkAreaElement, setSkipLinkAreaElement] =
   createSignal<HTMLElement>();
@@ -9,15 +9,11 @@ export function SkipLinkArea() {
   return <div ref={setSkipLinkAreaElement} />;
 }
 
-type SkipLinkData = {
-  label: string;
-  id: string;
-};
+type SkipLinkData = { label: string; id: string };
 
 type SkipLinksProps = { links: SkipLinkData[] };
 
 export function SkipLinks(props: SkipLinksProps) {
-  if (typeof window === "undefined") return;
   return (
     <Show when={skipLinkAreaElement()}>
       <Portal mount={skipLinkAreaElement()}>
@@ -44,6 +40,6 @@ type SkipLinkProps = {
   id: string;
 };
 
-export function SkipLink({ id }: SkipLinkProps) {
-  return <div id={id} class="focus-scroll-target" />;
+export function SkipLink(props: SkipLinkProps) {
+  return <div id={props.id} class="focus-scroll-target" />;
 }

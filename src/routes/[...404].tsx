@@ -30,12 +30,14 @@ export default function NotFound() {
   return (
     <>
       <HttpStatusCode code={404} />
-      <h1 class="px-4 py-8 bg-accent text-white font-roboto-mono font-bold text-3xl">
-        {text()}
-        <span class={blinking() ? "motion-safe:animate-blink" : undefined}>
-          _
-        </span>
-      </h1>
+      <div class="bg-accent">
+        <h1 class="px-4 py-8 lg:main-container text-white font-roboto-mono font-bold text-3xl">
+          {text()}
+          <span class={blinking() ? "motion-safe:animate-blink" : undefined}>
+            _
+          </span>
+        </h1>
+      </div>
       <div class="p-4 min-h-[65vh] lg:main-container flex flex-col items-center justify-center space-y-8">
         <A href="/" class="text-accent hover:underline">
           Check out the homepage?

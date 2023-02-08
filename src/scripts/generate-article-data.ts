@@ -7,7 +7,7 @@ import { ESLint } from "eslint";
 
 import type { ArticleMetadata } from "~/data/articles";
 import { ALLOWED_TOPICS, REQUIRED_ARTICLE_FIELDS } from "~/data/config";
-import { isDrafts } from "~/utils";
+import { isDrafts } from "~/utils/is-drafts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

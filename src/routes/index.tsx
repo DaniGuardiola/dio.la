@@ -16,7 +16,10 @@ import {
   TOPICS_SORTED,
   ARTICLES_BY_YEAR_SORTED,
   ARTICLES_SORTED,
+  Topic,
 } from "~/data/articles";
+import { useAnimateBanner } from "~/utils/animate-banner";
+import { ALLOWED_TOPICS } from "~/data/config";
 
 // article url
 // -----------
@@ -130,8 +133,15 @@ function Highlight(props: ArticleMetadata) {
 function Highlights() {
   const [topHighlight, ...highlights] = HIGHLIGHTS;
 
+  const { animateBannerRef, animateBannerStyle } = useAnimateBanner();
+
   return (
-    <section class="bg-accent select-none" aria-labelledby="highlights-heading">
+    <section
+      ref={animateBannerRef}
+      style={animateBannerStyle()}
+      class="bg-accent select-none overflow-hidden"
+      aria-labelledby="highlights-heading"
+    >
       <div class="main-container w-full px-4 py-8 gap-12 flex max-md:flex-col">
         <div class="space-y-4">
           <h1 id="highlights-heading" class="text-[2rem] text-white">
@@ -202,11 +212,15 @@ function Topics() {
 }
 
 function TopicBanner() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const topic = () => searchParams.topic;
+  const [searchParams] = useSearchParams();
+  const topic = () => searchParams.topic as Topic;
+
+  const topicExists = createMemo(
+    () => topic() && ALLOWED_TOPICS.includes(topic())
+  );
 
   return (
-    <Show when={topic()}>
+    <Show when={topicExists()}>
       <section
         id="topic-banner"
         aria-label={`filtering by topic: ${topic()}`}
@@ -272,11 +286,12 @@ function ArticleItem(props: ArticleItemProps) {
   );
 }
 
-type ArticleListProps = {
-  topic?: string;
-};
+type ArticleListProps = { topic?: Topic };
 
 function ArticleList(props: ArticleListProps) {
+  const topicExists = createMemo(
+    () => props.topic && ALLOWED_TOPICS.includes(props.topic)
+  );
   return (
     <>
       <SkipLink id="article-list" />
@@ -284,7 +299,7 @@ function ArticleList(props: ArticleListProps) {
         <TopicBanner />
         <div class="space-y-6">
           <Switch>
-            <Match when={!props.topic}>
+            <Match when={!topicExists()}>
               <For each={ARTICLES_BY_YEAR_SORTED}>
                 {([year, articles]) => {
                   const isCurrentYear = +year === new Date().getFullYear();
@@ -315,10 +330,11 @@ function ArticleList(props: ArticleListProps) {
                 }}
               </For>
             </Match>
-            <Match when={props.topic}>
+            <Match when={topicExists()}>
               <For
-                each={ARTICLES_SORTED.filter((article) =>
-                  article.topics?.includes(props.topic as any)
+                each={ARTICLES_SORTED.filter(
+                  (article) =>
+                    props.topic && article.topics?.includes(props.topic)
                 )}
               >
                 {(article) => <ArticleItem {...article} includeYear="always" />}
@@ -336,7 +352,7 @@ function ArticleList(props: ArticleListProps) {
 
 export default function Home() {
   const [searchParams] = useSearchParams();
-  const topic = () => searchParams.topic;
+  const topic = () => searchParams.topic as Topic;
 
   return (
     <>

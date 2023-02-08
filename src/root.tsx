@@ -27,7 +27,7 @@ import {
   SITE_DESCRIPTION,
 } from "./data/config";
 import "./root.sass";
-import { isDrafts } from "./utils";
+import { isDrafts } from "./utils/is-drafts";
 
 function NavLink(props: ComponentProps<typeof A>) {
   return (

@@ -11,6 +11,7 @@ import {
   findArticleMetadataById,
 } from "~/data/articles";
 import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
+import { useAnimateBanner } from "~/utils/animate-banner";
 
 // reading speed
 const WORDS_PER_MINUTE = 250;
@@ -57,6 +58,12 @@ function ArticleHeader(props: ArticleHeaderProps) {
     };
   });
 
+  const [heightOffsetEl, setHeightOffsetEl] = createSignal<HTMLElement>();
+  const { animateBannerRef, animateBannerStyle } = useAnimateBanner({
+    heightOffsetEl: () =>
+      props.metadata.imageUrl ? heightOffsetEl() : undefined,
+  });
+
   return (
     <>
       <Link
@@ -66,7 +73,14 @@ function ArticleHeader(props: ArticleHeaderProps) {
       <Show when={typeof window !== "undefined"}>
         <Base href={props.articleUrl} />
       </Show>
-      <header class="bg-accent pt-8 pb-6 text-white break-words">
+      <header
+        ref={(el) => {
+          if (props.metadata.imageUrl) setHeightOffsetEl(el);
+          else animateBannerRef(el);
+        }}
+        style={props.metadata.imageUrl ? undefined : animateBannerStyle()}
+        class="bg-accent pt-8 pb-6 text-white break-words"
+      >
         <div class="main-container px-4">
           <p class="font-roboto-mono text-[.875rem] text-subtle-white">
             <span class="sm:hidden">{date().short}</span>
@@ -94,7 +108,14 @@ function ArticleHeader(props: ArticleHeaderProps) {
       </header>
       <Show when={props.metadata.imageUrl}>
         <div class="relative">
-          <div class="absolute top-0 inset-x-0 -z-10 bg-accent h-[4rem] xs:h-[6rem] sm:h-[9rem] lg:h-[12rem]" />
+          <div
+            ref={(el) => {
+              if (props.metadata.imageUrl) animateBannerRef(el);
+              else setHeightOffsetEl(el);
+            }}
+            style={props.metadata.imageUrl ? animateBannerStyle() : undefined}
+            class="absolute top-0 inset-x-0 -z-10 bg-accent h-[4rem] xs:h-[6rem] sm:h-[9rem] lg:h-[12rem]"
+          />
           <div class="px-4 main-container">
             <img
               alt="This article's main image"
@@ -111,6 +132,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
 export default function ArticleLayout() {
   const articleData = useArticleData();
   if (articleData === "not-found")
+    // eslint-disable-next-line solid/components-return-once
     return useNavigate()("/404", { replace: true });
   const { metadata, articlePathname, articleUrl } = articleData;
 

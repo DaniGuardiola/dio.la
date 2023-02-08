@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import solid from "solid-start/vite";
 import mdx from "@mdx-js/rollup";
 import remarkShikiTwoslash from "remark-shiki-twoslash";
@@ -10,7 +11,6 @@ import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
-// @ts-expect-error No types.
 import vercel from "solid-start-vercel";
 // @ts-expect-error No types.
 import node from "solid-start-node";
