@@ -67,3 +67,7 @@ export function findArticleMetadataById(id: string) {
   if (!result) throw new Error(`Article with id "${id}" was not found`);
   return result;
 }
+
+export function articleMetadataExists(id: string) {
+  return ARTICLES.some((article) => article.id === id);
+}

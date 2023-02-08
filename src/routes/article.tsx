@@ -1,11 +1,15 @@
 import { Base, Link } from "@solidjs/meta";
 import { createEffect, createMemo, createSignal, Show } from "solid-js";
-import { Outlet, useLocation } from "solid-start";
+import { Outlet, useLocation, useNavigate } from "solid-start";
 import { format } from "date-fns";
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
-import { ArticleMetadata, findArticleMetadataById } from "~/data/articles";
+import {
+  ArticleMetadata,
+  articleMetadataExists,
+  findArticleMetadataById,
+} from "~/data/articles";
 import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
 
 // reading speed
@@ -19,6 +23,9 @@ function useArticleData() {
     if (!match) throw new Error("Missing article id");
     return match[1];
   };
+
+  if (!articleMetadataExists(articleId())) return "not-found";
+
   const metadata = () => findArticleMetadataById(articleId());
   const host =
     typeof window !== "undefined" ? window.location.host : CANONICAL_DOMAIN;
@@ -102,7 +109,10 @@ function ArticleHeader(props: ArticleHeaderProps) {
 }
 
 export default function ArticleLayout() {
-  const { metadata, articlePathname, articleUrl } = useArticleData();
+  const articleData = useArticleData();
+  if (articleData === "not-found")
+    return useNavigate()("/404", { replace: true });
+  const { metadata, articlePathname, articleUrl } = articleData;
 
   let contentDiv: HTMLDivElement;
   const [readingMinutes, setReadingMinutes] = createSignal(1);

@@ -103,7 +103,7 @@
 
     // completions
     &:hover .inline-completions::before
-      @apply motion-safe:animate-[completion-cursor-blink_1s_steps(1)_infinite] duration-200
+      @apply animate-blink
 
     & .inline-completions
       &::before
@@ -126,9 +126,3 @@
           & span
             &.result-found
               @apply text-blue-500 font-bold
-
-@keyframes completion-cursor-blink
-  0%
-    opacity: 1
-  50% 
-    opacity: 0

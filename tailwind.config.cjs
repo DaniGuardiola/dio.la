@@ -18,6 +18,9 @@ module.exports = {
       listStyleType: {
         "lower-latin": "lower-latin",
       },
+      animation: {
+        blink: "cursor-blink 1s steps(1) infinite",
+      },
     },
   },
   plugins: [],
