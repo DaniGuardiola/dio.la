@@ -12,16 +12,15 @@ type HeadMetadataProps = {
 };
 
 export function HeadMetadata(props: HeadMetadataProps) {
+  const title = () =>
+    `${props.title ? `${props.title} | ` : ""}${BASE_PAGE_TITLE}`;
   return (
     <>
-      <Title>
-        {props.title ? `${props.title} | ` : ""}
-        {BASE_PAGE_TITLE}
-      </Title>
+      <Title>{title()}</Title>
       <Meta name="description" content={props.description} />
       <Meta name="author" content={NAME} />
 
-      <Meta property="og:title" content={props.title} />
+      <Meta property="og:title" content={title()} />
       <Meta property="og:description" content={props.description} />
       <Meta property="og:locale" content="en_US" />
       <Meta property="og:type" content={props.type ?? "website"} />
