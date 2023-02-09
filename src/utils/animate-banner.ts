@@ -28,7 +28,14 @@ export function useAnimateBanner({
       height: `${to}px`,
     });
     // wait for animation to end
-    bannerRef()?.addEventListener("transitionend", onEnd, { once: true });
+    bannerRef()?.addEventListener(
+      "transitionend",
+      () => {
+        setStyle(undefined);
+        onEnd();
+      },
+      { once: true }
+    );
   }
 
   onMount(() => {
