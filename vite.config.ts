@@ -25,6 +25,8 @@ export default defineConfig({
         jsx: true,
         jsxImportSource: "solid-js",
         providerImportSource: "solid-mdx",
+        elementAttributeNameCase: "html",
+        stylePropertyNameCase: "css",
         remarkPlugins: [
           [
             (remarkShikiTwoslash as any).default,
