@@ -113,6 +113,9 @@
         @apply inline-block z-[5] absolute max-w-[15rem] translate-x-[calc(var(--scroll-x)*-1)] -translate-y-[1rem]
         @apply bg-gray-900 border border-gray-700 text-white/80 max-h-48 overflow-auto list-none
 
+        // undo padding from general styles
+        @apply p-0
+
         & li
           @apply overflow-hidden px-2 my-1 select-none cursor-pointer
 

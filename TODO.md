@@ -44,3 +44,4 @@
 - Dark theme
 - Co-locate article og images
 - Javascript-less header collapse? (position sticky?)
+- Bug: topics list jumps around when selected
