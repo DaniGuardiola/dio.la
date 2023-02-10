@@ -13,7 +13,6 @@
 - Make tags in article list clickable
 - Article view
   - Test deprecated options in completions
-  - Fix/report hot reload issue
   - Tables
   - ToC
   - Topics
@@ -40,8 +39,8 @@
 - Add easter egg
 - Allow type highlights to overflow code blocks
 - Fix twoslash errors for multi-file snippets
-- Fix hydration issue
 - Dark theme
 - Co-locate article og images
 - Javascript-less header collapse? (position sticky?)
 - Bug: topics list jumps around when selected
+- Bug: title and others meta tags don't work properly
