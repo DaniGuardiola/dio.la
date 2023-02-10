@@ -1,8 +1,8 @@
-import { Base, Link } from "@solidjs/meta";
+import { Base } from "@solidjs/meta";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { createEffect, createMemo, createSignal, Show } from "solid-js";
-import { Outlet, useLocation, useNavigate } from "solid-start";
+import { Link, Outlet, useLocation, useNavigate } from "solid-start";
 
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";

@@ -1,6 +1,5 @@
-import { Link } from "@solidjs/meta";
 import { Show } from "solid-js";
-import { Outlet } from "solid-start";
+import { Link, Outlet } from "solid-start";
 
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";
