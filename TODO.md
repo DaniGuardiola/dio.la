@@ -43,4 +43,3 @@
 - Co-locate article og images
 - Javascript-less header collapse? (position sticky?)
 - Bug: topics list jumps around when selected
-- Bug: title and others meta tags don't work properly

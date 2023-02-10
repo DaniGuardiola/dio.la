@@ -2,6 +2,8 @@ import { createSignal } from "solid-js";
 import { A } from "solid-start";
 import { HttpStatusCode } from "solid-start/server";
 
+import { HeadMetadata } from "~/components/HeadMetadata";
+
 import tRexSvg from "./404-t-rex.svg";
 
 const CURSOR_EFFECT_DELAY = 2000;
@@ -30,6 +32,7 @@ export default function NotFound() {
   return (
     <>
       <HttpStatusCode code={404} />
+      <HeadMetadata title="404" description="Not found!" />
       <div class="bg-accent">
         <h1 class="px-4 py-8 lg:main-container text-white font-roboto-mono font-bold text-3xl">
           {text()}

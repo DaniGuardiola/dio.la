@@ -23,6 +23,7 @@
     "@typescript-eslint/parser": "^5.51.0",
     "autoprefixer": "^10.4.13",
     "concurrently": "^7.6.0",
+    "esbuild": "^0.14.54",
     "eslint": "^8.33.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-simple-import-sort": "^10.0.0",

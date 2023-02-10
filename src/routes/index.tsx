@@ -10,6 +10,7 @@ import {
 } from "solid-js";
 import { A, useSearchParams } from "solid-start";
 
+import { HeadMetadata } from "~/components/HeadMetadata";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
 import {
   type ArticleMetadata,
@@ -19,7 +20,7 @@ import {
   type Topic,
   TOPICS_SORTED,
 } from "~/data/articles";
-import { ALLOWED_TOPICS } from "~/data/config";
+import { ALLOWED_TOPICS, SITE_DESCRIPTION } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
 
 // article url
@@ -357,6 +358,8 @@ export default function Home() {
 
   return (
     <>
+      {/* workaround for: https://github.com/solidjs/solid-start/issues/738 */}
+      <HeadMetadata description={SITE_DESCRIPTION} />
       <SkipLinks
         links={[
           { id: "article-list", label: "article list" },
