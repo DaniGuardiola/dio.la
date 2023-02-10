@@ -31,15 +31,14 @@
   - inline code highlights
   - logger
   - annotations
+  - error positions for multi-file snippets
+  - allow type highlights to overflow code blocks
 - Image fallbacks on error
 - Analytics
 - Fira code font for code blocks?
 - Optimization: compute reading time when generating article metadata (from article content, maybe excluding JSX - remark should be useful for this) so it's available without javascript enabled (and before hydration)
 - Smaller font sizes on mobile?
 - Add easter egg
-- Allow type highlights to overflow code blocks
-- Fix twoslash errors for multi-file snippets
 - Dark theme
 - Co-locate article og images
 - Javascript-less header collapse? (position sticky?)
-- Bug: topics list jumps around when selected

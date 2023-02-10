@@ -215,10 +215,10 @@ function Topics() {
 
 function TopicBanner() {
   const [searchParams] = useSearchParams();
-  const topic = () => searchParams.topic as Topic;
+  const topic = () => searchParams.topic as Topic | undefined;
 
   const topicExists = createMemo(
-    () => topic() && ALLOWED_TOPICS.includes(topic())
+    () => topic() && ALLOWED_TOPICS.includes(topic()!)
   );
 
   return (
@@ -296,8 +296,8 @@ function ArticleList(props: ArticleListProps) {
   );
   return (
     <>
-      <SkipLink id="article-list" />
-      <section aria-label="articles" class="p-4 lg:pt-2">
+      <section aria-label="articles" class="p-4 lg:grow lg:pt-2">
+        <SkipLink id="article-list" />
         <TopicBanner />
         <div class="space-y-6">
           <Switch>
@@ -354,7 +354,7 @@ function ArticleList(props: ArticleListProps) {
 
 export default function Home() {
   const [searchParams] = useSearchParams();
-  const topic = () => searchParams.topic as Topic;
+  const topic = () => searchParams.topic as Topic | undefined;
 
   return (
     <>
@@ -375,14 +375,7 @@ export default function Home() {
           )}
         >
           <Topics />
-          <Switch fallback={<div>Not Found</div>}>
-            <Match when={!topic()}>
-              <ArticleList />
-            </Match>
-            <Match when={topic()}>
-              <ArticleList topic={topic()} />
-            </Match>
-          </Switch>
+          <ArticleList topic={topic()} />
         </div>
       </div>
     </>
