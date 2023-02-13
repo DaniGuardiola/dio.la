@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { createSignal, For,Show } from "solid-js";
+import { type ComponentProps, createSignal, For, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 
 const [skipLinkAreaElement, setSkipLinkAreaElement] =
@@ -38,8 +38,8 @@ export function SkipLinks(props: SkipLinksProps) {
 
 type SkipLinkProps = {
   id: string;
-};
+} & Omit<ComponentProps<"div">, "id">;
 
 export function SkipLink(props: SkipLinkProps) {
-  return <div id={props.id} class="focus-scroll-target" />;
+  return <div {...props} class={clsx("focus-scroll-target", props.class)} />;
 }

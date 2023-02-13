@@ -195,7 +195,8 @@ export default function ArticleLayout() {
               <Outlet />
             </MDXContent>
             <section aria-label="Comments">
-              <SkipLink id="comments" />
+              {/* see https://github.com/giscus/giscus/blob/main/CHANGELOG.md#2022-03-19 */}
+              <SkipLink id="comments" class="giscus" />
               <Comments />
             </section>
           </div>
