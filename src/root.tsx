@@ -20,7 +20,11 @@ import { HeadMetadata } from "./components/HeadMetadata";
 import { SkipLinkArea } from "./components/SkipLinks";
 import { CANONICAL_DOMAIN, SITE_DESCRIPTION } from "./data/config";
 import { isDrafts } from "./utils/is-drafts";
-import { headerScrolled, scrolledAtTop } from "./utils/page-scroll";
+import {
+  headerScrolled,
+  scrolledAtTop,
+  setUpPageScroll,
+} from "./utils/page-scroll";
 
 function NavLink(props: ComponentProps<typeof A>) {
   return (
@@ -117,6 +121,8 @@ function Header() {
 }
 
 export default function Root() {
+  setUpPageScroll();
+
   return (
     <Html lang="en" prefix="og: http://ogp.me/ns#">
       <Head>

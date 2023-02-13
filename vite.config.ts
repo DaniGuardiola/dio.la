@@ -20,6 +20,7 @@ const isVercel = process.env.VERCEL === "1";
 
 export default defineConfig({
   plugins: [
+    // @ts-expect-error Dep issues.
     {
       ...mdx({
         jsx: true,

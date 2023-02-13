@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { createEffect, createMemo, createSignal, Show } from "solid-js";
 import { Link, Outlet, useLocation, useNavigate } from "solid-start";
 
+import { Comments } from "~/components/Comments";
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
@@ -176,7 +177,10 @@ export default function ArticleLayout() {
         type="article"
       />
       <SkipLinks
-        links={[{ id: "article-content", label: "article content" }]}
+        links={[
+          { id: "article-content", label: "article content" },
+          { id: "comments", label: "comments" },
+        ]}
       />
       <div>
         <article>
@@ -185,11 +189,15 @@ export default function ArticleLayout() {
             articleUrl={articleUrl()}
             readingMinutes={readingMinutes()}
           />
-          <div class="article-container p-4" ref={contentDiv!}>
-            <SkipLink id="article-content" />
+          <div class="article-container p-4 space-y-16" ref={contentDiv!}>
             <MDXContent>
+              <SkipLink id="article-content" />
               <Outlet />
             </MDXContent>
+            <section aria-label="Comments">
+              <SkipLink id="comments" />
+              <Comments />
+            </section>
           </div>
         </article>
       </div>

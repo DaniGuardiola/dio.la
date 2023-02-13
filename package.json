@@ -61,6 +61,7 @@
     "@solidjs/router": "^0.7.0",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.3",
+    "giscus": "^1.2.6",
     "p-debounce": "^4.0.0",
     "solid-js": "^1.6.10",
     "solid-start": "^0.2.20"

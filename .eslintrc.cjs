@@ -30,5 +30,7 @@ module.exports = {
       "error",
       { fixStyle: "inline-type-imports" },
     ],
+    // type declarations
+    "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }],
   },
 };
