@@ -1,3 +1,5 @@
+import { useLocation } from "solid-start";
+
 import { type ALLOWED_TOPICS } from "./config";
 import { type ArticleId, ARTICLES } from "./generated/articles";
 
@@ -61,6 +63,17 @@ export const ARTICLES_BY_YEAR_SORTED = Object.entries(ARTICLES_BY_YEAR).sort(
 
 // utils
 // -----
+
+export function useArticleLocation() {
+  const location = useLocation();
+  const articlePathname = () => location.pathname.replace(/\/*$/, "");
+  const articleId = () => {
+    const match = articlePathname().match(/\S*\/([\S]*)/);
+    if (!match) throw new Error("Missing article id");
+    return match[1];
+  };
+  return { articlePathname, articleId };
+}
 
 export function findArticleMetadataById(id: string) {
   const result = ARTICLES.find((article) => article.id === id);

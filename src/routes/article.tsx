@@ -2,7 +2,7 @@ import { Base } from "@solidjs/meta";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { createEffect, createMemo, createSignal, Show } from "solid-js";
-import { Link, Outlet, useLocation, useNavigate } from "solid-start";
+import { Link, Outlet, useNavigate } from "solid-start";
 
 import { Comments } from "~/components/Comments";
 import { HeadMetadata } from "~/components/HeadMetadata";
@@ -12,6 +12,7 @@ import {
   type ArticleMetadata,
   articleMetadataExists,
   findArticleMetadataById,
+  useArticleLocation,
 } from "~/data/articles";
 import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
@@ -21,21 +22,15 @@ import { articleScrolled } from "~/utils/page-scroll";
 const WORDS_PER_MINUTE = 250;
 
 function useArticleData() {
-  const location = useLocation();
-  const articlePathname = () => location.pathname.replace(/\/*$/, "");
-  const articleId = () => {
-    const match = articlePathname().match(/\S*\/([\S]*)/);
-    if (!match) throw new Error("Missing article id");
-    return match[1];
-  };
+  const { articleId, articlePathname } = useArticleLocation();
 
   if (!articleMetadataExists(articleId())) return "not-found";
 
   const metadata = () => findArticleMetadataById(articleId());
   const host =
-    typeof window !== "undefined" ? window.location.host : CANONICAL_DOMAIN;
+    typeof document !== "undefined" ? document.location.host : CANONICAL_DOMAIN;
   const protocol =
-    typeof window !== "undefined" ? window.location.protocol : "https";
+    typeof document !== "undefined" ? document.location.protocol : "https";
   const articleUrl = () => `${protocol}//${host}${articlePathname()}`;
 
   return { metadata, articleUrl, articlePathname };
