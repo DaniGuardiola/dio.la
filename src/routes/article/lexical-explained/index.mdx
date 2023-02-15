@@ -1,6 +1,6 @@
 ---
 draft: true
-date: 1970/1/1
+date: 2000/1/1
 title: "Lexical, explained"
 description: An introduction to the Lexical text editor framework and the "Lexical, explained" series.
 topics:
@@ -11,47 +11,35 @@ import { LexicalExplainedIndex } from "~/components/LexicalExplainedIndex";
 
 <LexicalExplainedIndex />
 
-[Lexical](https://lexical.dev/) is "an extensible [web] text editor framework that does things differently", designed to be "reliable, accessible and fast".
+Welcome to the "Lexical, explained" series!
 
-Lexical is built and used extensively at Meta, it "powers web text editing experiences for hundreds of millions of users every day across Facebook, Workplace, Messenger, WhatsApp and Instagram".
+In this series, we'll demystify Lexical and explore its clever design. Plus, I'll share personal insights and opinions along the way.
+
+[Lexical](https://lexical.dev/) is a game-changing web text editor framework built at Meta, used by "hundreds of millions of users across Facebook, Workplace, Messenger, WhatsApp, and Instagram".
 
 ![The Lexical logo](./lexical-logo.png)
 
-At [Guide](https://guide.co/), we've built a text editor that is at the heart of some of the core features of our product. It's no simple editor! It's packed with features like:
+At [Guide](https://guide.co/), we've built a text editor using Lexical and found it to be an excellent choice for the job.
 
-- Rich text: lists, links, quotes, bold, italic, etc.
-- Interactive blocks: video/image/file embeds, interview schedules, etc.
-- Variables/tokens.
-- Mentions.
-- Floating and fixed toolbars.
-- A command/typeahead menu triggered by the `/` character, etc.
-- Markdown-like shortcuts, like `*` for bold, `#` for headings, etc.
+Our editor features rich text, interactive blocks, variables/tokens, mentions, floating and fixed toolbars, a command/typeahead menu, Markdown-like shortcuts, and more.
 
 TODO: add demo video
 
-We've built our editor with Lexical, which has proven to be a great choice.
-
----
-
-I've learned many things on this journey that I want to share. I'm gonna be publishing a series of articles about Lexical ("Lexical, explained"), going over how it works and how to use it, and even looking at some of the internals.
-
-I aim to demystify Lexical and highlight the cleverness of its design. And I also intend to share advanced and opinionated ways to architect a text editor project built on top of Lexical.
-
-It's gonna be an in-depth dive that assumes some level of familiarity with the basics, so go read the [official documentation](https://lexical.dev/docs/intro) if you haven't done it yet.
+I'm excited to share some of the lessons I've learned in this series. I assume some level of familiarity with the basics, so go read the [official documentation](https://lexical.dev/docs/intro) if you haven't done it yet.
 
 # Lexical in a nutshell
 
-To get things started, here are some quick fundamental facts about Lexical:
+Before we get started, let's cover some fundamental facts about Lexical:
 
-- It is **framework-agnostic**, meaning that it's not tied to any specific view framework. It can be used with React, Solid, etc, or even vanilla (framework-less). Frameworks are supported through "bindings", with only React being officially supported at the moment. There are community efforts to support other frameworks, like [Solid](https://github.com/mosheduminer/lexical-solid).
-- It uses **[`contenteditable`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/contenteditable)** under the hood, an HTML attribute that makes any HTML element editable. Lexical handles inconsistencies across different browsers and operative systems, which are unfortunately frequent with this attribute.
-- It is powered by a **DOM reconciler**, which takes care of comparing the current state with the next ("pending") one and applies changes to the DOM efficiently. This resembles a "virtual DOM" (as seen in frameworks like React), optimized for text editing which makes it very efficient.
+- It is **framework-agnostic**, meaning that it can be used with any view framework (or without one!). Only React is officially supported, but there are community efforts to support others, like [Solid](https://github.com/mosheduminer/lexical-solid).
+- It uses **[`contenteditable`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/contenteditable)** under the hood, an attribute that makes HTML elements editable.
+- It is powered by a **DOM reconciler**, which compares the current and next editor states and applies any necessary changes to the DOM. It resembles a "virtual DOM" (like React's), optimized for text editing.
 
-The name "Lexical", besides being a concept related to language and text, comes from the fact that it exploits JavaScript's lexical scoping in clever ways as part of its design. You'll be able to learn more about this in the upcoming article about state updates.
+The name "Lexical" was chosen because it relates to language and words, but also because it cleverly utilizes JavaScript's lexical scoping as part of its design. If you're interested in learning more about this, keep an eye out for the upcoming article on state updates.
 
 # Lexical, explained
 
-With this series, I aim to cover some of the topics that I find interesting or worth deconstructing. Being exhaustive is **not** a goal, as this is not intended as a replacement for the official documentation.
+I'd like to be explicit about the goals and non-goals of this series so you know what to expect.
 
 ## Goals
 
@@ -69,10 +57,10 @@ With this series, I aim to cover some of the topics that I find interesting or w
 - Provide support to Lexical users.
 - Be always up to date.
 
-Each article in the series will focus on a different topic or set of related topics. I'm gonna try to be mindful of the order in which I publish them so that readers can follow along and build a mental model of how Lexical works.
+## Before you read on
 
-That said, the best way to profit from this series is to be prepared to jump back and forth between articles (and the Lexical documentation) so that you can get the full picture and understand things deeply.
+As we cover a range of topics, I'll publish the articles in a logical order so that you can follow along and build a mental model of how Lexical works. However, to make the most of the series, I encourage you to switch between articles and the Lexical documentation as needed to understand the full picture.
 
-Finally, keep in mind that some of the information in these articles is likely to become outdated at some point, as Lexical is a project in active development and an unstable API. If you do find something that's no longer accurate, please let me know and I'll be happy to make an update or add a note at the top.
+Please note that since Lexical is an actively developed project with an unstable API, some information in these articles may become outdated. If you notice anything that's no longer accurate, please inform me, and I'll be glad to update the article or add a note at the top.
 
-Thanks for reading, and I hope you enjoy the series!
+Thanks for joining me on this journey, and I hope you enjoy the series!
