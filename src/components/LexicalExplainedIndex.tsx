@@ -1,6 +1,7 @@
 import { For } from "solid-js";
 
 import {
+  articleMetadataExists,
   findArticleMetadataById,
   getArticlePath,
   useArticleLocation,
@@ -14,7 +15,9 @@ const ARTICLE_IDS: ArticleId[] = [
   "what-is-a-node",
   "lexical-state-updates",
 ];
-const ARTICLE_DATA = ARTICLE_IDS.map(findArticleMetadataById);
+const ARTICLE_DATA = ARTICLE_IDS.filter(articleMetadataExists).map(
+  findArticleMetadataById
+);
 
 export function LexicalExplainedIndex() {
   const { articleId } = useArticleLocation();
