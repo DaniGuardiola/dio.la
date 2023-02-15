@@ -18,8 +18,13 @@ import {
 
 import { HeadMetadata } from "./components/HeadMetadata";
 import { SkipLinkArea } from "./components/SkipLinks";
-import { CANONICAL_DOMAIN, SITE_DESCRIPTION } from "./data/config";
-import { isDrafts } from "./utils/is-drafts";
+import {
+  CANONICAL_DOMAIN,
+  SITE_DESCRIPTION,
+  UMAMI_DRAFTS_ID,
+  UMAMI_ID,
+} from "./data/config";
+import { isDrafts, isLocalhost } from "./utils/is-host";
 import {
   headerScrolled,
   scrolledAtTop,
@@ -151,12 +156,14 @@ export default function Root() {
           as="style"
           rel="preload"
         />
-        <script
-          async
-          defer
-          src="https://analytics.umami.is/script.js"
-          data-website-id="2c4ed1eb-29c7-4ce4-a98c-457730c826e7"
-        />
+        {!isLocalhost() && (
+          <script
+            async
+            defer
+            src="https://analytics.umami.is/script.js"
+            data-website-id={isDrafts() ? UMAMI_DRAFTS_ID : UMAMI_ID}
+          />
+        )}
       </Head>
       <Body>
         <ErrorBoundary>

@@ -4,7 +4,7 @@ import {
   REPO,
   REPO_ID,
 } from "~/data/config";
-import { isDrafts } from "~/utils/is-drafts";
+import { isDrafts } from "~/utils/is-host";
 
 import { Giscus } from "./Giscus";
 
