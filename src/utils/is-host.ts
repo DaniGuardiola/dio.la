@@ -6,6 +6,7 @@ export function isDrafts() {
     );
 
   const { NODE_ENV, VITE_VERCEL_ENV } = process.env;
+  console.log("SERVER SIDE LOG:", { NODE_ENV, VITE_VERCEL_ENV });
   return Boolean(
     NODE_ENV === "development" ||
       (VITE_VERCEL_ENV && ["preview", "development"].includes(VITE_VERCEL_ENV))
