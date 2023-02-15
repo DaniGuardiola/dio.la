@@ -162,6 +162,7 @@ export default function Root() {
             defer
             src="https://analytics.umami.is/script.js"
             data-website-id={isDrafts() ? UMAMI_DRAFTS_ID : UMAMI_ID}
+            data-domains="dio.la,drafts.dio.la"
           />
         )}
       </Head>
