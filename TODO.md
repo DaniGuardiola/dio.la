@@ -32,7 +32,6 @@
   - logger
   - annotations
 - Image fallbacks on error
-- Analytics
 - Fira code font for code blocks?
 - Optimization: compute reading time when generating article metadata (from article content, maybe excluding JSX - remark should be useful for this) so it's available without javascript enabled (and before hydration)
 - Smaller font sizes on mobile?

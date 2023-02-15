@@ -151,6 +151,12 @@ export default function Root() {
           as="style"
           rel="preload"
         />
+        <script
+          async
+          defer
+          src="https://analytics.umami.is/script.js"
+          data-website-id="2c4ed1eb-29c7-4ce4-a98c-457730c826e7"
+        />
       </Head>
       <Body>
         <ErrorBoundary>
