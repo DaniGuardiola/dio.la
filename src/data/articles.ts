@@ -21,9 +21,15 @@ export type ArticleMetadata = {
 // data
 // ----
 
-const highlightsIds: ArticleId[] = ["test-article"];
+const highlightsIds: ArticleId[] = [
+  "lexical-explained",
+  "hacking-regexp-to-avoid-linkedin",
+  "two-clever-number-tostring-tricks",
+];
 
-export const HIGHLIGHTS = highlightsIds.map(findArticleMetadataById);
+export const HIGHLIGHTS = highlightsIds
+  .filter(articleMetadataExists)
+  .map(findArticleMetadataById);
 
 export { ARTICLES };
 
