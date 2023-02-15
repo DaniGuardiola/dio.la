@@ -9,7 +9,7 @@ import { type ArticleId, ARTICLES } from "./generated/articles";
 export type Topic = (typeof ALLOWED_TOPICS)[number];
 
 export type ArticleMetadata = {
-  id: string;
+  id: ArticleId;
   date: string;
   title: string;
   description: string;
@@ -73,6 +73,10 @@ export function useArticleLocation() {
     return match[1];
   };
   return { articlePathname, articleId };
+}
+
+export function getArticlePath(id: ArticleId) {
+  return `/article/${id}`;
 }
 
 export function findArticleMetadataById(id: string) {

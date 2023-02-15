@@ -1,8 +1,13 @@
 import { For } from "solid-js";
-import { A } from "solid-start";
 
-import { findArticleMetadataById, useArticleLocation } from "~/data/articles";
+import {
+  findArticleMetadataById,
+  getArticlePath,
+  useArticleLocation,
+} from "~/data/articles";
 import { type ArticleId } from "~/data/generated/articles";
+
+// import { A } from "solid-start";
 
 const ARTICLE_IDS: ArticleId[] = [
   "lexical-explained",
@@ -10,7 +15,6 @@ const ARTICLE_IDS: ArticleId[] = [
   "lexical-state-updates",
 ];
 const ARTICLE_DATA = ARTICLE_IDS.map(findArticleMetadataById);
-const ARTICLE_URL_PREFIX = "/article/";
 
 export function LexicalExplainedIndex() {
   const { articleId } = useArticleLocation();
@@ -28,9 +32,10 @@ export function LexicalExplainedIndex() {
                   <u>{title}</u> (you're here)
                 </>
               ) : (
-                <A href={`${ARTICLE_URL_PREFIX}${id}`} class="inactive">
+                // TODO: should be <A> but there's a Solid Start bug :(
+                <a href={getArticlePath(id)} class="inactive">
                   {title}
-                </A>
+                </a>
               )}
             </li>
           )}
