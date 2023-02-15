@@ -5,10 +5,11 @@ export function isDrafts() {
       document.location.host.startsWith("localhost:")
     );
 
-  const { NODE_ENV, VITE_VERCEL_ENV } = process.env;
-  console.log("SERVER SIDE LOG:", { NODE_ENV, VITE_VERCEL_ENV });
+  const { NODE_ENV, VITE_VERCEL_ENV, IS_DRAFTS } = process.env;
+  console.log("SERVER SIDE LOG:", { NODE_ENV, VITE_VERCEL_ENV, IS_DRAFTS });
   return Boolean(
-    NODE_ENV === "development" ||
+    IS_DRAFTS === "true" ||
+      NODE_ENV === "development" ||
       (VITE_VERCEL_ENV && ["preview", "development"].includes(VITE_VERCEL_ENV))
   );
 }
