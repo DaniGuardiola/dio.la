@@ -1,17 +1,9 @@
 export function isDrafts() {
   if (typeof document !== "undefined")
-    return (
-      document.location.host.startsWith("drafts.") ||
-      document.location.host.startsWith("localhost:")
-    );
+    return document.location.host.startsWith("drafts.");
 
-  const { NODE_ENV, VITE_VERCEL_ENV, IS_DRAFTS } = process.env;
-  console.log("SERVER SIDE LOG:", { NODE_ENV, VITE_VERCEL_ENV, IS_DRAFTS });
-  return Boolean(
-    IS_DRAFTS === "true" ||
-      NODE_ENV === "development" ||
-      (VITE_VERCEL_ENV && ["preview", "development"].includes(VITE_VERCEL_ENV))
-  );
+  const { IS_DRAFTS } = process.env;
+  return IS_DRAFTS === "true";
 }
 
 export function isLocalhost() {

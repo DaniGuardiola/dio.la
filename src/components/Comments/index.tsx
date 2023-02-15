@@ -4,7 +4,7 @@ import {
   REPO,
   REPO_ID,
 } from "~/data/config";
-import { isDrafts } from "~/utils/is-host";
+import { isDrafts, isLocalhost } from "~/utils/is-host";
 
 import { Giscus } from "./Giscus";
 
@@ -14,7 +14,9 @@ export function Comments() {
       repo={REPO}
       repoId={REPO_ID}
       categoryId={
-        isDrafts() ? GH_DISCUSSIONS_CAT_ID : GH_DISCUSSIONS_DRAFTS_CAT_ID
+        isDrafts() || isLocalhost()
+          ? GH_DISCUSSIONS_DRAFTS_CAT_ID
+          : GH_DISCUSSIONS_CAT_ID
       }
       mapping="pathname"
       strict="1"
