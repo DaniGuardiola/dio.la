@@ -1,4 +1,4 @@
-import { Show } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import { Link, Outlet } from "solid-start";
 
 import { HeadMetadata } from "~/components/HeadMetadata";
@@ -11,10 +11,13 @@ const TITLE = "Dani Guardiola (me!)";
 const DESCRIPTION =
   "Software engineer and student of a double bachelor's degree in math and physics.";
 const PATHNAME = "/about";
-const IMAGE_URL = "img/me.webp";
+const IMAGE_URL: string | undefined = "/img/me.webp";
 
 function Header() {
-  const { animateBannerRef, animateBannerStyle } = useAnimateBanner();
+  const [heightOffsetEl, setHeightOffsetEl] = createSignal<HTMLElement>();
+  const { animateBannerRef, animateBannerStyle } = useAnimateBanner({
+    heightOffsetEl: () => (IMAGE_URL ? heightOffsetEl() : undefined),
+  });
 
   return (
     <>
@@ -23,8 +26,11 @@ function Header() {
         rel="stylesheet"
       />
       <header
-        ref={animateBannerRef}
-        style={animateBannerStyle()}
+        ref={(el) => {
+          if (IMAGE_URL) setHeightOffsetEl(el);
+          else animateBannerRef(el);
+        }}
+        style={IMAGE_URL ? undefined : animateBannerStyle()}
         class="bg-accent pt-8 pb-6 text-white"
       >
         <div class="main-container px-4">
@@ -34,7 +40,14 @@ function Header() {
       </header>
       <Show when={IMAGE_URL}>
         <div class="relative">
-          <div class="absolute top-0 inset-x-0 -z-10 bg-accent h-[4rem] xs:h-[6rem] sm:h-[9rem] lg:h-[12rem]" />
+          <div
+            ref={(el) => {
+              if (IMAGE_URL) animateBannerRef(el);
+              else setHeightOffsetEl(el);
+            }}
+            style={IMAGE_URL ? animateBannerStyle() : undefined}
+            class="absolute top-0 inset-x-0 -z-10 bg-accent h-[4rem] xs:h-[6rem] sm:h-[9rem] lg:h-[12rem]"
+          />
           <div class="px-4 main-container">
             <img
               alt="This article's main image"

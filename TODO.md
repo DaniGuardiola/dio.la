@@ -1,6 +1,6 @@
 # To do
 
-- About page
+- drafts site banner
 - Footer
 - Write/schedule 10 initial articles
 - Update domain and redirect everywhere

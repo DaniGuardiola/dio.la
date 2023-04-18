@@ -3,7 +3,7 @@ import "katex/dist/katex.min.css";
 
 import clsx from "clsx";
 import pDebounce from "p-debounce";
-import { type ComponentProps, createSignal, type JSX } from "solid-js";
+import { type ComponentProps, createSignal, type JSX, Show } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { MDXProvider } from "solid-mdx";
 import { A } from "solid-start";
@@ -40,6 +40,14 @@ const KATEX_TAGS = [
   "line",
   "path",
 ];
+
+function Anchor(props: ComponentProps<typeof A>) {
+  return (
+    <Show when={props.href.startsWith("mailto:")} fallback={<A {...props} />}>
+      <a target="_blank" {...(props as ComponentProps<"a">)} />
+    </Show>
+  );
+}
 
 function DataLSP(props: ComponentProps<"span"> & { lsp: string }) {
   const lspAttr = () => props.lsp.replaceAll("&quot;", '"');
@@ -101,7 +109,7 @@ export function MDXContent(props: MDXContentProps) {
     <div class="mdx-content">
       <MDXProvider
         components={{
-          a: A,
+          a: Anchor,
           "data-lsp": DataLSP,
           "data-err": DataErr,
           pre: Pre,
