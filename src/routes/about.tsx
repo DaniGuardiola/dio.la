@@ -7,11 +7,11 @@ import { SkipLink, SkipLinks } from "~/components/SkipLinks";
 import { CANONICAL_DOMAIN } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
 
-const TITLE = "About me";
+const TITLE = "Dani Guardiola (me!)";
 const DESCRIPTION =
-  "Hi! I'm a software engineer with a passion for the web and design systems.";
+  "Software engineer and student of a double bachelor's degree in math and physics.";
 const PATHNAME = "/about";
-const IMAGE_URL: string | undefined = undefined;
+const IMAGE_URL = "img/me.webp";
 
 function Header() {
   const { animateBannerRef, animateBannerStyle } = useAnimateBanner();
@@ -55,7 +55,7 @@ export default function ArticleLayout() {
         url={`https://${CANONICAL_DOMAIN}${PATHNAME}`}
         title={TITLE}
         description={DESCRIPTION}
-        image={IMAGE_URL} // TODO: support public dir path? (if starts with "/")
+        image={IMAGE_URL}
         type="article"
       />
       <SkipLinks links={[{ id: "content", label: "content" }]} />
