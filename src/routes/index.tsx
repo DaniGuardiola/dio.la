@@ -234,7 +234,7 @@ function TopicBanner() {
         </p>
         <div class="flex-grow" />
         <A
-          href="/"
+          href="#articles"
           class={clsx(
             "border border-white p-2 lg:py-0 rounded focus-ring-white",
             "hover:bg-white hover:text-dark focus-visible:bg-white focus-visible:text-dark"
@@ -296,7 +296,7 @@ function ArticleList(props: ArticleListProps) {
   );
   return (
     <>
-      <section aria-label="articles" class="p-4 lg:grow lg:pt-2">
+      <section id="articles" aria-label="articles" class="p-4 lg:grow lg:pt-2">
         <SkipLink id="article-list" />
         <TopicBanner />
         <div class="space-y-6">
