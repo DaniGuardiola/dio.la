@@ -1,3 +1,5 @@
+import { useLocation } from "solid-start";
+
 import { type ALLOWED_TOPICS } from "./config";
 import { type ArticleId, ARTICLES } from "./generated/articles";
 
@@ -7,7 +9,7 @@ import { type ArticleId, ARTICLES } from "./generated/articles";
 export type Topic = (typeof ALLOWED_TOPICS)[number];
 
 export type ArticleMetadata = {
-  id: string;
+  id: ArticleId;
   date: string;
   title: string;
   description: string;
@@ -19,9 +21,15 @@ export type ArticleMetadata = {
 // data
 // ----
 
-const highlightsIds: ArticleId[] = ["test-article"];
+const highlightsIds: ArticleId[] = [
+  "lexical-explained",
+  "hacking-regexp-to-avoid-linkedin",
+  "two-clever-number-tostring-tricks",
+];
 
-export const HIGHLIGHTS = highlightsIds.map(findArticleMetadataById);
+export const HIGHLIGHTS = highlightsIds
+  .filter(articleMetadataExists)
+  .map(findArticleMetadataById);
 
 export { ARTICLES };
 
@@ -61,6 +69,21 @@ export const ARTICLES_BY_YEAR_SORTED = Object.entries(ARTICLES_BY_YEAR).sort(
 
 // utils
 // -----
+
+export function useArticleLocation() {
+  const location = useLocation();
+  const articlePathname = () => location.pathname.replace(/\/*$/, "");
+  const articleId = () => {
+    const match = articlePathname().match(/\S*\/([\S]*)/);
+    if (!match) throw new Error("Missing article id");
+    return match[1];
+  };
+  return { articlePathname, articleId };
+}
+
+export function getArticlePath(id: ArticleId) {
+  return `/article/${id}`;
+}
 
 export function findArticleMetadataById(id: string) {
   const result = ARTICLES.find((article) => article.id === id);

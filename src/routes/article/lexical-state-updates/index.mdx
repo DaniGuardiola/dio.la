@@ -9,6 +9,10 @@ topics:
   - js
 ---
 
+import { LexicalExplainedIndex } from "~/components/LexicalExplainedIndex";
+
+<LexicalExplainedIndex />
+
 # What is an update?
 
 A Lexical state (`EditorState`) holds two important pieces of data: the current **node tree** and the **selection state**. An editor instance (`LexicalEditor`) always contains a state (the "active" state).
@@ -224,7 +228,13 @@ export function updateEditor(editor: LexicalEditor, updateFn: () => void) {
 
 This is useful due to **lexical scope**.
 
-> **Important note:** we're talking about **JavaScript lexical scope**, which is entirely unrelated to _Lexical_. I know, it's confusing. 😅
+> **Fun fact!**
+>
+> Lexical used to be called "Outline", but at some point, it was renamed to "Lexical", which is a reference to JavaScript lexical scope.
+>
+> As Dominic Gannaway (the brain behind this approach!) told me:
+>
+> "This is exactly why we called the project Lexical. It has double meaning. Lexical's main workflow is via lexical scopes, but Lexical also has meanings around language and words."
 >
 > If you're unfamiliar with this concept, you should [learn about it](<](https://developer.mozilla.org/en-US/docs/Glossary/Scope)>) before you read on.
 
@@ -669,3 +679,10 @@ When I first started building with Lexical, things like the `$` function prefix 
 Once I understood, I was able to use this knowledge to my advantage. And when bugs arose, finding and fixing the root cause became much easier.
 
 I hope this article has helped you understand updates too. Stay tuned for more articles about Lexical!
+
+---
+
+Bonus! Here's the feedback I received from a couple of maintainers of Lexical on this article:
+
+> - "It's a brilliant article." - Dominic Gannaway
+> - "This is really, really cool Dani! Thanks for putting this together! (I love the interactive examples as well). From my side, this reads very accurately fine." - John Flockton

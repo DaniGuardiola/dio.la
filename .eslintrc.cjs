@@ -17,9 +17,10 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "simple-import-sort", "import"],
   rules: {
-    // disable annoying typescript stuff
+    // typescript
     "@typescript-eslint/no-non-null-assertion": "off",
-    // autosort imports
+    "@typescript-eslint/no-namespace": ["error", { allowDeclarations: true }],
+    // imports
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
     "import/first": "error",
@@ -30,5 +31,6 @@ module.exports = {
       "error",
       { fixStyle: "inline-type-imports" },
     ],
+    "@typescript-eslint/no-unused-vars": "error",
   },
 };

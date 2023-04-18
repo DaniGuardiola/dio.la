@@ -14,3 +14,11 @@ export const ALLOWED_TOPICS = [
   "lexical",
 ] as const;
 export const REQUIRED_ARTICLE_FIELDS = ["date", "title", "description"];
+export const REPO = "DaniGuardiola/dio.la";
+export const REPO_ID = "R_kgDOITIE3g";
+// GitHub Discussions category IDs (for Giscus comments)
+export const GH_DISCUSSIONS_CAT_ID = "DIC_kwDOITIE3s4CUL5w";
+export const GH_DISCUSSIONS_DRAFTS_CAT_ID = "DIC_kwDOITIE3s4CULyr";
+// Umami Cloud analytics
+export const UMAMI_ID = "2c4ed1eb-29c7-4ce4-a98c-457730c826e7";
+export const UMAMI_DRAFTS_ID = "94aee2fe-a617-485f-8d3f-35d46441aef5";

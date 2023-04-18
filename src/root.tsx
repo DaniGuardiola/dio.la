@@ -18,9 +18,18 @@ import {
 
 import { HeadMetadata } from "./components/HeadMetadata";
 import { SkipLinkArea } from "./components/SkipLinks";
-import { CANONICAL_DOMAIN, SITE_DESCRIPTION } from "./data/config";
-import { isDrafts } from "./utils/is-drafts";
-import { headerScrolled, scrolledAtTop } from "./utils/page-scroll";
+import {
+  CANONICAL_DOMAIN,
+  SITE_DESCRIPTION,
+  UMAMI_DRAFTS_ID,
+  UMAMI_ID,
+} from "./data/config";
+import { isDrafts, isLocalhost } from "./utils/is-host";
+import {
+  headerScrolled,
+  scrolledAtTop,
+  setUpPageScroll,
+} from "./utils/page-scroll";
 
 function NavLink(props: ComponentProps<typeof A>) {
   return (
@@ -117,6 +126,8 @@ function Header() {
 }
 
 export default function Root() {
+  setUpPageScroll();
+
   return (
     <Html lang="en" prefix="og: http://ogp.me/ns#">
       <Head>
@@ -145,6 +156,15 @@ export default function Root() {
           as="style"
           rel="preload"
         />
+        {!isLocalhost() && (
+          <script
+            async
+            defer
+            src="https://analytics.umami.is/script.js"
+            data-website-id={isDrafts() ? UMAMI_DRAFTS_ID : UMAMI_ID}
+            data-domains="dio.la,drafts.dio.la"
+          />
+        )}
       </Head>
       <Body>
         <ErrorBoundary>

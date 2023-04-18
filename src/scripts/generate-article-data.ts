@@ -8,7 +8,7 @@ import prettier from "prettier";
 
 import type { ArticleMetadata } from "~/data/articles";
 import { ALLOWED_TOPICS, REQUIRED_ARTICLE_FIELDS } from "~/data/config";
-import { isDrafts } from "~/utils/is-drafts";
+import { isDrafts, isLocalhost } from "~/utils/is-host";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -63,6 +63,7 @@ async function getArticleMetadata(articlePath: string) {
   const id =
     filename === "index" ? path.basename(path.dirname(articlePath)) : filename;
   if (!id) throw new Error("Could not obtain article ID");
+  // @ts-expect-error This is fine.
   validateMetadata({ id, ...data });
   return { id, ...data } as ArticleMetadata;
 }
@@ -71,7 +72,7 @@ async function getArticleMetadataList() {
   const articleFilePaths = await getArticleFilePaths();
   const promises = articleFilePaths.map(getArticleMetadata);
   const metadataList = await Promise.all(promises);
-  return isDrafts()
+  return isLocalhost() || isDrafts()
     ? metadataList
     : metadataList.filter((metadata) => !metadata.draft);
 }

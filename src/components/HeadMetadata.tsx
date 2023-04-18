@@ -1,9 +1,16 @@
 import { Show } from "solid-js";
 import { Meta, Title } from "solid-start";
 
-import { BASE_PAGE_TITLE, NAME, TWITTER_USERNAME } from "~/data/config";
+import {
+  BASE_PAGE_TITLE,
+  CANONICAL_DOMAIN,
+  NAME,
+  TWITTER_USERNAME,
+} from "~/data/config";
 
 const DEFAULT_IMAGE = "/open-graph/default.png";
+const DOMAIN =
+  typeof window !== "undefined" ? window.location.host : CANONICAL_DOMAIN;
 
 type HeadMetadataProps = {
   description: string;
@@ -30,7 +37,10 @@ export function HeadMetadata(props: HeadMetadataProps) {
       <Show when={props.url}>
         <Meta property="og:url" content={props.url} />
       </Show>
-      <Meta property="og:image" content={props.image ?? DEFAULT_IMAGE} />
+      <Meta
+        property="og:image"
+        content={`https://${DOMAIN}${props.image ?? DEFAULT_IMAGE}`}
+      />
 
       <Meta name="twitter:card" content="summary_large_image" />
       <Meta
