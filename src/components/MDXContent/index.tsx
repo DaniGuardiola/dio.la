@@ -3,7 +3,13 @@ import "katex/dist/katex.min.css";
 
 import clsx from "clsx";
 import pDebounce from "p-debounce";
-import { type ComponentProps, createSignal, type JSX, Show } from "solid-js";
+import {
+  type ComponentProps,
+  createSignal,
+  type JSX,
+  Match,
+  Switch,
+} from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { MDXProvider } from "solid-mdx";
 import { A } from "solid-start";
@@ -43,9 +49,14 @@ const KATEX_TAGS = [
 
 function Anchor(props: ComponentProps<typeof A>) {
   return (
-    <Show when={props.href.startsWith("mailto:")} fallback={<A {...props} />}>
-      <a target="_blank" {...(props as ComponentProps<"a">)} />
-    </Show>
+    <Switch fallback={<A {...props} />}>
+      <Match when={props.href.startsWith("mailto:")}>
+        <a target="_blank" {...(props as ComponentProps<"a">)} />
+      </Match>
+      <Match when={props.href.startsWith("#")}>
+        <a {...(props as ComponentProps<"a">)} />
+      </Match>
+    </Switch>
   );
 }
 
