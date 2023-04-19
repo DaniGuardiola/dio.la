@@ -71,7 +71,13 @@ async function getArticleMetadata(articlePath: string) {
 async function getArticleMetadataList() {
   const articleFilePaths = await getArticleFilePaths();
   const promises = articleFilePaths.map(getArticleMetadata);
-  const metadataList = await Promise.all(promises);
+  const metadataList = (await Promise.all(promises)).sort((a, b) => {
+    // sort by time and alphabetically
+    const aTime = new Date(a.date).getTime();
+    const bTime = new Date(b.date).getTime();
+    if (aTime !== bTime) return bTime - aTime;
+    return a.title.localeCompare(b.title);
+  });
   return isLocalhost() || isDrafts()
     ? metadataList
     : metadataList.filter((metadata) => !metadata.draft);
@@ -94,9 +100,11 @@ async function generateOutputFile(articleMetadataList: ArticleMetadata[]) {
   const parts = [
     "// This file has been automatically generated and should not be modified manually.",
     'import type { ArticleMetadata } from "~/data/articles";',
+    'import { linkArticles } from "~/data/link-articles";',
     `\nexport type ArticleId = ${ids.map((id) => `"${id}"`).join(" | ")}`,
-    "\nexport const ARTICLES: ArticleMetadata[] =",
+    "\nexport const ARTICLES: ArticleMetadata[] = linkArticles(",
     JSON.stringify(articleMetadataList),
+    ")",
   ];
   await fs.mkdir(OUTPUT_DIR, { recursive: true });
   await fs.writeFile(OUTPUT_FILE_PATH, parts.join("\n"));

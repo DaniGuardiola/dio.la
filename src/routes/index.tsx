@@ -14,8 +14,8 @@ import { HeadMetadata } from "~/components/HeadMetadata";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
 import {
   type ArticleMetadata,
+  ARTICLES,
   ARTICLES_BY_YEAR_SORTED,
-  ARTICLES_SORTED,
   HIGHLIGHTS,
   type Topic,
   TOPICS_SORTED,
@@ -334,7 +334,7 @@ function ArticleList(props: ArticleListProps) {
             </Match>
             <Match when={topicExists()}>
               <For
-                each={ARTICLES_SORTED.filter(
+                each={ARTICLES.filter(
                   (article) =>
                     props.topic && article.topics?.includes(props.topic)
                 )}
@@ -366,7 +366,7 @@ export default function Home() {
           { id: "topics", label: "topics" },
         ]}
       />
-      <div class="space-y-6">
+      <div class="space-y-6 pb-20">
         <Highlights />
         <div
           class={clsx(

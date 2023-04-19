@@ -2,7 +2,7 @@ import { Base } from "@solidjs/meta";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { createEffect, createMemo, createSignal, Show } from "solid-js";
-import { Link, Outlet, useNavigate } from "solid-start";
+import { A, Link, Outlet, useNavigate } from "solid-start";
 
 import { Comments } from "~/components/Comments";
 import { HeadMetadata } from "~/components/HeadMetadata";
@@ -12,6 +12,7 @@ import {
   type ArticleMetadata,
   articleMetadataExists,
   findArticleMetadataById,
+  getArticlePath,
   useArticleLocation,
 } from "~/data/articles";
 import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
@@ -134,7 +135,7 @@ export function GoToTopButton() {
       aria-label="scroll to the top"
       class={clsx(
         `fixed bottom-4 right-4 lg:bottom-8 lg:right-8
-            bg-accent text-white p-3 lg:p-4 rounded-xl font-roboto-mono shadow-lg
+            bg-accent text-white p-3 lg:p-4 rounded-xl font-roboto-mono shadow-lg border-2 border-white
               transition-[transform,opacity] ease-out
               hover:-translate-y-2 active:-translate-y-1
               focus:outline-none focus-visible:-translate-y-2 focus-visible:outline-offset-2 focus-visible:outline-accent`,
@@ -144,6 +145,52 @@ export function GoToTopButton() {
     >
       scroll(TOP)
     </button>
+  );
+}
+
+function Footer(props: { metadata: ArticleMetadata }) {
+  return (
+    <footer class="bg-accent">
+      <div class="article-container px-4 pt-8 pb-24 text-white space-y-4">
+        <Show when={props.metadata.prev}>
+          <p>
+            <A
+              class="group scroll-focus-target focus-ring-white rounded"
+              href={getArticlePath(props.metadata.prev!.id)}
+            >
+              <span class="font-bold">{"<-"} Previous:</span>{" "}
+              <span class="group-hover:underline">
+                {props.metadata.prev?.title}
+              </span>
+            </A>
+          </p>
+        </Show>
+        <Show when={props.metadata.next}>
+          <p class="text-right">
+            <A
+              class="group scroll-focus-target focus-ring-white rounded"
+              href={getArticlePath(props.metadata.next!.id)}
+            >
+              <span class="font-bold">Next:</span>{" "}
+              <span class="group-hover:underline">
+                {props.metadata.next?.title}
+              </span>
+              <span class="font-bold">{" ->"}</span>{" "}
+            </A>
+          </p>
+        </Show>
+        <p class="pt-8">
+          Follow me on Twitter:{" "}
+          <a
+            class="font-bold hover:underline focus-ring-white rounded"
+            target="_blank"
+            href="https://twitter.com/daniguardio_la"
+          >
+            @daniguardio_la
+          </a>
+        </p>
+      </div>
+    </footer>
   );
 }
 
@@ -195,6 +242,7 @@ export default function ArticleLayout() {
               <Comments />
             </section>
           </div>
+          <Footer metadata={metadata()} />
         </article>
       </div>
       <GoToTopButton />

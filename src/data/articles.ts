@@ -16,6 +16,8 @@ export type ArticleMetadata = {
   topics?: Topic[];
   imageUrl?: string;
   draft?: boolean;
+  next?: ArticleMetadata;
+  prev?: ArticleMetadata;
 };
 
 // data
@@ -50,10 +52,6 @@ export const TOPICS_SORTED = Object.entries(TOPICS).sort(
     if (byCount !== 0) return byCount;
     return aName.localeCompare(bName);
   }
-);
-
-export const ARTICLES_SORTED = ARTICLES.sort(
-  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
 );
 
 export const ARTICLES_BY_YEAR = ARTICLES.reduce((acc, article) => {

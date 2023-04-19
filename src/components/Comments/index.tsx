@@ -1,3 +1,6 @@
+import { createEffect } from "solid-js";
+import { useLocation } from "solid-start";
+
 import {
   GH_DISCUSSIONS_CAT_ID,
   GH_DISCUSSIONS_DRAFTS_CAT_ID,
@@ -9,8 +12,18 @@ import { isDrafts, isLocalhost } from "~/utils/is-host";
 import { Giscus } from "./Giscus";
 
 export function Comments() {
+  const location = useLocation();
+  let giscusWidgetEl: HTMLElement & { requestUpdate: () => void };
+
+  createEffect(() => {
+    // SPA refresh hack
+    if (location.pathname)
+      setTimeout(() => giscusWidgetEl?.requestUpdate(), 50);
+  });
+
   return (
     <Giscus
+      ref={giscusWidgetEl!}
       repo={REPO}
       repoId={REPO_ID}
       categoryId={

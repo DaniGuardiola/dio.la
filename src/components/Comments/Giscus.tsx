@@ -1,4 +1,4 @@
-import { createEffect, createSignal, Show } from "solid-js";
+import { createEffect, createSignal, type Ref, Show } from "solid-js";
 
 // adapted from https://github.com/giscus/giscus-component/tree/main/solid
 // MIT licensed: https://github.com/giscus/giscus-component/blob/main/LICENSE
@@ -61,6 +61,7 @@ export type AvailableLanguage =
 export type Loading = "lazy" | "eager";
 
 export interface GiscusProps {
+  ref?: Ref<HTMLElement>;
   id?: string;
   host?: string;
   repo: Repo;
@@ -82,6 +83,7 @@ export interface GiscusProps {
 // -------------------
 
 export interface GiscusWidgetAttributes {
+  ref?: Ref<HTMLElement>;
   id?: string;
   host?: string;
   repo: `${string}/${string}`;
@@ -122,6 +124,7 @@ export function Giscus(props: GiscusProps) {
   return (
     <Show when={mounted()}>
       <giscus-widget
+        ref={props.ref}
         id={props.id}
         host={props.host}
         repo={props.repo}
