@@ -8,8 +8,7 @@ import { CANONICAL_DOMAIN } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
 
 const TITLE = "Dani Guardiola (me!)";
-const DESCRIPTION =
-  "Software engineer and student of a double bachelor's degree in math and physics.";
+const DESCRIPTION = "Software engineer, math and physics student.";
 const PATHNAME = "/about";
 const IMAGE_URL: string | undefined = "/img/me.webp";
 

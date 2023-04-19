@@ -24,8 +24,8 @@ export type ArticleMetadata = {
 // ----
 
 const highlightsIds: ArticleId[] = [
+  "unlinked",
   "lexical-explained",
-  "hacking-regexp-to-avoid-linkedin",
   "two-clever-number-tostring-tricks",
 ];
 

@@ -94,16 +94,24 @@ function MainHighlight(props: ArticleMetadata) {
       href={getArticleUrl(props.id)}
       class="block rounded-md focus-ring-white focus-scroll-target group"
     >
-      <article class="p-6 bg-white rounded-md space-y-3">
-        <DateLabel
-          class="text-[1rem] text-accent font-bold uppercase"
-          date={props.date}
-          includeYear
-        />
-        <h2 class="text-[1.5rem] group-hover:underline group-focus-visible:underline">
-          {props.title}
-        </h2>
-        <p class="text-[1.125rem] text-subtle">{props.description}</p>
+      <article class="bg-white rounded-md space-y-1 overflow-hidden">
+        <Show when={props.imageUrl}>
+          <img src={props.imageUrl} />
+        </Show>
+        <div class="p-6 space-y-3 bg-white">
+          <DateLabel
+            class="text-[1rem] text-accent font-bold uppercase"
+            date={props.date}
+            includeYear
+          />
+          <h2 class="text-[1.5rem] group-hover:underline group-focus-visible:underline">
+            {props.title}
+          </h2>
+
+          <Show when={!props.imageUrl}>
+            <p class="text-[1.125rem] text-subtle">{props.description}</p>
+          </Show>
+        </div>
       </article>
     </A>
   );
@@ -145,13 +153,13 @@ function Highlights() {
       aria-labelledby="highlights-heading"
     >
       <div class="main-container w-full px-4 py-8 gap-12 flex max-md:flex-col">
-        <div class="space-y-4">
+        <div class="space-y-4 grow-[2] basis-0">
           <h1 id="highlights-heading" class="text-[2rem] text-white">
             Highlights
           </h1>
           <MainHighlight {...topHighlight} />
         </div>
-        <div class="space-y-8">
+        <div class="space-y-8 grow-[1] basis-0">
           <For each={highlights}>
             {(highlight) => <Highlight {...highlight} />}
           </For>
