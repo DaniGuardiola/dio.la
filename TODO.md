@@ -1,10 +1,3 @@
-# To do
-
-- Write/schedule 10 initial articles
-- Update domain and redirect everywhere
-- Update URL on social media, etc
-- Launch!!!
-
 # Later
 
 - Related articles in footer

@@ -159,7 +159,7 @@ function Highlights() {
           </h1>
           <MainHighlight {...topHighlight} />
         </div>
-        <div class="space-y-8 grow-[1] basis-0">
+        <div class="space-y-8 grow basis-0">
           <For each={highlights}>
             {(highlight) => <Highlight {...highlight} />}
           </For>
