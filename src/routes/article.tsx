@@ -1,7 +1,7 @@
 import { Base } from "@solidjs/meta";
 import clsx from "clsx";
 import { format } from "date-fns";
-import { createEffect, createMemo, createSignal, Show } from "solid-js";
+import { createEffect, createMemo, createSignal, For, Show } from "solid-js";
 import { A, Link, Outlet, useNavigate } from "solid-start";
 
 import { Comments } from "~/components/Comments";
@@ -152,6 +152,20 @@ function Footer(props: { metadata: ArticleMetadata }) {
   return (
     <footer class="bg-accent">
       <div class="article-container px-4 pt-8 pb-24 text-white space-y-4">
+        <Show when={Boolean(props.metadata.topics)}>
+          <ul class="flex items-center gap-2">
+            <For each={props.metadata.topics?.slice(0, 2)}>
+              {(topic) => (
+                <li class="text-[.9rem] leading-none hover:underline">
+                  <A
+                    class="focus-ring-white rounded"
+                    href={`/?topic=${topic}#topic-banner`}
+                  >{`#${topic}`}</A>
+                </li>
+              )}
+            </For>
+          </ul>
+        </Show>
         <Show when={props.metadata.prev}>
           <p>
             <A

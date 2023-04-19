@@ -14,7 +14,6 @@
   - Test deprecated options in completions
   - Tables
   - ToC
-  - Topics
   - Turn typescript errors into links to https://ts-error-translator.vercel.app/ (see: https://github.com/mattpocock/ts-error-translator/blob/main/apps/web/src/pages/index.tsx#L91)
   - Headings as anchor links
 - Add schema.org stuff

@@ -1,4 +1,4 @@
-import { createEffect } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 import { useLocation } from "solid-start";
 
 import {
@@ -13,12 +13,13 @@ import { Giscus } from "./Giscus";
 
 export function Comments() {
   const location = useLocation();
+  const [pathname, setPathname] = createSignal(location.pathname);
+  createEffect(() => setPathname(location.pathname));
   let giscusWidgetEl: HTMLElement & { requestUpdate: () => void };
 
   createEffect(() => {
     // SPA refresh hack
-    if (location.pathname)
-      setTimeout(() => giscusWidgetEl?.requestUpdate(), 50);
+    if (pathname()) setTimeout(() => giscusWidgetEl?.requestUpdate(), 50);
   });
 
   return (

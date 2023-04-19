@@ -175,39 +175,42 @@ function Topics() {
     <>
       <SkipLink id="topics" />
       <section aria-label="topics" class="main-container lg:p-4">
-        <h1
-          class={clsx(
-            "max-lg:sr-only",
-            "text-[1.25rem] font-bold leading-[2.25rem] mb-[.375rem] px-1"
-          )}
-        >
-          Topics
-        </h1>
-        <ul
-          class={clsx(
-            "flex gap-6 whitespace-nowrap p-4 overflow-auto",
-            "lg:flex-col lg:gap-[.625rem] lg:p-1"
-          )}
-        >
-          <For each={TOPICS_SORTED}>
-            {([id, amount]) => (
-              <li>
-                <A
-                  href={getTopicUrl(id)}
-                  aria-label={`${id} (${amount} article${
-                    amount === 1 ? "" : "s"
-                  })`}
-                  class="text-[1.125rem] leading-none hover:underline focus-ring focus-scroll-target rounded-sm"
-                  classList={{
-                    "font-bold pointer-events-none": topic() === id,
-                  }}
-                >
-                  {`#${id}`} <span class="text-accent font-bold">{amount}</span>
-                </A>
-              </li>
+        <div class="lg:sticky lg:top-24">
+          <h1
+            class={clsx(
+              "max-lg:sr-only",
+              "text-[1.25rem] font-bold leading-[2.25rem] mb-[.375rem] px-1"
             )}
-          </For>
-        </ul>
+          >
+            Topics
+          </h1>
+          <ul
+            class={clsx(
+              "flex gap-6 whitespace-nowrap p-4 overflow-auto",
+              "lg:flex-col lg:gap-[.625rem] lg:p-1"
+            )}
+          >
+            <For each={TOPICS_SORTED}>
+              {([id, amount]) => (
+                <li>
+                  <A
+                    href={getTopicUrl(id)}
+                    aria-label={`${id} (${amount} article${
+                      amount === 1 ? "" : "s"
+                    })`}
+                    class="text-[1.125rem] leading-none hover:underline focus-ring focus-scroll-target rounded-sm"
+                    classList={{
+                      "font-bold pointer-events-none": topic() === id,
+                    }}
+                  >
+                    {`#${id}`}{" "}
+                    <span class="text-accent font-bold">{amount}</span>
+                  </A>
+                </li>
+              )}
+            </For>
+          </ul>
+        </div>
       </section>
     </>
   );
