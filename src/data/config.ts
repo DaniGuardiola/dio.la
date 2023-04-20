@@ -12,6 +12,9 @@ export const ALLOWED_TOPICS = [
   "math",
   "hacking",
   "lexical",
+  "react",
+  "design-systems",
+  "frontend",
 ] as const;
 export const REQUIRED_ARTICLE_FIELDS = ["date", "title", "description"];
 export const REPO = "DaniGuardiola/dio.la";

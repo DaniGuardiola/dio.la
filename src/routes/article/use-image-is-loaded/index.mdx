@@ -1,0 +1,176 @@
+---
+draft: true
+date: 2000/1/1
+title: useImageIsLoaded
+description: A simple React hook to track the loading state of an image.
+topics:
+  - react
+  - frontend
+  - design-systems
+  - js
+---
+
+A very common pattern for components like avatars is to detect whether an image has been loaded to adapt the UI accordingly. It allows the component to react gracefully and prevent jarring changes or flashes of content.
+
+Here's a simple React hook that tracks the loading state of an image. It was built by the awesome [Radix UI](https://www.radix-ui.com/) team as [`useImageLoadingStatus`](https://github.com/radix-ui/primitives/blob/main/packages/react/avatar/src/Avatar.tsx), I only made minor changes so all credit goes to them.
+
+```ts twoslash
+import { useEffect, useState } from "react";
+// ---cut---
+export function useImageIsLoaded(src?: string) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!src) return setIsLoaded(false);
+
+    let isMounted = true;
+    const image = new window.Image();
+
+    const createStatusHandler = (status: boolean) => () => {
+      if (isMounted) setIsLoaded(status);
+    };
+
+    setIsLoaded(false);
+    image.onload = createStatusHandler(true);
+    image.onerror = createStatusHandler(false);
+    image.src = src;
+
+    return () => {
+      isMounted = false;
+    };
+  }, [src]);
+
+  return isLoaded;
+}
+```
+
+Then you can simply use it inside your component, like so:
+
+```tsx twoslash
+declare function useImageIsLoaded(src?: string): boolean;
+declare const imageUrl: string;
+// ---cut---
+const imageLoaded = useImageIsLoaded(imageUrl);
+```
+
+# In action
+
+I used this hook at [Guide](https://guide.co/) to ensure that the loading experience of the [`Avatar` component](https://atlas.guide.co/?path=/story/components-avatar--examples) was smooth on fast and slow networks, even in the event of failure.
+
+Here's what it looks like if you load it on a fast network:
+
+![A fast network loading the avatar](avatar-fast.gif)
+
+And in a slow network:
+
+![A slow network loading the avatar](avatar-slow.gif)
+
+Three important things are going on:
+
+- On both fast and slow networks, the image is **loaded all at once**, instead of doing this:
+
+![A meme gif of an image falsely loading slowly top to bottom](slow-image-meme.gif)
+
+- Since the image will always load _at least a bit after_ the component itself is rendered, even on fast networks, there's a **fade-in effect** to prevent a sudden flash.
+
+- Finally, since the image could take a while (or even fail) to load in slow networks, the avatar will **fall back to displaying the initials**. It doesn't happen instantly though: there's a small delay (one second in this case) so that the user doesn't see the initials flash if the image loads quickly.
+
+All in all, this technique makes the experience for the user much more pleasant and significantly less jarring.
+
+# Deconstructing the hook
+
+This hook is pretty clever and surprisingly simple.
+
+It takes the target image URL (`src`) and creates an [`Image`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/Image) instance that uses it as source. This is functionally equivalent to creating an `img` element (e.g. `document.createElement('img')`) without adding it to the DOM.
+
+```ts twoslash
+import { useEffect, useState } from "react";
+export function useImageIsLoaded(src?: string) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!src) return setIsLoaded(false);
+
+    let isMounted = true;
+    // ---cut---
+    const image = new window.Image();
+    // ...
+    image.src = src;
+    // ---cut-after---
+
+    return () => {
+      isMounted = false;
+    };
+  }, [src]);
+
+  return isLoaded;
+}
+```
+
+Then, when the `load` or `error` events are triggered, the state is updated accordingly.
+
+```ts twoslash
+import { useEffect, useState } from "react";
+export function useImageIsLoaded(src?: string) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!src) return setIsLoaded(false);
+
+    let isMounted = true;
+    const image = new window.Image();
+
+    const createStatusHandler = (status: boolean) => () => {
+      if (isMounted) setIsLoaded(status);
+    };
+
+    setIsLoaded(false);
+    // ---cut---
+    image.onload = createStatusHandler(true);
+    image.onerror = createStatusHandler(false);
+    // ---cut-after---
+    image.src = src;
+
+    return () => {
+      isMounted = false;
+    };
+  }, [src]);
+
+  return isLoaded;
+}
+```
+
+Finally, the state is returned. If the image is loading or failed to load, the state will be `false`. If it loaded successfully, the state will be `true`.
+
+```ts twoslash
+import { useEffect, useState } from "react";
+export function useImageIsLoaded(src?: string) {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!src) return setIsLoaded(false);
+
+    let isMounted = true;
+    const image = new window.Image();
+
+    const createStatusHandler = (status: boolean) => () => {
+      if (isMounted) setIsLoaded(status);
+    };
+
+    setIsLoaded(false);
+    image.onload = createStatusHandler(true);
+    image.onerror = createStatusHandler(false);
+    image.src = src;
+
+    return () => {
+      isMounted = false;
+    };
+  }, [src]);
+
+  // ---cut---
+  return isLoaded;
+  // ---cut-after---
+}
+```
+
+Neat, right?
