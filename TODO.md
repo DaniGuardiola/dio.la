@@ -31,3 +31,5 @@
 - Dark theme
 - Co-locate article og images
 - Javascript-less header collapse? (position sticky?)
+- Optimization: CI action that automatically resizes images, converts to webp or multiple formats, adds width and height data (how in MDX??), etc
+- Optimization delay YouTube embeds until in view
