@@ -2,7 +2,7 @@ import { Base } from "@solidjs/meta";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { createEffect, createMemo, createSignal, For, Show } from "solid-js";
-import { A, Link, Outlet, useNavigate } from "solid-start";
+import { A, Outlet, useNavigate } from "solid-start";
 
 import { Comments } from "~/components/Comments";
 import { HeadMetadata } from "~/components/HeadMetadata";

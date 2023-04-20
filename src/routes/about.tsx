@@ -1,5 +1,5 @@
 import { createSignal, Show } from "solid-js";
-import { Link, Outlet } from "solid-start";
+import { Outlet } from "solid-start";
 
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";

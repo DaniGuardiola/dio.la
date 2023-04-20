@@ -1,5 +1,6 @@
 // @refresh reload
 import "./root.sass";
+import "./fonts.sass";
 
 import clsx from "clsx";
 import { type ComponentProps, Suspense } from "solid-js";
@@ -14,7 +15,6 @@ import {
   Meta,
   Routes,
   Scripts,
-  Style,
 } from "solid-start";
 
 import { HeadMetadata } from "./components/HeadMetadata";
@@ -25,7 +25,6 @@ import {
   UMAMI_DRAFTS_ID,
   UMAMI_ID,
 } from "./data/config";
-import { fontsStyleSheet } from "./fonts-stylesheet";
 import { isDrafts, isLocalhost } from "./utils/is-host";
 import {
   headerScrolled,
@@ -165,7 +164,6 @@ export default function Root() {
           href="https://fonts.gstatic.com"
           crossorigin="anonymous"
         />
-        <Style>{fontsStyleSheet}</Style>
         {!isLocalhost() && (
           <script
             async
