@@ -66,10 +66,6 @@ function ArticleHeader(props: ArticleHeaderProps) {
 
   return (
     <>
-      <Link
-        href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto+Slab&display=swap"
-        rel="stylesheet"
-      />
       <Show when={typeof window !== "undefined"}>
         <Base href={props.articleUrl} />
       </Show>
