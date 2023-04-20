@@ -96,7 +96,11 @@ function MainHighlight(props: ArticleMetadata) {
     >
       <article class="bg-white rounded-md space-y-1 overflow-hidden">
         <Show when={props.imageUrl}>
-          <img class="w-full aspect-[40/21]" src={props.imageUrl} />
+          <img
+            alt="This article's main image"
+            class="w-full aspect-[40/21]"
+            src={props.imageUrl}
+          />
         </Show>
         <div class="p-6 space-y-3 bg-white">
           <DateLabel
