@@ -114,6 +114,11 @@ function ArticleHeader(props: ArticleHeaderProps) {
           />
           <div class="px-4 main-container">
             <img
+              style={{
+                // @ts-expect-error Types for the View Transitions API have not shipped yet.
+                // eslint-disable-next-line solid/style-prop
+                "view-transition-name": `article-image-${props.metadata.id}`,
+              }}
               alt="This article's main image"
               src={props.metadata.imageUrl}
               class="bg-white w-full object-cover aspect-[1.91/1] rounded shadow-lg"

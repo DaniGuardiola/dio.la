@@ -97,6 +97,11 @@ function MainHighlight(props: ArticleMetadata) {
       <article class="bg-white rounded-md space-y-1 overflow-hidden">
         <Show when={props.imageUrl}>
           <img
+            style={{
+              // @ts-expect-error Types for the View Transitions API have not shipped yet.
+              // eslint-disable-next-line solid/style-prop
+              "view-transition-name": `article-image-${props.id}`,
+            }}
             alt="This article's main image"
             class="w-full aspect-[40/21]"
             src={props.imageUrl}
