@@ -33,3 +33,4 @@
 - Javascript-less header collapse? (position sticky?)
 - Optimization: CI action that automatically resizes images, converts to webp or multiple formats, adds width and height data (how in MDX??), etc
 - Optimization delay YouTube embeds until in view
+- Fix #articles anchor with scroll margin (clear topic button on mobile)

@@ -2,7 +2,7 @@
 import "./root.sass";
 import "./fonts.sass";
 
-import { useBeforeLeave, useIsRouting } from "@solidjs/router";
+import { useBeforeLeave } from "@solidjs/router";
 import clsx from "clsx";
 import { type ComponentProps, createEffect, on, Suspense } from "solid-js";
 import {
@@ -181,7 +181,7 @@ function setUpViewTransitions() {
 
 export default function Root() {
   setUpPageScroll();
-  setUpViewTransitions();
+  // setUpViewTransitions(); // causes issues when navigating to a topic :(
 
   return (
     <Html lang="en" prefix="og: http://ogp.me/ns#">
