@@ -2,9 +2,8 @@
 import "./root.sass";
 import "./fonts.sass";
 
-import { useBeforeLeave } from "@solidjs/router";
 import clsx from "clsx";
-import { type ComponentProps, createEffect, on, Suspense } from "solid-js";
+import { type ComponentProps, Suspense } from "solid-js";
 import {
   A,
   Body,
@@ -16,7 +15,6 @@ import {
   Meta,
   Routes,
   Scripts,
-  useLocation,
 } from "solid-start";
 
 import { HeadMetadata } from "./components/HeadMetadata";
@@ -142,40 +140,6 @@ function DraftsNotice() {
         <span class="group-hover:underline font-bold text-accent">dio.la</span>
       </p>
     </a>
-  );
-}
-
-declare global {
-  interface Document {
-    startViewTransition(callback: () => void): void;
-  }
-}
-
-function setUpViewTransitions() {
-  let doneRouting: ((value?: unknown) => void) | undefined;
-  useBeforeLeave((event) => {
-    if (typeof document === "undefined" || !document.startViewTransition)
-      return;
-    event.preventDefault();
-    document.startViewTransition(
-      () =>
-        new Promise((res) => {
-          event.retry(true);
-          doneRouting = res;
-        })
-    );
-  });
-
-  const location = useLocation();
-  createEffect(
-    on(
-      () => location.pathname,
-      () => {
-        doneRouting?.();
-        doneRouting = undefined;
-      },
-      { defer: true }
-    )
   );
 }
 
