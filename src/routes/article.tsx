@@ -155,7 +155,7 @@ function Footer(props: { metadata: ArticleMetadata }) {
       <div class="article-container px-4 pt-8 pb-24 text-white space-y-4">
         <Show when={Boolean(props.metadata.topics)}>
           <ul class="flex items-center gap-2">
-            <For each={props.metadata.topics?.slice(0, 2)}>
+            <For each={props.metadata.topics}>
               {(topic) => (
                 <li class="text-[.9rem] leading-none hover:underline">
                   <A

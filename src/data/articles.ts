@@ -26,8 +26,7 @@ export type ArticleMetadata = {
 const highlightsIds: ArticleId[] = [
   "unlinked",
   "use-image-is-loaded",
-  "lexical-explained",
-  "two-clever-number-tostring-tricks",
+  "colorful-avatars",
 ];
 
 export const HIGHLIGHTS = highlightsIds

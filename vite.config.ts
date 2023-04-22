@@ -15,6 +15,7 @@ import solid from "solid-start/vite";
 // @ts-expect-error No types.
 import node from "solid-start-node";
 import vercel from "solid-start-vercel";
+import typescript, { type CompilerOptions } from "typescript";
 import { defineConfig } from "vite";
 
 const isVercel = process.env.VERCEL === "1";
@@ -32,7 +33,13 @@ export default defineConfig({
         remarkPlugins: [
           [
             (remarkShikiTwoslash as any).default,
-            { theme: "dark-plus", addTryButton: true },
+            {
+              theme: "dark-plus",
+              addTryButton: true,
+              defaultCompilerOptions: {
+                target: typescript.ScriptTarget.ESNext,
+              } satisfies CompilerOptions,
+            },
           ],
           remarkGfm,
           remarkFrontmatter,
@@ -62,3 +69,5 @@ export default defineConfig({
     }),
   ],
 });
+
+// declare const test: import("typescript").CompilerOptions
