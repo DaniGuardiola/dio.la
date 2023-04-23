@@ -12,7 +12,7 @@ import {
 } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { MDXProvider } from "solid-mdx";
-import { A } from "solid-start";
+import { type A } from "solid-start";
 
 const KATEX_TAGS = [
   "math",
@@ -48,16 +48,19 @@ const KATEX_TAGS = [
 ];
 
 function Anchor(props: ComponentProps<typeof A>) {
-  return (
-    <Switch fallback={<A {...props} />}>
-      <Match when={props.href.startsWith("mailto:")}>
-        <a target="_blank" {...(props as ComponentProps<"a">)} />
-      </Match>
-      <Match when={props.href.startsWith("#")}>
-        <a {...(props as ComponentProps<"a">)} />
-      </Match>
-    </Switch>
-  );
+  // unfortunately, client-side navigation doesn't work with solid-start inside MDX content
+  return <a {...(props as ComponentProps<"a">)} />;
+
+  // return (
+  //   <Switch fallback={<A {...props} />}>
+  //     <Match when={props.href.startsWith("mailto:")}>
+  //       <a target="_blank" {...(props as ComponentProps<"a">)} />
+  //     </Match>
+  //     <Match when={props.href.startsWith("#")}>
+  //       <a {...(props as ComponentProps<"a">)} />
+  //     </Match>
+  //   </Switch>
+  // );
 }
 
 function DataLSP(props: ComponentProps<"span"> & { lsp: string }) {
