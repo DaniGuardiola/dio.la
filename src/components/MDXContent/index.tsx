@@ -3,13 +3,7 @@ import "katex/dist/katex.min.css";
 
 import clsx from "clsx";
 import pDebounce from "p-debounce";
-import {
-  type ComponentProps,
-  createSignal,
-  type JSX,
-  Match,
-  Switch,
-} from "solid-js";
+import { type ComponentProps, createSignal, type JSX } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { MDXProvider } from "solid-mdx";
 import { type A } from "solid-start";
