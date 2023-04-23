@@ -177,10 +177,16 @@ Avatars with images are **recognizable and memorable**. Just like you might reco
 When there is no image to display, achieving the same result is a bit harder. A person's initials alone are not very useful when doing a quick visual scan. That's where the color comes in, and there are a few important rules to follow:
 
 1. **Deterministic outcome:** it's not enough to just pick a random color, it needs to be consistent. If it was different every time, it'd be useless and confusing!
-2. **Uniform probability distribution:** one color should not show up more often than the others.
+2. **Uniform probability distribution:** one color should not show up more often than the others. Note that we're not going for perfection here, but it should be close enough.
 3. **Disctinct permutations:** different arrangements of the same letters (like "DG" and "GD") should result in different colors. If not, it'd be hard to tell them apart since they share the same letters and colors!
 
 With these in mind, we can now build the algorithm.
+
+> Do these rules remind you of something?
+>
+> If you've ever worked with **[hash functions](https://en.wikipedia.org/wiki/Hash_function)**, you'll notice that they have a lot in common. In fact, when I first implemented this, I called it a _"color hash"_!
+>
+> _Thanks to [Vladimir Klepov](https://twitter.com/thoughtspile) (who reviewed this article) for pointing this out._
 
 # The magic number
 
@@ -236,7 +242,7 @@ Try it:
 
 <InitialsColorDemoIncomplete />
 
-With this, we achieved our first two goals: deterministic outcome and (more or less) uniform probability distribution. We're missing the third one, though.
+With this, we've achieved our first two goals: deterministic outcome and (more or less) uniform probability distribution. We're missing the third one, though.
 
 # Disctinct permutations
 
