@@ -1,13 +1,22 @@
 ---
 draft: true
 date: 1970/1/1
-title: The open/closed pattern
-description: TODO
+title: The open/closed component
+description: A powerful pattern to build extensible UI components that do more with less.
+topics:
+  - design-systems
+  - js
+  - react
+  - frontend
 ---
+
+import { TheOpenClosedComponentIndex } from "~/components/ArticleSeriesIndex/TheOpenClosedComponentIndex";
+
+<TheOpenClosedComponentIndex />
 
 In this article, I'm going to talk about a pattern for building UI components in frameworks like React or Solid. A pattern that I've come to understand as a **must-have** for almost every single component I build.
 
-I'm talking about the **open/closed** pattern, as named by [Diego Haz](https://twitter.com/diegohaz) (author of [Ariakit](https://ariakit.org/)), who introduced this concept in [this Twitter thread](https://twitter.com/diegohaz/status/1305450112890662914).
+I'm talking about the **open/closed** pattern, as coined by [Diego Haz](https://twitter.com/diegohaz) (author of [Ariakit](https://ariakit.org/)), who introduced this concept in [this Twitter thread](https://twitter.com/diegohaz/status/1305450112890662914).
 
 Note that developers have been doing some of these things for a long time, but it's great to have a name and some specific guidelines for it.
 
@@ -17,7 +26,7 @@ Let's start with a common example.
 
 ## The problem
 
-When building using a component, there is a situation that happens very often. Consider the following React example:
+When building and using a component, there is a situation that happens very often. Consider the following React example:
 
 ```jsx
 function Button({ variant }) {
@@ -56,7 +65,7 @@ function Button({ variant, ...props }: ButtonProps) {
 
 Makes sense so far, but we're not done. What happens now if you pass a `className` prop to the `Button` component?
 
-It will override `className={variant}` since a prop spread (`{...props}`) behaves like an object spread (or `Object.assign()`), which means that later properties get replaced.
+It will override `className={variant}` since a prop spread (`{...props}`) behaves like an object spread (or `Object.assign()`), which means that new properties replace previous ones.
 
 That's not what we want, we need our variant class to be set. We could invert the order, like this:
 
@@ -68,8 +77,6 @@ function Button({ variant, ...props }: ButtonProps) {
 
 However, that doesn't fix anything, it simply switches the problem around. Now, the variant class will take precedence, and the `className` prop will be ignored.
 
-Getting warmer!
-
 ## The solution
 
 The obvious solution is to merge the classes:
@@ -79,10 +86,6 @@ function Button({ variant, ...props }) {
   return <button {...props} className={`${variant} ${props.className}`} />;
 }
 ```
-
-> Note that this example, as all others throughout this article, is meant as a simplified example.
->
-> For instance, in a real-world scenario, you'd probably want to use a library like [clsx](https://www.npmjs.com/package/clsx) to merge classes.
 
 We can go further, and merge other props as well, like event handlers:
 
@@ -101,6 +104,8 @@ function Button({ variant, ...props }) {
 }
 ```
 
+> Note that these two examples are simplified and incomplete. I go into more detail on these topics later in the article.
+
 This strategy is great, but we can't merge every prop. In fact, only `className`, `style` and event handlers are usually safe to merge.
 
 The only solution is to let other external props override the internal ones. This is normally okay since the internal props are usually just "defaults", or the user knows what they're doing.
@@ -113,7 +118,7 @@ Here's how Diego defined it:
 
 > The open/closed (...) component:
 >
-> A component that is based on the open/closed principle, which states that “software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification”.
+> A component that is based on the open/closed principle, which states that “software entities (classes, modules, functions, etc.) should be **open for extension**, but **closed for modification**”.
 
 Let's digest this:
 
@@ -146,89 +151,14 @@ In both cases, you're effectively wrapping something else, that much is true.
 
 The key difference is that a wrapper component behaves like a "black box", with a custom API. It might pass down a prop or two, but even then it's not uncommon to see, for example, props called `onSelect` or `action` which are passed down to `onClick` and which exclude the `MouseEvent` argument.
 
-This can make sense sometimes, of course. For example, the `react-aria` library has a [`usePress`](https://react-spectrum.adobe.com/react-aria/usePress.html) utility that wraps all kinds of pointer events (touch, mouse...) and exposes a custom, unified API for them. That can be an immensely useful thing to have.
+This can make sense sometimes, of course. For example, the [React Aria](https://react-spectrum.adobe.com/react-aria/) library has a [`usePress`](https://react-spectrum.adobe.com/react-aria/usePress.html) utility that wraps all kinds of pointer events (touch, mouse...) and exposes a custom, unified API for them. That can be an immensely useful thing to have.
 
-The way I think about this, though, is that it's probably better to always start with open/closed, and only opt into wrapping when you have really good reasons to do so.
+The way I think about this, though, is that it's probably better to always start with open/closed, and only opt into wrapping (and out of open/closed) when you have really good reasons to do so.
 
-# Building an open/closed component
+---
 
-_"Enough philosophical stuff!"_ you say. _"How do I actually build an open/closed component?"_
+> _"Enough philosophical stuff!"_ you say. _"How do I actually build an open/closed component?"_
 
-Okay, okay. Let's do it (in React).
+Okay, okay. We'll do it in the next article (in React for now).
 
-## Pass the rest props down
-
-We already did this, but let's be more detailed now. We have two types of props:
-
-- Non-mergeable: we want these to be overridable.
-- Mergeable: we want to merge these (duh!).
-
-In React, passing props to a component behaves like an object spread (or `Object.assign()`). Since we want any non-mergeable props that we're internally using to be overridable by the user, we need to pass them first. For example:
-
-```jsx {1}
-function Button() {
-  return <button type="button" />;
-}
-```
-
-Next, we want to spread the props:
-
-```jsx {1}
-function Button(props) {
-  return <button type="button" {...props} />;
-}
-```
-
-This way, `{...props}` will override any previous props.
-
-Finally, we want to merge and pass the mergeable props. We do it after the spread to prevent them from being accidentally overridden. We're already taking care of merging all of the values, so we won't be missing any!
-
-```jsx {5}
-function Button({ variant, ...props }) {
-  return (
-    <button
-      type="button"
-      {...props}
-      className={clsx(variant, props.className)}
-    />
-  );
-}
-```
-
-In short, here's the order:
-
-1. Pass non-mergeable props.
-2. Spread the rest props.
-3. Merge and pass mergeable props.
-
-Let's take a closer look at mergeable props. These are the ones that are usually safe to merge:
-
-### Merging classes
-
-Simple, just concatenate all values separated by spaces. Libraries like [clsx](https://www.npmjs.com/package/clsx) are recommended.
-
-```jsx
-const className = clsx(internalClassName, props.className);
-```
-
-### Merging styles
-
-In React, styles are objects, so we just need to merge them. We can do so easily with the spread syntax.
-
-```jsx
-const style = { ...internalStyle, ...props.style };
-```
-
-### Merging event handlers
-
-Event handler props typically start with `on` (e.g. `onClick`), so a common technique is to detect them that way and then create a wrapper function that calls both the internal and external handlers.
-
-The external one must be called first. This is important because that handler could have called `event.preventDefault()`, which is self-explanatory (stops the default behavior of the event).
-
-Our internal handler is the "default behavior" in this case, so we need to check if `preventDefault()` was called (through `event.defaultPrevented`) and, in that case, the internal handler shouldn't run to respect the user's wishes.
-
-The logic is a bit complicated, so it is left as an exercise for the reader. There are a few open-source libraries like [Ariakit](https://ariakit.org/) and [Radix UI](https://www.radix-ui.com/) that do this though, in case you want to see a good example.
-
-## Forward (and merge) refs
-
-In React, we need to forward the ref to the underlying element.
+Stay tuned!

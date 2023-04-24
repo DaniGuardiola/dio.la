@@ -1,0 +1,65 @@
+---
+draft: true
+date: 1970/1/1
+title: Open/closed components vs. design system constraints
+description: The open/closed pattern seems to be at odds with the constrained nature of a design system, but I disagree!
+topics:
+  - design-systems
+  - js
+  - react
+  - frontend
+---
+
+import { TheOpenClosedComponentIndex } from "~/components/ArticleSeriesIndex/TheOpenClosedComponentIndex";
+
+<TheOpenClosedComponentIndex />
+
+In [parts 1](/article/the-open-closed-component-part-1) [and 2](/article/the-open-closed-component-part-1) of this series, we've learned about open/closed components and how to build them.
+
+At this point, if you've worked with design systems before, you might be wondering...
+
+> What about the constraints?!?
+
+I hear you. I am a huge design systems guy, and I've spent some of my past years building them full-time.
+
+One of the things you'll hear time and time again is that _a design system is a set of constraints_ that are in place to make sure that your apps/websites are consistent and predictable.
+
+In other words, **constraining the choices that a team of designers and developers can make is a good thing**, and a feature rather than a bug. I wholeheartedly agree with that!
+
+It can seem like the open/closed pattern is at odds with that because it allows you to extend the component in almost any way you want. But I don't think that's the case.
+
+# Hitting a wall
+
+When I first started building my first production design system ([Atlas](https://atlas.guide.co/)) for an ever-growing app ([Guide](https://guide.co/)), my philosophy was to constrain everything as much as possible. I was operating under the assumption that as you impose more constraints, the development team gets more productive, and the quality of the output gets higher.
+
+Ah, the illusion of control! _I quickly realized that this was not the case._
+
+![Control is an illusion](control.jpg)
+
+As the design system and its usage grew, some pains began to arise. Since the components were black boxes, almost any new use case required investing in adding new features or reworking some of the implementation details or API. Moreover, trying to get components and libraries to work together was a nightmare.
+
+Maybe we needed to show a tooltip for a button that was also the trigger for a menu. Or maybe we needed a button that needed to behave like a link. Many things that seemed simple at first quickly became very complex.
+
+> Sometimes, **this resulted in developers not using the design system components**, and creating a rough and unpolished one-off alternative using native HTML elements directly, just so that it'd work with some library or layout.
+>
+> A fork like that is never good news!
+
+# Not everything needs to be constrained
+
+The truth is that I was constraining the wrong thing. For example, it makes sense to constrain the variants of a button (e.g. primary, secondary, etc.), since that's gonna help you keep a consistent look and feel across your app. But why would you constrain the API for anything else? Why would you keep reinventing the wheel for every single use case?
+
+A `<button />` already does so much for you, out of the box. The web platform, even with its pitfalls, is a very mature and powerful tool. Just let developers use it!
+
+> **Constraining the API does nothing for you.** It only creates limitations and makes it harder to use your components.
+>
+> Rather, **extend the API of existing elements by adding your own sprinkles of functionality or style on top**.
+
+# Escape hatches matter
+
+Another critical aspect of a design system is the ability to escape its constraints when necessary. This is where the open/closed pattern shines.
+
+Some devs seem to think that having ways to "break" the established rules is a bad thing, but I disagree with that. **I don't think a design system has failed its purpose when it allows you to escape its constraints.** That's a glass-half-empty way of looking at it.
+
+> Rather, I believe that **a design system has succeeded when you don't need to escape its constraints often**, but **you can do it trivially when you need to**.
+
+Then, a good strategy to improve your design system is to track how often and how these escape hatches are used. If they're used a lot, that's probably a good opportunity to improve the design system itself.

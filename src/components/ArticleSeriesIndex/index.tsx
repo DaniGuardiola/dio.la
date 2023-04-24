@@ -8,26 +8,23 @@ import {
 } from "~/data/articles";
 import { type ArticleId } from "~/data/generated/articles";
 
-// import { A } from "solid-start";
+type ArticleSeriesIndexProps = {
+  name: string;
+  articleIds: ArticleId[];
+};
 
-const ARTICLE_IDS: ArticleId[] = [
-  "lexical-explained",
-  "what-is-a-node",
-  "lexical-state-updates",
-];
-const ARTICLE_DATA = ARTICLE_IDS.filter(articleMetadataExists).map(
-  findArticleMetadataById
-);
+export function ArticleSeriesIndex(props: ArticleSeriesIndexProps) {
+  const data = () =>
+    props.articleIds.filter(articleMetadataExists).map(findArticleMetadataById);
 
-export function LexicalExplainedIndex() {
   const { articleId } = useArticleLocation();
   return (
     <blockquote>
       <p>
-        <strong>Lexical explained series</strong>
+        <strong>"{props.name}" series</strong>
       </p>
       <ol>
-        <For each={ARTICLE_DATA}>
+        <For each={data()}>
           {({ id, title }) => (
             <li>
               {articleId() === id ? (
