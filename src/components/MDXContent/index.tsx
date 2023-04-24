@@ -64,7 +64,7 @@ function DataLSP(props: ComponentProps<"span"> & { lsp: string }) {
       {...props}
       data-lsp={lspAttr()
         // workaround for shiki-twoslash, see file: patches/shiki-twoslash@x.x.x.patch
-        .replace("--LINEBREAK--", "\n")}
+        .replaceAll("--LINEBREAK--", "\n")}
       class={clsx("data-lsp", props.class)}
     />
   );
