@@ -1,6 +1,6 @@
 ---
 draft: true
-date: 1970/1/1
+date: 2000/1/1
 title: The open/closed component
 description: A powerful pattern to build extensible UI components that do more with less.
 topics:
@@ -104,9 +104,9 @@ function Button({ variant, ...props }) {
 }
 ```
 
-> Note that these two examples are simplified and incomplete. I go into more detail on these topics later in the article.
+> Note that these two examples are simplified and incomplete. I go into more detail on these topics in the next part of the series.
 
-This strategy is great, but we can't merge every prop. In fact, only `className`, `style` and event handlers are usually safe to merge.
+This strategy is great, but we can't merge every prop. Normally, only `className`, `style` and event handlers are safe to merge.
 
 The only solution is to let other external props override the internal ones. This is normally okay since the internal props are usually just "defaults", or the user knows what they're doing.
 
