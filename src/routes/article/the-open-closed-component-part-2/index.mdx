@@ -177,6 +177,16 @@ This is a very tricky one, and I don't have a perfect answer for it. I can think
 
 It's all about trade-offs.
 
+---
+
+There's another approach worth mentioning that I'd call **the "inverse purist" approach**, which consists of choosing the inner component as a main component (in our case that'd be the `<input />` element), and then exposing a `wrapperProps` prop for the actual root element (`<div />` in this case). This was brought to my attention by [Diego Haz](https://https://haz.dev/).
+
+In this specific case, I would strongly recommend against it, since I think it'd be very unexpected for the user. For example, if they were to try to style this component with a margin (e.g. `className="mt-2"`) for layout purposes, they'd quickly realize that there's now an unwanted larger space between the label and the input. That's why my general rule is to always choose the root component as the target for prop and ref forwarding.
+
+However, there are valid cases for this. A very good example is [the Ariakit `Popover` component](https://ariakit.org/components/popover). This component (which adheres to the open/closed pattern, as all Ariakit components do) renders a markup consisting of a positioning wrapper with a "content" element inside. Normally, the user will want to style the content element to create a layout for the content, like `display: flex` or maybe some padding.
+
+Tweaking the positioning wrapper element is rarely needed, so it makes sense to pick the content element as the main element. If you do need to tweak the wrapper, you can always use `wrapperProps`. Notice how, in this case, the actual root element (positioning wrapper) is not part of the normal layout flow (it's a **popover** after all, it's supposed to float on top of other content). That turns the problem I previously explained effectively into a non-issue.
+
 # Some notes on API design
 
 The open/closed pattern is a very powerful tool, but it's not a silver bullet. As you can see, there are a few edge cases and tradeoffs to consider, and it's not always clear what the best approach is.
