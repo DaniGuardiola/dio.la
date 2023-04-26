@@ -179,13 +179,13 @@ It's all about trade-offs.
 
 ---
 
-There's another approach worth mentioning that I'd call **the "inverse purist" approach**, which consists of choosing the inner component as a main component (in our case that'd be the `<input />` element), and then exposing a `wrapperProps` prop for the actual root element (`<div />` in this case). This was brought to my attention by [Diego Haz](https://https://haz.dev/).
+An alternative method that I'd call **the "inverse purist" approach** consists of selecting the inner component as the main one (like `<input />`), and using a wrapperProps prop for the root element (e.g., `<div />`) (thanks [Diego Haz](https://https://haz.dev/) for bringing this to my attention!).
 
-In this specific case, I would strongly recommend against it, since I think it'd be very unexpected for the user. For example, if they were to try to style this component with a margin (e.g. `className="mt-2"`) for layout purposes, they'd quickly realize that there's now an unwanted larger space between the label and the input. That's why my general rule is to always choose the root component as the target for prop and ref forwarding.
+I don't recommend this for our `TextInput` example, as it may confuse users. For instance, if they attempt to add a margin for layout purposes, they'll find an unwanted gap between the label and input. Thus, it's better to use the root component for prop and ref forwarding.
 
-However, there are valid cases for this. A very good example is [the Ariakit `Popover` component](https://ariakit.org/components/popover). This component (which adheres to the open/closed pattern, as all Ariakit components do) renders a markup consisting of a positioning wrapper with a "content" element inside. Normally, the user will want to style the content element to create a layout for the content, like `display: flex` or maybe some padding.
+However, this approach can work in some situations, such as with [the Ariakit `Popover` component](https://ariakit.org/components/popover) which renders a positioning wrapper with a "content" element inside. Users generally want to style the content element (e.g. `display: flex` or `padding`), while adjusting the positioning wrapper is rare. In this case, selecting the content as the main element is reasonable, and `wrapperProps` can be used for the wrapper.
 
-Tweaking the positioning wrapper element is rarely needed, so it makes sense to pick the content element as the main element. If you do need to tweak the wrapper, you can always use `wrapperProps`. Notice how, in this case, the actual root element (positioning wrapper) is not part of the normal layout flow (it's a **popover** after all, it's supposed to float on top of other content). That turns the problem I previously explained effectively into a non-issue.
+Since the root element is not part of the normal layout flow (it's a popover, it floats on top of other content!), the issue mentioned earlier is unlikely to arise.
 
 # Some notes on API design
 
