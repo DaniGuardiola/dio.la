@@ -203,7 +203,7 @@ Here are a few API design recommendations that I think work great with this patt
 
 - **Documenting the API:** for users already familiar with the open/closed pattern, a simple "this component extends `button`" in a JSDoc description can be incredibly helpful.
 
-  In line with the "sprinkles on top" analogy I made before, it's very useful to know that you're working with a `<button />` that just happens to have some extra features. Web developers are already familiar with the web platform, no need to reinvent the wheel! More on this in the next section, btw.
+  In line with the "sprinkles on top" analogy I made before, it's very useful to know that you're working with a `<button />` that just happens to have some extra features. Web developers are already familiar with the web platform, no need to reinvent the wheel! More on this in the next article in the series.
 
 ## Beware of side effects!
 
@@ -224,7 +224,7 @@ In a nutshell, when building an open/closed React component:
    2. Spread the rest props.
    3. Merge and pass mergeable props.
 
-      1. Merge classes: concatenate them into a single string.
+      1. Merge classes: concatenate them into a single, space-separated string.
       2. Merge styles: merge them into a single object.
       3. Merge event handlers: merge them into a single function.
 
