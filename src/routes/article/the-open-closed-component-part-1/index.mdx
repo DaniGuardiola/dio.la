@@ -152,7 +152,7 @@ While there's no exact hard distinction between a wrapper component and an open/
 
 In both cases, you're effectively wrapping something else, that much is true.
 
-The key difference is that a wrapper component behaves like a "black box", with a custom API. It might pass down a prop or two, but even then it's not uncommon to see, for example, props called `onSelect` or `action` which are passed down to `onClick` and which exclude the `MouseEvent` argument.
+The key difference is that a wrapper component behaves like a "black box", with a custom API. It might pass down a prop or two, but even then it's not uncommon to see, for example, props called `onSelect` or `action` which are passed down to `onClick` and which exclude the `event` argument.
 
 This can make sense sometimes, of course. For example, the [React Aria](https://react-spectrum.adobe.com/react-aria/) library has a [`usePress`](https://react-spectrum.adobe.com/react-aria/usePress.html) utility that wraps all kinds of pointer events (touch, mouse...) and exposes a custom, unified API for them. That can be an immensely useful thing to have.
 
