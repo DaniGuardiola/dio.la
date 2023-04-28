@@ -21,11 +21,11 @@ The state (not the DOM) is the source of truth for the editor. The DOM is always
 
 > The view (DOM) is a function of the state (`EditorState`).
 
-![view as a function of the state](./state-to-dom.png)
+![invert || view as a function of the state](./state-to-dom.png)
 
 When the state is updated, Lexical computes the differences between the previous and next states and then applies them to the DOM in a process called "reconciliation".
 
-![state update and reconciliation](./state-update.png)
+![invert || state update and reconciliation](./state-update.png)
 
 In this simplified example, the previous state had two paragraphs, while the next one only has one. After comparing them, Lexical knows that the second paragraph needs to be removed, so it removes it from the DOM.
 

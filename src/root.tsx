@@ -31,6 +31,7 @@ import {
   scrolledAtTop,
   setUpPageScroll,
 } from "./utils/page-scroll";
+import { theme, ThemeScript, toggleTheme } from "./utils/theme";
 
 function NavLink(props: ComponentProps<typeof A>) {
   return (
@@ -58,10 +59,25 @@ function NavLink(props: ComponentProps<typeof A>) {
   );
 }
 
+function ThemeToggle() {
+  return (
+    <div class="ml-4 flex items-end">
+      <button
+        aria-label="toggle theme"
+        class="focus-ring rounded text-[1.1rem] leading-[1.3rem]"
+        onClick={toggleTheme}
+      >
+        <span class="hidden dark:inline">☼</span>
+        <span class="dark:hidden">🌗︎</span>
+      </button>
+    </div>
+  );
+}
+
 function Header() {
   return (
     <header
-      class="fixed z-20 inset-x-0 top-0 bg-white select-none transition-[height] flex items-center overflow-hidden"
+      class="fixed z-20 inset-x-0 top-0 bg-white/95 dark:bg-black/95 select-none transition-[height] flex items-center overflow-hidden"
       classList={{
         "h-[5rem] sm:h-[11.25rem]": !headerScrolled(),
         "h-[3.5rem] sm:h-[4.5rem]": headerScrolled(),
@@ -121,6 +137,7 @@ function Header() {
             about
           </NavLink>
         </nav>
+        <ThemeToggle />
       </div>
     </header>
   );
@@ -148,7 +165,7 @@ export default function Root() {
   // setUpViewTransitions(); // causes issues when navigating to a topic :(
 
   return (
-    <Html lang="en" prefix="og: http://ogp.me/ns#">
+    <Html class={theme()} lang="en" prefix="og: http://ogp.me/ns#">
       <Head>
         {/* prevent indexing drafts website */}
         {isDrafts() && <Meta name="robots" content="noindex" />}
@@ -174,6 +191,7 @@ export default function Root() {
             data-domains="dio.la,drafts.dio.la"
           />
         )}
+        <ThemeScript />
       </Head>
       <Body>
         <ErrorBoundary>

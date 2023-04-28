@@ -1,6 +1,6 @@
-# Later
+# To do
 
-- Related articles in footer
+- Related articles?
 - Defer / selectively load LaTeX CSS
 - Make tags in article list clickable
 - Article view
@@ -11,7 +11,6 @@
   - Headings as anchor links
 - Add schema.org stuff
 - OG images (satori) for articles without defined image
-- Hire illustrator to make nice main images for articles (and some secondary illustrations as needed)
 - RSS
 - Error fallback
 - Fix upstream shiki-twoslash issues:
@@ -23,15 +22,17 @@
   - annotations
   - error positions for multi-file snippets
   - allow type highlights to overflow code blocks
+  - weirdness with TSX (cut/cut-after)
 - Image fallbacks on error
 - Fira code font for code blocks?
 - Optimization: compute reading time when generating article metadata (from article content, maybe excluding JSX - remark should be useful for this) so it's available without javascript enabled (and before hydration)
 - Smaller font sizes on mobile?
 - Add easter egg
-- Dark theme
 - Co-locate article og images
 - Javascript-less header collapse? (position sticky?)
 - Optimization: CI action that automatically resizes images, converts to webp or multiple formats, adds width and height data (how in MDX??), etc
-- Optimization delay YouTube embeds until in view
+- Optimization: delay YouTube embeds until in view
 - Fix #articles anchor with scroll margin (clear topic button on mobile)
 - robots.txt and sitemap
+- setup newsletter system
+- lint, typecheck and gen (check) actions

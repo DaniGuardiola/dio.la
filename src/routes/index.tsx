@@ -94,7 +94,7 @@ function MainHighlight(props: ArticleMetadata) {
       href={getArticleUrl(props.id)}
       class="block rounded-md focus-ring-white focus-scroll-target group"
     >
-      <article class="bg-white rounded-md space-y-1 overflow-hidden">
+      <article class="bg-white dark:bg-neutral-950 rounded-md space-y-1 overflow-hidden">
         <Show when={props.imageUrl}>
           <img
             style={{
@@ -107,7 +107,7 @@ function MainHighlight(props: ArticleMetadata) {
             src={props.imageUrl}
           />
         </Show>
-        <div class="p-6 space-y-3 bg-white">
+        <div class="p-6 space-y-3">
           <DateLabel
             class="text-[1rem] text-accent font-bold uppercase"
             date={props.date}
@@ -118,7 +118,9 @@ function MainHighlight(props: ArticleMetadata) {
           </h2>
 
           <Show when={!props.imageUrl}>
-            <p class="text-[1.125rem] text-subtle">{props.description}</p>
+            <p class="text-[1.125rem] text-subtle-invert">
+              {props.description}
+            </p>
           </Show>
         </div>
       </article>
@@ -291,7 +293,7 @@ function ArticleItem(props: ArticleItemProps) {
             <ul class="flex items-center gap-2 overflow-hidden opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100">
               <For each={props.topics?.slice(0, 2)}>
                 {(topic) => (
-                  <li class="text-[.9rem] leading-none text-subtle">{`#${topic}`}</li>
+                  <li class="text-[.9rem] leading-none text-subtle-invert">{`#${topic}`}</li>
                 )}
               </For>
             </ul>
@@ -300,7 +302,7 @@ function ArticleItem(props: ArticleItemProps) {
         <h2 class="text-[1.125rem] leading-[1.375rem] group-hover:underline group-focus-visible:underline">
           {props.title}
         </h2>
-        <p class="text-[1rem] text-subtle leading-[1.1875rem]">
+        <p class="text-subtle-invert text-[1rem] leading-[1.1875rem]">
           {props.description}
         </p>
       </article>

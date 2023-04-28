@@ -104,6 +104,38 @@ function YoutubeVideo(props: { id: string }) {
   );
 }
 
+type ImageMetadata = {
+  invert?: boolean;
+};
+
+function Image(props: ComponentProps<"img">) {
+  const alt = () => {
+    let text = "";
+    let metadata = {} as ImageMetadata;
+    if (props.alt) {
+      const parts = props.alt.split("||");
+      if (parts[1]) {
+        text = parts[1].trim();
+        metadata = Object.fromEntries(
+          parts[0].split("&&").map((fragment) => {
+            const [key, value] = fragment.split("=").map((s) => s.trim());
+            return [key, value || true];
+          })
+        );
+      } else text = parts[0].trim();
+    }
+    return { text, metadata };
+  };
+  return (
+    <img
+      title={alt().text}
+      {...props}
+      alt={alt().text}
+      class={clsx(alt().metadata.invert && "invert", props.class)}
+    />
+  );
+}
+
 function stub<T extends string>(component: T) {
   return function StubComponent(props: ComponentProps<T>) {
     return <Dynamic component={component} {...props} />;
@@ -118,6 +150,7 @@ export function MDXContent(props: MDXContentProps) {
       <MDXProvider
         components={{
           a: Anchor,
+          img: Image,
           "data-lsp": DataLSP,
           "data-err": DataErr,
           pre: Pre,

@@ -136,10 +136,10 @@ export function GoToTopButton() {
       aria-label="scroll to the top"
       class={clsx(
         `fixed bottom-4 right-4 lg:bottom-8 lg:right-8
-            bg-accent text-white p-3 lg:p-4 rounded-xl font-roboto-mono shadow-lg border-2 border-white
-              transition-[transform,opacity] ease-out
-              hover:-translate-y-2 active:-translate-y-1
-              focus:outline-none focus-visible:-translate-y-2 focus-visible:outline-offset-2 focus-visible:outline-accent`,
+         bg-accent text-white p-3 lg:p-4 rounded-xl font-roboto-mono shadow-lg border-2 border-white
+         transition-[transform,opacity] ease-out
+         hover:-translate-y-2 active:-translate-y-1
+         focus:outline-none focus-visible:-translate-y-2 focus-visible:outline-offset-2 focus-visible:outline-accent`,
         articleScrolled() ? "opacity-100" : "opacity-0"
       )}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

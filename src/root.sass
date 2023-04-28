@@ -3,7 +3,23 @@
 @tailwind utilities
 
 :root
-  @apply font-inter text-dark bg-gray-100
+  @apply font-inter text-dark-invert
+  --text-accent: #046b46
+  --dark-invert: #1e1e1e
+  --black-invert: 0 0 0
+  --subtle-invert: #6f6f6f
+  --subtle-white-invert: #ffffffd1
+
+  @apply bg-gray-100
+  &.dark
+    @apply bg-neutral-950
+
+html.dark
+  --text-accent: #1d9267
+  --dark-invert: #e1e1e1
+  --black-invert: 255 255 255
+  --subtle-invert: #909090
+  --subtle-white-invert: #ffffffd1
 
 @layer utilities
   .focus-ring
