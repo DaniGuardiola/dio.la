@@ -31,8 +31,10 @@
 - Co-locate article og images
 - Javascript-less header collapse? (position sticky?)
 - Optimization: CI action that automatically resizes images, converts to webp or multiple formats, adds width and height data (how in MDX??), etc
+- ^ or something like gatsby-remark-images
 - Optimization: delay YouTube embeds until in view
 - Fix #articles anchor with scroll margin (clear topic button on mobile)
 - robots.txt and sitemap
 - setup newsletter system
 - lint, typecheck and gen (check) actions
+- fade-in images on load

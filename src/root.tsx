@@ -147,7 +147,7 @@ function DraftsNotice() {
   return (
     <a
       href="https://dio.la/"
-      class="group fixed top-0 right-0 z-[999] border-y-2 border-black rotate-45 translate-x-24 translate-y-20 px-20 py-1 bg-slate-200 text-lg whitespace-nowrap select-none shadow-md hover:scale-110 transition-transform animate-pulse"
+      class="text-dark group fixed top-0 right-0 z-[999] border-y-2 border-black rotate-45 translate-x-24 translate-y-20 px-20 py-1 bg-slate-200 text-lg whitespace-nowrap select-none shadow-md hover:scale-110 transition-transform animate-pulse"
     >
       <p>
         You're looking at my <span class="font-bold">drafts</span>!
