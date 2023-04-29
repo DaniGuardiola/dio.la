@@ -8,7 +8,7 @@ import {
   splitProps,
   Switch,
 } from "solid-js";
-import { A, useSearchParams } from "solid-start";
+import { A, useNavigate, useSearchParams } from "solid-start";
 
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
@@ -184,7 +184,7 @@ function Highlights() {
 // ------
 
 function getTopicUrl(id: string) {
-  return `/?topic=${id}#topic-banner`;
+  return `/?topic=${id}#articles`;
 }
 
 function Topics() {
@@ -248,7 +248,7 @@ function TopicBanner() {
       <section
         id="topic-banner"
         aria-label={`filtering by topic: ${topic()}`}
-        class="bg-accent/75 text-white px-4 py-2 lg:py-4 mb-8 rounded flex items-center justify-center gap-4 flex-wrap focus-scroll-target"
+        class="bg-accent/75 text-white px-4 py-2 lg:py-4 mb-8 rounded flex items-center justify-center gap-4 flex-wrap focus-scroll-target sticky top-20 lg:top-24"
       >
         <p>
           <span class="max-sm:sr-only">Filtering by topic: </span>
@@ -256,7 +256,7 @@ function TopicBanner() {
         </p>
         <div class="flex-grow" />
         <A
-          href="#articles"
+          href="#topics"
           class={clsx(
             "border border-white p-2 lg:py-0 rounded focus-ring-white",
             "hover:bg-white hover:text-dark focus-visible:bg-white focus-visible:text-dark"
@@ -277,6 +277,7 @@ type ArticleItemProps = ArticleMetadata & {
 };
 
 function ArticleItem(props: ArticleItemProps) {
+  const navigate = useNavigate();
   return (
     <A
       href={getArticleUrl(props.id)}
@@ -293,13 +294,19 @@ function ArticleItem(props: ArticleItemProps) {
             <ul class="flex items-center gap-2 overflow-hidden opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100">
               <For each={props.topics?.slice(0, 2)}>
                 {(topic) => (
-                  <li class="text-[.9rem] leading-none text-subtle-invert">{`#${topic}`}</li>
+                  <li
+                    onClick={(event) => {
+                      event.preventDefault();
+                      navigate(getTopicUrl(topic));
+                    }}
+                    class="hover-exclude text-[.9rem] leading-none text-subtle-invert hover:underline"
+                  >{`#${topic}`}</li>
                 )}
               </For>
             </ul>
           </Show>
         </div>
-        <h2 class="text-[1.125rem] leading-[1.375rem] group-hover:underline group-focus-visible:underline">
+        <h2 class="text-[1.125rem] leading-[1.375rem] [.group:hover:not(:has(.hover-exclude:hover))_&]:underline group-focus-visible:underline">
           {props.title}
         </h2>
         <p class="text-subtle-invert text-[1rem] leading-[1.1875rem]">
@@ -318,7 +325,11 @@ function ArticleList(props: ArticleListProps) {
   );
   return (
     <>
-      <section id="articles" aria-label="articles" class="p-4 lg:grow lg:pt-2">
+      <section
+        id="articles"
+        aria-label="articles"
+        class="focus-scroll-target p-4 lg:grow lg:pt-2"
+      >
         <SkipLink id="article-list" />
         <TopicBanner />
         <div class="space-y-6">

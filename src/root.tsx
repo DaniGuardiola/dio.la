@@ -95,7 +95,7 @@ function Header() {
           <p
             class={clsx(
               "text-[2rem] font-bold leading-[85%] underline-offset-4 decoration-4",
-              "xs:text-[2.5rem]",
+              "min-[400px]:text-[2.5rem]",
               "sm:transition-[font-size]"
             )}
             classList={{
