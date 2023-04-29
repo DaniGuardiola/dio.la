@@ -133,7 +133,7 @@ function Image(props: ComponentProps<"img">) {
       title={alt().text}
       {...props}
       alt={alt().text}
-      class={clsx(alt().metadata.invert && "invert", props.class)}
+      class={clsx(alt().metadata.invert && "dark:invert", props.class)}
     />
   );
 }
