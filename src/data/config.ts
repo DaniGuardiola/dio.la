@@ -8,6 +8,7 @@ export const HEADER_SCROLL_OFFSET = 420;
 export const ARTICLE_SCROLL_OFFSET = 690;
 export const ALLOWED_TOPICS = [
   "js",
+  "css",
   "fun",
   "math",
   "hacking",

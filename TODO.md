@@ -39,3 +39,4 @@
 - lint, typecheck and gen (check) actions
 - fade-in images on load
 - replace theme toggle icons with actual svg icons
+- more visible links in light theme

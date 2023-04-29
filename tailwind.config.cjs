@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const plugin = require("tailwindcss/plugin");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./src/**/*.{html,js,jsx,ts,tsx,mdx}"],
@@ -31,5 +34,10 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ({ addVariant }) {
+      addVariant("exclusive-hover", "&:hover:not(:has(.hover-exclude:hover))");
+      addVariant("targeted-hover", "&:has(.hover-target:hover)");
+    }),
+  ],
 };

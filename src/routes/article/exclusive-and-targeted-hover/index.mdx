@@ -1,0 +1,213 @@
+---
+draft: true
+date: 1090/1/1
+title: "Exclusive and targeted :hover styles with :has()"
+description: Using :has() to finally solve a decades-long CSS limitation.
+topics:
+  - css
+  - frontend
+---
+
+import clsx from "clsx";
+import { For } from "solid-js";
+
+export function DemoRow(props) {
+  const buttonClass = () =>
+    clsx(
+      "bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-900 rounded text-white px-4 py-2 whitespace-nowrap",
+      props.exclusiveHover && "hover-exclude"
+    );
+  return (
+    <div class="rounded-t-lg shadow divide-y divide-neutral-200 dark:divide-neutral-700">
+      <For
+        each={[
+          "A row in some table",
+          "Just another row",
+          "One more day, one more row",
+        ]}
+      >
+        {(text) => (
+          <div
+            class={clsx(
+              "bg-white dark:bg-neutral-600 first:rounded-t-lg last:rounded-b-lg px-6 py-3 flex items-center justify-center gap-2 select-none cursor-pointer text-dark-invert",
+              props.exclusiveHover
+                ? "exclusive-hover:bg-neutral-200 dark:exclusive-hover:bg-neutral-800"
+                : "hover:bg-neutral-200 dark:hover:bg-neutral-800"
+            )}
+          >
+            <p class="!m-0 grow">{text}</p>
+            <button class={buttonClass()}>
+              <span>Button</span>
+            </button>
+          </div>
+        )}
+      </For>
+    </div>
+  );
+}
+
+Here's a `:hover` styling problem that bugs me often.
+
+Move your mouse over one of the rows below. Next, try the button.
+
+<DemoRow />
+
+Sorry mobile or motion-impaired visitors! This GIF shows what you're missing:
+
+TODO: gif
+
+As you can see, when the mouse is over the button, the row `:hover` styles are triggered.
+
+This is a terrible user experience! When the user wants to click a button, the row is highlighted as if they're about to click it instead.
+
+The markup for this example (using [Tailwind CSS](https://tailwindcss.com/) classes) looks like this:
+
+```html
+<!-- Simplified example -->
+<div class="bg-white hover:bg-gray-200">
+  <p>A row in some table</p>
+  <button class="bg-blue-500 hover:bg-blue-700">Button</button>
+</div>
+```
+
+I've been looking for a decent fix to this problem for years, but they've always involved JavaScript... I finally found a **CSS-only solution** that works in modern browsers! 🎉
+
+Unfortunately, it depends on `:has()` which does not have wide browser support yet. However, depending on your use case, you may be able to use it today as long as you don't mind falling back to the old experience (or to a JavaScript solution).
+
+# `:has` in a nutshell
+
+If you're not familiar with `:has()`, here's a very quick overview.
+
+It is a CSS selector that lets you select elements based on their descendants. For example, you can select all `<div>`s that contain a `<p>`:
+
+```css
+div:has(p) {
+  /* styles */
+}
+```
+
+`:has` is a very powerful selector, but [it's not widely supported yet](https://caniuse.com/css-has) (_come on Firefox, I believe in you!_).
+
+> Check the [MDN documentation on `:has`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has)
+
+# Exclusive `:hover`
+
+Leveraging the new `:has()` superpowers, we can now do this:
+
+```html {0,2}
+<div class="bg-white exclusive-hover:bg-gray-200">
+  <p>A row in some table</p>
+  <button class="hover-exclude bg-blue-500 hover:bg-blue-700">Button</button>
+</div>
+```
+
+We made two changes:
+
+1. We modified the row hover class: `hover:` -> `exclusive-hover:`.
+2. We added a `hover-exclude` class to the button.
+
+If you're on a browser that supports `:has()`, check this out!
+
+<DemoRow exclusiveHover />
+
+Beautiful! 😍
+
+Again, here's a GIF of the result for those unable to try it:
+
+TODO: gif
+
+The magic behind the scenes is surprisingly simple. This is the CSS:
+
+> Note: "exclusive-hover" is technically a Tailwind CSS variant in the example above. For the sake of example, imagine that the row had the `.exclusive-hover` class instead.
+
+```css
+.exclusive-hover:hover:not(:has(.hover-exclude:hover)) {
+  /* hover styles (e.g. bg-gray-200) */
+}
+```
+
+Okay, that selector looks scary but it's not that bad. Let's re-build it step by step.
+
+# Building `.exclusive-hover`
+
+First step: our `.exclusive-hover` class is called into action when the row is hovered.
+
+```css {0}
+.exclusive-hover:hover {
+  /* ... */
+}
+```
+
+However, there is a case in which we don't want it to be active, so we'll exclude it with `:not()`.
+
+```css {0}
+.exclusive-hover:hover:not() {
+  /* ... */
+}
+```
+
+In what case do we not want the row to be highlighted?
+
+When it **has** a child `.hover-exclude` element that is already being hovered!
+
+```css {0}
+.exclusive-hover:hover:not(:has(.hover-exclude:hover)) {
+  /* ... */
+}
+```
+
+> In short, we want to highlight the row when it's hovered, but only if it doesn't contain a `.hover-exclude` element that is also being hovered.
+
+# Targeted hover
+
+We've learned how to prevent a child element from triggering a parent's `:hover` styles.
+
+There's a similar trick we can pull off: we can make a child element a "hover target" so that the parent's "hover" styles are **only** triggered when the child is being hovered.
+
+It's even simpler:
+
+```css
+.targeted-hover:has(.hover-target:hover) {
+  /* hover styles (e.g. bg-gray-200) */
+}
+```
+
+The selector applies the hover styles **only** when it **has** a child `.hover-target` element that is being hovered.
+
+I'm too lazy to create an embedded demo for this one, but you can check [this Tailwind playground example](https://play.tailwindcss.com/8z1tgYu0ZN) to see it in action. Here's a GIF though:
+
+TODO: gif
+
+This one is useful for... uh... I... actually don't know. Let me know if you can come up with a good use case for it. 😅
+
+It's still good to have it in your toolbox!
+
+# Tailwind CSS plugin
+
+These two tricks can be used normally in CSS by just copying the selectors above and replacing the `.exclusive-hover` or `.targeted-hover` part with a selector specific to each element.
+
+However, there's an easier way if you're using Tailwind CSS (_🌶️ as you should 🌶️_): variants!
+
+You can use this plugin to add the `exclusive-hover` and `targeted-hover` variants (and the respective classes) to your project:
+
+```js {0,6-10}
+// tailwind.config.js
+const plugin = require("tailwindcss/plugin");
+
+module.exports = {
+  // ...
+  plugins: [
+    plugin(function ({ addVariant, addUtilities }) {
+      addVariant("exclusive-hover", "&:hover:not(:has(.hover-exclude:hover))");
+      addVariant("targeted-hover", "&:has(.hover-target:hover)");
+      addUtilities({ ".hover-exclude": {}, ".hover-target": {} });
+    }),
+  ],
+};
+```
+
+Feel free to copy and paste it into your project! I might publish it as a package if there's enough interest.
+
+---
+
+Many thanks to [Bill Criswell](https://twitter.com/crswll) for posting the initial idea and [the ensuing discussion on Twitter](https://twitter.com/crswll/status/1621588302145937410)!
