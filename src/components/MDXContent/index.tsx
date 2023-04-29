@@ -144,6 +144,16 @@ function stub<T extends string>(component: T) {
   };
 }
 
+function createHeading(type: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
+  return function Heading(props: ComponentProps<typeof type>) {
+    return (
+      <Dynamic component={type} {...props}>
+        <a href={`#${props.id}`}>{props.children}</a>
+      </Dynamic>
+    );
+  };
+}
+
 type MDXContentProps = { children?: JSX.Element };
 
 export function MDXContent(props: MDXContentProps) {
@@ -160,6 +170,12 @@ export function MDXContent(props: MDXContentProps) {
           ...KATEX_TAGS.reduce(
             (obj, component) => ({ ...obj, [component]: stub(component) }),
             {}
+          ),
+          ...Object.fromEntries(
+            (["h1", "h2", "h3", "h4", "h5", "h6"] as const).map((type) => [
+              type,
+              createHeading(type),
+            ])
           ),
         }}
       >

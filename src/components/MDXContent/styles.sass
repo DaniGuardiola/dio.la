@@ -24,7 +24,13 @@
     @apply text-[1rem]
 
   & :is(h1, h2, h3, h4, h5, h6)
-    @apply focus-scroll-target
+    @apply relative focus-scroll-target
+
+    &:is(:hover,:has(:focus-visible))::before
+      @apply lg:content-["#"] absolute left-[-.9em]
+
+    & a
+      @apply text-dark-invert
 
     & + *
       @apply mt-0
