@@ -13,7 +13,13 @@ export function ThemeScript() {
   return (
     <script>
       {`{
-        ${isDarkTheme.toString()}
+        function isDarkTheme() {
+          if (localStorage.theme === "dark") return true;
+          return (
+            !("theme" in localStorage) &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+          );
+        }
         document.documentElement.classList.add(isDarkTheme() ? "dark": "light");
       }`}
     </script>
