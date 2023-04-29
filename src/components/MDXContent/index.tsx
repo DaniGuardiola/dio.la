@@ -95,6 +95,7 @@ function Pre(props: ComponentProps<"pre">) {
 function YoutubeVideo(props: { id: string }) {
   return (
     <iframe
+      loading="lazy"
       class="w-full aspect-video"
       src={`https://www.youtube-nocookie.com/embed/${props.id}`}
       title="YouTube video player"
@@ -128,6 +129,7 @@ function Image(props: ComponentProps<"img">) {
   };
   return (
     <img
+      loading="lazy"
       title={alt().text}
       {...props}
       alt={alt().text}

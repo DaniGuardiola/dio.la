@@ -167,6 +167,7 @@ export default function Root() {
   return (
     <Html class={theme()} lang="en" prefix="og: http://ogp.me/ns#">
       <Head>
+        <Meta charset="utf-8" />
         {/* prevent indexing drafts website */}
         {isDrafts() && <Meta name="robots" content="noindex" />}
         <Link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -175,7 +176,6 @@ export default function Root() {
           url={`https://${CANONICAL_DOMAIN}/`}
           description={SITE_DESCRIPTION}
         />
-        <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
         <Link
           rel="preconnect"
