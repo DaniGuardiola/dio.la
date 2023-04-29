@@ -18,6 +18,7 @@ import {
 } from "solid-start";
 
 import { HeadMetadata } from "./components/HeadMetadata";
+import { DarkThemeIcon, LightThemeIcon } from "./components/icons";
 import { SkipLinkArea } from "./components/SkipLinks";
 import {
   CANONICAL_DOMAIN,
@@ -61,14 +62,15 @@ function NavLink(props: ComponentProps<typeof A>) {
 
 function ThemeToggle() {
   return (
-    <div class="ml-4 flex items-end">
+    <div class="ml-2 flex items-end">
       <button
+        title="Toggle theme"
         aria-label="toggle theme"
-        class="focus-ring rounded text-[1.1rem] leading-[1.3rem]"
+        class="focus-ring rounded w-8 h-6 flex items-center justify-center -mr-[.375rem]"
         onClick={toggleTheme}
       >
-        <span class="hidden dark:inline">☼</span>
-        <span class="dark:hidden">🌗︎</span>
+        <LightThemeIcon class="w-5 hidden dark:block" />
+        <DarkThemeIcon class="w-5 dark:hidden" />
       </button>
     </div>
   );

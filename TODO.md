@@ -37,7 +37,6 @@
   - Javascript-less header collapse? (position sticky?)
   - Error fallback
   - handle errors gracefully in prod
-  - replace theme toggle icons with actual svg icons
   - more visible links in light theme
   - Add easter egg
   - Defer / selectively load LaTeX CSS
