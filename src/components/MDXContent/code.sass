@@ -1,18 +1,18 @@
 @mixin styles
   // inline code (`code`)
   & :not(.code-container) > code
-    @apply font-roboto-mono px-[.4em] py-[.2em] text-[85%] rounded-md bg-black/10 dark:bg-white/20
+    @apply font-fira-code px-[.4em] py-[.2em] text-[85%] rounded-md bg-black/10 dark:bg-white/20
 
   // code block (```code```)
   & pre
     @apply article-rounded
-    @apply flex font-roboto-mono -mx-4 my-[1.25em] px-4 py-6 bg-gray-900 text-black overflow-x-auto
+    @apply flex font-fira-code -mx-4 my-[1.25em] px-4 py-6 bg-gray-900 text-black overflow-x-auto
 
     & .code-container
       @apply grow
 
     & code
-      @apply whitespace-pre text-[.95rem] font-roboto-mono
+      @apply whitespace-pre text-[.95rem] font-fira-code
 
     & .line
       @apply min-h-[1rem]

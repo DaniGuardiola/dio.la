@@ -3,7 +3,6 @@
 - Article view
   - Test deprecated options in completions
   - Tables
-  - Fira code font for code blocks?
   - ToC
   - Turn typescript errors into links to https://ts-error-translator.vercel.app/ (see: https://github.com/mattpocock/ts-error-translator/blob/main/apps/web/src/pages/index.tsx#L91)
 - Fix upstream shiki-twoslash issues:

@@ -34,7 +34,7 @@ export default function NotFound() {
       <HttpStatusCode code={404} />
       <HeadMetadata title="404" description="Not found!" />
       <div class="bg-accent">
-        <h1 class="px-4 py-8 lg:main-container text-white font-roboto-mono font-bold text-3xl">
+        <h1 class="px-4 py-8 lg:main-container text-white font-fira-code font-bold text-3xl">
           {text()}
           <span class={blinking() ? "motion-safe:animate-blink" : undefined}>
             _

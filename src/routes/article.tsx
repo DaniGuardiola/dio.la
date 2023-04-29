@@ -78,7 +78,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
         class="bg-accent pt-8 pb-6 text-white break-words"
       >
         <div class="main-container px-4">
-          <p class="font-roboto-mono text-[.875rem] text-subtle-white">
+          <p class="font-fira-code text-[.875rem] text-subtle-white">
             <span class="sm:hidden">{date().short}</span>
             <span class="max-sm:hidden">{date().long}</span>
             <span class="font-bold"> · </span>
@@ -136,7 +136,7 @@ export function GoToTopButton() {
       aria-label="scroll to the top"
       class={clsx(
         `fixed bottom-4 right-4 lg:bottom-8 lg:right-8
-         bg-accent text-white p-3 lg:p-4 rounded-xl font-roboto-mono shadow-lg border-2 border-white
+         bg-accent text-white p-3 lg:p-4 rounded-xl font-fira-code shadow-lg border-2 border-white
          transition-[transform,opacity] ease-out
          hover:-translate-y-2 active:-translate-y-1
          focus:outline-none focus-visible:-translate-y-2 focus-visible:outline-offset-2 focus-visible:outline-accent`,

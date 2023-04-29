@@ -23,7 +23,7 @@ module.exports = {
       },
       fontFamily: {
         inter: ['"Inter"', "sans-serif"],
-        "roboto-mono": ['"Roboto Mono"', "monospace"],
+        "fira-code": ['"Fira Code"', "monospace"],
         "roboto-slab": ['"Roboto Slab"', "serif"],
       },
       listStyleType: {
