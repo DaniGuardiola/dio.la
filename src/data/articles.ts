@@ -23,7 +23,11 @@ export type ArticleMetadata = {
 // data
 // ----
 
-const highlightsIds: ArticleId[] = ["use-image-is-loaded", "unlinked"];
+const highlightsIds: ArticleId[] = [
+  "colorful-avatars",
+  "use-image-is-loaded",
+  "unlinked",
+];
 
 export const HIGHLIGHTS = highlightsIds
   .filter(articleMetadataExists)
