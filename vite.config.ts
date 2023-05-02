@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// @ts-expect-error No types.
+import a11yEmoji from "@fec/remark-a11y-emoji";
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
 import rehypeExternalLinks from "rehype-external-links";
@@ -41,6 +43,7 @@ export default defineConfig({
               } satisfies CompilerOptions,
             },
           ],
+          a11yEmoji,
           remarkGfm,
           remarkFrontmatter,
           remarkMdxImages,

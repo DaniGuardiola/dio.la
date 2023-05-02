@@ -8,6 +8,7 @@ import {
   REPO_ID,
 } from "~/data/config";
 import { isDrafts, isLocalhost } from "~/utils/is-host";
+import { theme } from "~/utils/theme";
 
 import { Giscus } from "./Giscus";
 
@@ -37,7 +38,7 @@ export function Comments() {
       reactionsEnabled="1"
       emitMetadata="0"
       inputPosition="top"
-      theme="light"
+      theme={theme()}
       lang="en"
       loading="lazy"
     />

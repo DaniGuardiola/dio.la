@@ -1,19 +1,10 @@
-# Later
+# To do
 
-- Related articles in footer
-- Defer / selectively load LaTeX CSS
-- Make tags in article list clickable
 - Article view
   - Test deprecated options in completions
   - Tables
   - ToC
   - Turn typescript errors into links to https://ts-error-translator.vercel.app/ (see: https://github.com/mattpocock/ts-error-translator/blob/main/apps/web/src/pages/index.tsx#L91)
-  - Headings as anchor links
-- Add schema.org stuff
-- OG images (satori) for articles without defined image
-- Hire illustrator to make nice main images for articles (and some secondary illustrations as needed)
-- RSS
-- Error fallback
 - Fix upstream shiki-twoslash issues:
   - ESM
   - remark: html raw
@@ -23,15 +14,31 @@
   - annotations
   - error positions for multi-file snippets
   - allow type highlights to overflow code blocks
-- Image fallbacks on error
-- Fira code font for code blocks?
-- Optimization: compute reading time when generating article metadata (from article content, maybe excluding JSX - remark should be useful for this) so it's available without javascript enabled (and before hydration)
-- Smaller font sizes on mobile?
-- Add easter egg
-- Dark theme
-- Co-locate article og images
-- Javascript-less header collapse? (position sticky?)
-- Optimization: CI action that automatically resizes images, converts to webp or multiple formats, adds width and height data (how in MDX??), etc
-- Optimization delay YouTube embeds until in view
-- Fix #articles anchor with scroll margin (clear topic button on mobile)
-- robots.txt and sitemap
+  - weirdness with TSX (cut/cut-after)
+- images:
+  - OG images (satori) for articles without defined image
+  - Image fallbacks on error
+  - CI action that automatically resizes images, converts to webp or multiple formats, adds width and height data (how in MDX??), etc
+  - ^ vite image optimizer
+  - ^ or something like gatsby-remark-images
+  - Co-locate article og images
+  - fade-in images on load
+  - image placeholder (e.g. plaiceholder)
+- SEO/discoverability/engagement:
+  - Related articles?
+  - Add schema.org stuff
+  - RSS
+  - robots.txt
+  - sitemap
+  - setup newsletter system
+- Experience:
+  - compute reading time when generating article metadata (from article content, maybe excluding JSX - remark should be useful for this) so it's available without javascript enabled (and before hydration)
+  - Smaller font sizes on mobile?
+  - Javascript-less header collapse? (position sticky?)
+  - Error fallback
+  - handle errors gracefully in prod
+  - more visible links in light theme
+  - Add easter egg
+  - Defer / selectively load LaTeX CSS
+- DX:
+  - lint, typecheck and gen (check) actions

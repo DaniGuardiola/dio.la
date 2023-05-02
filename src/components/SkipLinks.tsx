@@ -24,7 +24,7 @@ export function SkipLinks(props: SkipLinksProps) {
               class={clsx(
                 "[&:not(:focus-visible)]:sr-only",
                 "fixed top-0 left-0 z-30",
-                "bg-white border m-2 p-2 border-accent outline-none shadow rounded font-bold"
+                "bg-white text-dark border m-2 p-2 border-accent outline-none shadow rounded font-bold"
               )}
             >
               Skip to {label}

@@ -1,4 +1,4 @@
-import { createSignal, type JSX, onMount } from "solid-js";
+import { createSignal, type JSX, onCleanup, onMount } from "solid-js";
 
 const ANIMATION_DURATION = 150;
 
@@ -17,8 +17,17 @@ export function useAnimateBanner({
 }: UseAnimateBannerOptions = {}) {
   const [bannerRef, setBannerRef] = createSignal<HTMLElement>();
   const [style, setStyle] = createSignal<JSX.CSSProperties>();
+  const [done, setDone] = createSignal(false);
 
   async function triggerAnimation(from: number, to: number, onEnd: () => void) {
+    function cleanUp() {
+      if (done()) return;
+      setStyle(undefined);
+      onEnd();
+      setDone(false);
+    }
+
+    setDone(false);
     // setup animation
     setStyle({ height: `${from}px` });
     await raf();
@@ -28,15 +37,12 @@ export function useAnimateBanner({
       height: `${to}px`,
     });
     // wait for animation to end
-    bannerRef()?.addEventListener(
-      "transitionend",
-      () => {
-        setStyle(undefined);
-        onEnd();
-      },
-      { once: true }
-    );
+    bannerRef()?.addEventListener("transitionend", cleanUp, { once: true });
+    // timeout fallback
+    setTimeout(cleanUp, ANIMATION_DURATION + 100);
   }
+
+  onCleanup(() => setDone(true));
 
   onMount(() => {
     const heightOffset = heightOffsetEl?.()?.offsetHeight ?? 0;

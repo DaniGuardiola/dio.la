@@ -24,13 +24,19 @@
     @apply text-[1rem]
 
   & :is(h1, h2, h3, h4, h5, h6)
-    @apply focus-scroll-target
+    @apply relative focus-scroll-target
+
+    &:is(:hover,:has(:focus-visible))::before
+      @apply lg:content-["#"] absolute left-[-.9em]
+
+    & a
+      @apply text-dark-invert
 
     & + *
       @apply mt-0
 
   & img
-    @apply bg-white mx-auto my-[1.8em] rounded lg:rounded-lg shadow
+    @apply bg-white dark:bg-black mx-auto my-[1.8em] rounded lg:rounded-lg shadow
 
   & a
     @apply text-accent hover:underline focus-ring rounded-sm focus-scroll-target
@@ -44,10 +50,10 @@
 
   & blockquote
     @apply article-rounded
-    @apply relative overflow-hidden bg-gray-200 font-roboto-slab -mx-4 py-4 px-8 my-[1.25em]
+    @apply relative overflow-hidden bg-gray-200 dark:bg-neutral-900 font-roboto-slab -mx-4 py-4 px-8 my-[1.25em]
 
     &::before
-      @apply content-[""] absolute inset-y-0 left-0 w-2 bg-gray-500
+      @apply content-[""] absolute inset-y-0 left-0 w-2 bg-gray-500 dark:bg-neutral-800
 
     & > *
       @apply first:mt-0 last:mb-0

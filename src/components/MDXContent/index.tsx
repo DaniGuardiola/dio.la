@@ -95,6 +95,7 @@ function Pre(props: ComponentProps<"pre">) {
 function YoutubeVideo(props: { id: string }) {
   return (
     <iframe
+      loading="lazy"
       class="w-full aspect-video"
       src={`https://www.youtube-nocookie.com/embed/${props.id}`}
       title="YouTube video player"
@@ -104,9 +105,52 @@ function YoutubeVideo(props: { id: string }) {
   );
 }
 
+type ImageMetadata = {
+  invert?: boolean;
+};
+
+function Image(props: ComponentProps<"img">) {
+  const alt = () => {
+    let text = "";
+    let metadata = {} as ImageMetadata;
+    if (props.alt) {
+      const parts = props.alt.split("||");
+      if (parts[1]) {
+        text = parts[1].trim();
+        metadata = Object.fromEntries(
+          parts[0].split("&&").map((fragment) => {
+            const [key, value] = fragment.split("=").map((s) => s.trim());
+            return [key, value || true];
+          })
+        );
+      } else text = parts[0].trim();
+    }
+    return { text, metadata };
+  };
+  return (
+    <img
+      loading="lazy"
+      title={alt().text}
+      {...props}
+      alt={alt().text}
+      class={clsx(alt().metadata.invert && "dark:invert", props.class)}
+    />
+  );
+}
+
 function stub<T extends string>(component: T) {
   return function StubComponent(props: ComponentProps<T>) {
     return <Dynamic component={component} {...props} />;
+  };
+}
+
+function createHeading(type: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
+  return function Heading(props: ComponentProps<typeof type>) {
+    return (
+      <Dynamic component={type} {...props}>
+        <a href={`#${props.id}`}>{props.children}</a>
+      </Dynamic>
+    );
   };
 }
 
@@ -118,6 +162,7 @@ export function MDXContent(props: MDXContentProps) {
       <MDXProvider
         components={{
           a: Anchor,
+          img: Image,
           "data-lsp": DataLSP,
           "data-err": DataErr,
           pre: Pre,
@@ -125,6 +170,12 @@ export function MDXContent(props: MDXContentProps) {
           ...KATEX_TAGS.reduce(
             (obj, component) => ({ ...obj, [component]: stub(component) }),
             {}
+          ),
+          ...Object.fromEntries(
+            (["h1", "h2", "h3", "h4", "h5", "h6"] as const).map((type) => [
+              type,
+              createHeading(type),
+            ])
           ),
         }}
       >

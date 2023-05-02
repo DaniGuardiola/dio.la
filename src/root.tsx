@@ -18,6 +18,7 @@ import {
 } from "solid-start";
 
 import { HeadMetadata } from "./components/HeadMetadata";
+import { DarkThemeIcon, LightThemeIcon } from "./components/icons";
 import { SkipLinkArea } from "./components/SkipLinks";
 import {
   CANONICAL_DOMAIN,
@@ -31,6 +32,7 @@ import {
   scrolledAtTop,
   setUpPageScroll,
 } from "./utils/page-scroll";
+import { theme, ThemeScript, toggleTheme } from "./utils/theme";
 
 function NavLink(props: ComponentProps<typeof A>) {
   return (
@@ -58,10 +60,26 @@ function NavLink(props: ComponentProps<typeof A>) {
   );
 }
 
+function ThemeToggle() {
+  return (
+    <div class="ml-2 flex items-end">
+      <button
+        title="Toggle theme"
+        aria-label="toggle theme"
+        class="focus-ring rounded w-8 h-6 flex items-center justify-center -mr-[.375rem]"
+        onClick={toggleTheme}
+      >
+        <LightThemeIcon class="w-5 hidden dark:block" />
+        <DarkThemeIcon class="w-5 dark:hidden" />
+      </button>
+    </div>
+  );
+}
+
 function Header() {
   return (
     <header
-      class="fixed z-20 inset-x-0 top-0 bg-white select-none transition-[height] flex items-center overflow-hidden"
+      class="fixed z-20 inset-x-0 top-0 bg-white/95 dark:bg-black/95 select-none transition-[height] flex items-center overflow-hidden"
       classList={{
         "h-[5rem] sm:h-[11.25rem]": !headerScrolled(),
         "h-[3.5rem] sm:h-[4.5rem]": headerScrolled(),
@@ -79,7 +97,7 @@ function Header() {
           <p
             class={clsx(
               "text-[2rem] font-bold leading-[85%] underline-offset-4 decoration-4",
-              "xs:text-[2.5rem]",
+              "min-[400px]:text-[2.5rem]",
               "sm:transition-[font-size]"
             )}
             classList={{
@@ -121,6 +139,7 @@ function Header() {
             about
           </NavLink>
         </nav>
+        <ThemeToggle />
       </div>
     </header>
   );
@@ -130,7 +149,7 @@ function DraftsNotice() {
   return (
     <a
       href="https://dio.la/"
-      class="group fixed top-0 right-0 z-[999] border-y-2 border-black rotate-45 translate-x-24 translate-y-20 px-20 py-1 bg-slate-200 text-lg whitespace-nowrap select-none shadow-md hover:scale-110 transition-transform animate-pulse"
+      class="text-dark group fixed top-0 right-0 z-[999] border-y-2 border-black rotate-45 translate-x-24 translate-y-20 px-20 py-1 bg-slate-200 text-lg whitespace-nowrap select-none shadow-md hover:scale-110 transition-transform animate-pulse"
     >
       <p>
         You're looking at my <span class="font-bold">drafts</span>!
@@ -148,8 +167,9 @@ export default function Root() {
   // setUpViewTransitions(); // causes issues when navigating to a topic :(
 
   return (
-    <Html lang="en" prefix="og: http://ogp.me/ns#">
+    <Html class={theme()} lang="en" prefix="og: http://ogp.me/ns#">
       <Head>
+        <Meta charset="utf-8" />
         {/* prevent indexing drafts website */}
         {isDrafts() && <Meta name="robots" content="noindex" />}
         <Link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -158,7 +178,6 @@ export default function Root() {
           url={`https://${CANONICAL_DOMAIN}/`}
           description={SITE_DESCRIPTION}
         />
-        <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
         <Link
           rel="preconnect"
@@ -174,6 +193,7 @@ export default function Root() {
             data-domains="dio.la,drafts.dio.la"
           />
         )}
+        <ThemeScript />
       </Head>
       <Body>
         <ErrorBoundary>
