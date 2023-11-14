@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// @ts-expect-error No types.
-import a11yEmoji from "@fec/remark-a11y-emoji";
+// import a11yEmoji from "@fec/remark-a11y-emoji";
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
 import rehypeExternalLinks from "rehype-external-links";
@@ -14,8 +13,8 @@ import remarkMdxImages from "remark-mdx-images";
 import remarkShikiTwoslash from "remark-shiki-twoslash";
 import devtools from "solid-devtools/vite";
 import solid from "solid-start/vite";
-// @ts-expect-error No types.
-import node from "solid-start-node";
+// @ts-expect-error No types available yet.
+import bun from "solid-start-bun";
 import vercel from "solid-start-vercel";
 import typescript, { type CompilerOptions } from "typescript";
 import { defineConfig } from "vite";
@@ -24,7 +23,6 @@ const isVercel = process.env.VERCEL === "1";
 
 export default defineConfig({
   plugins: [
-    // @ts-expect-error Dep issues.
     {
       ...mdx({
         jsx: true,
@@ -43,10 +41,10 @@ export default defineConfig({
               } satisfies CompilerOptions,
             },
           ],
-          a11yEmoji,
+          // a11yEmoji,
           remarkGfm,
           remarkFrontmatter,
-          remarkMdxImages,
+          remarkMdxImages as any,
           remarkMath,
         ],
         rehypePlugins: [
@@ -68,7 +66,7 @@ export default defineConfig({
     }),
     solid({
       extensions: [".mdx"],
-      adapter: isVercel ? vercel({ edge: true }) : node(),
+      adapter: isVercel ? vercel({ edge: true }) : bun(),
     }),
   ],
 });

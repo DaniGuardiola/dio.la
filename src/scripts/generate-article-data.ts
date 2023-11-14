@@ -1,6 +1,5 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import { ESLint } from "eslint";
 import matter from "gray-matter";
@@ -10,7 +9,7 @@ import type { ArticleMetadata } from "~/data/articles";
 import { ALLOWED_TOPICS, REQUIRED_ARTICLE_FIELDS } from "~/data/config";
 import { isDrafts, isLocalhost } from "~/utils/is-host";
 
-const __filename = fileURLToPath(import.meta.url);
+const __filename = Bun.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 
 const ARTICLES_BASE_PATH = path.resolve(__dirname, "../routes/article");
@@ -55,7 +54,7 @@ function validateMetadata({ id, ...data }: ArticleMetadata) {
 }
 
 async function getArticleMetadata(articlePath: string) {
-  const fileContents = await fs.readFile(articlePath, "utf8");
+  const fileContents = await Bun.file(articlePath).text();
   const { data } = matter(fileContents) as unknown as {
     data: Omit<ArticleMetadata, "id">;
   };
@@ -84,9 +83,10 @@ async function getArticleMetadataList() {
 }
 
 async function formatFile(filepath: string) {
-  const file = await fs.readFile(filepath, { encoding: "utf-8" });
-  const formatted = prettier.format(file, { filepath });
-  return fs.writeFile(filepath, formatted);
+  const file = Bun.file(filepath);
+  const content = await file.text();
+  const formatted = await prettier.format(content, { filepath });
+  return Bun.write(file, formatted);
 }
 
 async function autofixFile(filePath: string) {
@@ -107,7 +107,7 @@ async function generateOutputFile(articleMetadataList: ArticleMetadata[]) {
     ")",
   ];
   await fs.mkdir(OUTPUT_DIR, { recursive: true });
-  await fs.writeFile(OUTPUT_FILE_PATH, parts.join("\n"));
+  await Bun.write(OUTPUT_FILE_PATH, parts.join("\n"));
   await autofixFile(OUTPUT_FILE_PATH);
   await formatFile(OUTPUT_FILE_PATH);
 }

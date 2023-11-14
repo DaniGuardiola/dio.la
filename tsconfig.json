@@ -8,14 +8,10 @@
     "moduleResolution": "node",
     "jsxImportSource": "solid-js",
     "jsx": "preserve",
-    "types": ["vite/client", "node"],
+    "types": ["vite/client", "node", "bun-types"],
     "baseUrl": "./",
     "paths": {
       "~/*": ["./src/*"]
     }
-  },
-  "ts-node": {
-    "esm": true,
-    "swc": true
   }
 }
