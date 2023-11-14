@@ -56,14 +56,15 @@ export default defineConfig({
       }),
       enforce: "pre",
     },
-    devtools({
-      autoname: true,
-      locator: {
-        targetIDE: "vscode",
-        componentLocation: true,
-        jsxLocation: true,
-      },
-    }),
+    !isVercel &&
+      devtools({
+        autoname: true,
+        locator: {
+          targetIDE: "vscode",
+          componentLocation: true,
+          jsxLocation: true,
+        },
+      }),
     solid({
       extensions: [".mdx"],
       adapter: isVercel ? vercel({ edge: true }) : bun(),
