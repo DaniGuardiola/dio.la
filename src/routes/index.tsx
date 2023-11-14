@@ -98,7 +98,6 @@ function MainHighlight(props: ArticleMetadata) {
         <Show when={props.imageUrl}>
           <img
             style={{
-              // @ts-expect-error Types for the View Transitions API have not shipped yet.
               // eslint-disable-next-line solid/style-prop
               "view-transition-name": `article-image-${props.id}`,
             }}

@@ -1,19 +1,19 @@
 {
   "name": "dio.la",
   "scripts": {
-    "gen:article-data": "tsx src/scripts/generate-article-data.ts",
-    "gen": "pnpm gen:article-data",
-    "watch:article-data": "watch 'pnpm gen:article-data' src/routes/article",
-    "watch": "pnpm watch:article-data",
-    "dev:watch": "NODE_ENV='development' pnpm watch",
+    "gen:article-data": "bun src/scripts/generate-article-data.ts",
+    "gen": "bun gen:article-data",
+    "watch:article-data": "watch 'bun gen:article-data' src/routes/article",
+    "watch": "bun watch:article-data",
+    "dev:watch": "NODE_ENV='development' bun watch",
     "dev:solid-start": "solid-start dev",
-    "dev": "concurrently --kill-others 'pnpm dev:watch' 'pnpm dev:solid-start'",
+    "dev": "concurrently --kill-others 'bun dev:watch' 'bun dev:solid-start'",
     "typecheck": "tsc --noEmit --skipLibCheck",
     "lint": "eslint --ignore-path .gitignore .",
-    "check": "pnpm lint && pnpm typecheck",
-    "build": "pnpm gen && solid-start build",
+    "check": "bun lint && bun typecheck",
+    "build": "bun gen && solid-start build",
     "start": "solid-start start",
-    "prod": "pnpm build && pnpm start"
+    "prod": "bun build && bun start"
   },
   "type": "module",
   "devDependencies": {
