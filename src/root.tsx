@@ -3,7 +3,7 @@ import "./root.sass";
 import "./fonts.sass";
 
 import clsx from "clsx";
-import { type ComponentProps, Suspense } from "solid-js";
+import { type ComponentProps, createMemo, Show, Suspense } from "solid-js";
 import {
   A,
   Body,
@@ -15,6 +15,7 @@ import {
   Meta,
   Routes,
   Scripts,
+  useLocation,
 } from "solid-start";
 
 import { HeadMetadata } from "./components/HeadMetadata";
@@ -162,9 +163,16 @@ function DraftsNotice() {
   );
 }
 
+const FULL_PAGE_PATHS = ["/me"];
+
 export default function Root() {
   setUpPageScroll();
   // setUpViewTransitions(); // causes issues when navigating to a topic :(
+
+  const location = useLocation();
+  const isFullPage = createMemo(() =>
+    FULL_PAGE_PATHS.some((path) => path === location.pathname)
+  );
 
   return (
     <Html class={theme()} lang="en" prefix="og: http://ogp.me/ns#">
@@ -198,9 +206,11 @@ export default function Root() {
       <Body>
         <ErrorBoundary>
           <SkipLinkArea />
-          <Header />
+          <Show when={!isFullPage()}>
+            <Header />
+          </Show>
           <Suspense>
-            <main class="pt-[5rem] sm:pt-[11.25rem]">
+            <main class={!isFullPage() ? "pt-[5rem] sm:pt-[11.25rem]" : ""}>
               <Routes>
                 <FileRoutes />
               </Routes>
