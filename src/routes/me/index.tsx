@@ -35,7 +35,7 @@ function Introduction() {
           <summary class="select-none">A brief history of me</summary>
           <div class="flex flex-col gap-8 text-base pt-4">
             <p>
-              When I was 7, my family's rusty old computer (still running
+              When I was 4, my family's rusty old computer (still running
               Windows 98) became my first machine. They probably expected me to
               play games, but I was more interested in messing with the poor
               computer. I would routinely delete system32 files until it stopped
