@@ -406,7 +406,7 @@ export const CAREER = (): CareerEntry[] => [
               , a design system starter with many styled components. Inspired by
               shadcn/ui.
             </>,
-            "Built advanced tooling to introspect AI-generated code to provide feedback to the AI agent.",
+            "Built advanced tooling to introspect AI-generated code and provide feedback to the AI agent.",
             "Contributed features to the product, such as AI-generated placeholder images as part of generative UI.",
           ]}
         />
