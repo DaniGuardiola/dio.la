@@ -362,7 +362,9 @@ export const CAREER = (): CareerEntry[] => [
               </Link>{" "}
               using Slate).
             </>,
-            "Contributed features to the product.",
+            "Contributed core and structural UI features to the product, including the main app navigation interface (fully keyboard accessible), the page layouting system, and coordination of floating/modal elements like nested dialogs.",
+            "Pushed for better accessibility in both the product and design system, both through code and education for my teammates.",
+            "Contributed specific features to the product.",
           ]}
         />
       </>
