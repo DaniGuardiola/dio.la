@@ -1,17 +1,18 @@
 ---
-draft: true
-date: 2000/1/1
-title: "Lexical state updates"
-description: Lexical, explained - part 3.
-imageUrl: /open-graph/lexical-updates.png
+date: 2023/11/21
+title: Lexical state updates
+description: A deep dive into how Lexical updates its state.
+imageUrl: /open-graph/lexical-state-updates.png
 topics:
   - lexical
   - js
 ---
 
-import { LexicalExplainedIndex } from "~/components/ArticleSeriesIndex/LexicalExplainedIndex";
+[Lexical](https://lexical.dev/) is a popular JavaScript text editor framework.
 
-<LexicalExplainedIndex />
+State updates are one of its core concepts, and Lexical has a very unique take on them. This article with demystify how they work.
+
+If you are a Lexical user, you will walk away with a deeper understanding of it that'll help you build better text editors. And if you aren't, you will still add a clever JavaScript technique to your toolbelt.
 
 # What is an update?
 
@@ -132,8 +133,6 @@ export const lock = "🔒";
 - Once the {<UpdateFunction />} is done, the {<PendingState />} is {lock} **locked** (made immutable).
 - Reconciliation happens and the resulting changes are applied to the DOM.
 - The {<PendingState />} is set as the {<CurrentState />}, effectively replacing it.
-
-// TODO: animation
 
 ---
 
