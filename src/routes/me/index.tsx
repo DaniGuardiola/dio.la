@@ -114,7 +114,9 @@ function Introduction() {
       </p>
       <p>
         Reach me at{" "}
-        <Link href="mailto:hi@daniguardio.la">hi@daniguardio.la</Link>.
+        <Link href="mailto:hi@daniguardio.la">hi@daniguardio.la</Link> or
+        schedule a call through{" "}
+        <Link href="https://cal.com/dio.la/30min">cal.com/dio.la</Link>.
       </p>
     </section>
   );
