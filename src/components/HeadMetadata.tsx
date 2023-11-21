@@ -30,14 +30,23 @@ export function HeadMetadata(props: HeadMetadataProps) {
       <Meta name="description" content={props.description} />
       <Meta name="author" content={NAME} />
 
-      <Meta property="og:title" content={title()} />
-      <Meta property="og:description" content={props.description} />
-      <Meta property="og:locale" content="en_US" />
-      <Meta property="og:type" content={props.type ?? "website"} />
+      <Meta name="og:title" property="og:title" content={title()} />
+      <Meta
+        name="og:description"
+        property="og:description"
+        content={props.description}
+      />
+      <Meta name="og:locale" property="og:locale" content="en_US" />
+      <Meta
+        name="og:type"
+        property="og:type"
+        content={props.type ?? "website"}
+      />
       <Show when={props.url}>
-        <Meta property="og:url" content={props.url} />
+        <Meta name="og:url" property="og:url" content={props.url} />
       </Show>
       <Meta
+        name="og:image"
         property="og:image"
         content={`https://${DOMAIN}${props.image ?? DEFAULT_IMAGE}`}
       />
