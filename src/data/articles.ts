@@ -24,6 +24,7 @@ export type ArticleMetadata = {
 // ----
 
 const highlightsIds: ArticleId[] = [
+  "lexical-state-updates",
   "colorful-avatars",
   "use-image-is-loaded",
   "unlinked",
@@ -38,13 +39,16 @@ export { ARTICLES };
 // computed
 // --------
 
-export const TOPICS = ARTICLES.reduce((acc, article) => {
-  article.topics?.forEach((TOPICS) => {
-    if (!acc[TOPICS]) acc[TOPICS] = 0;
-    acc[TOPICS] += 1;
-  });
-  return acc;
-}, {} as Record<Topic, number>);
+export const TOPICS = ARTICLES.reduce(
+  (acc, article) => {
+    article.topics?.forEach((TOPICS) => {
+      if (!acc[TOPICS]) acc[TOPICS] = 0;
+      acc[TOPICS] += 1;
+    });
+    return acc;
+  },
+  {} as Record<Topic, number>
+);
 
 export const TOPICS_SORTED = Object.entries(TOPICS).sort(
   ([aName, aCount], [bName, bCount]) => {
@@ -54,12 +58,15 @@ export const TOPICS_SORTED = Object.entries(TOPICS).sort(
   }
 );
 
-export const ARTICLES_BY_YEAR = ARTICLES.reduce((acc, article) => {
-  const year = new Date(article.date).getFullYear();
-  if (!acc[year]) acc[year] = [];
-  acc[year].push(article);
-  return acc;
-}, {} as Record<string, ArticleMetadata[]>);
+export const ARTICLES_BY_YEAR = ARTICLES.reduce(
+  (acc, article) => {
+    const year = new Date(article.date).getFullYear();
+    if (!acc[year]) acc[year] = [];
+    acc[year].push(article);
+    return acc;
+  },
+  {} as Record<string, ArticleMetadata[]>
+);
 
 export const ARTICLES_BY_YEAR_SORTED = Object.entries(ARTICLES_BY_YEAR).sort(
   ([aYear], [bYear]) => +bYear - +aYear
