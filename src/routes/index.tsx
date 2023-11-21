@@ -20,7 +20,11 @@ import {
   type Topic,
   TOPICS_SORTED,
 } from "~/data/articles";
-import { ALLOWED_TOPICS, SITE_DESCRIPTION } from "~/data/config";
+import {
+  ALLOWED_TOPICS,
+  CANONICAL_DOMAIN,
+  SITE_DESCRIPTION,
+} from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
 
 // article url
@@ -390,8 +394,10 @@ export default function Home() {
 
   return (
     <>
-      {/* workaround for: https://github.com/solidjs/solid-start/issues/738 */}
-      <HeadMetadata description={SITE_DESCRIPTION} />
+      <HeadMetadata
+        url={`https://${CANONICAL_DOMAIN}/`}
+        description={SITE_DESCRIPTION}
+      />
       <SkipLinks
         links={[
           { id: "article-list", label: "article list" },

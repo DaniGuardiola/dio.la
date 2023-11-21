@@ -18,15 +18,9 @@ import {
   useLocation,
 } from "solid-start";
 
-import { HeadMetadata } from "./components/HeadMetadata";
 import { DarkThemeIcon, LightThemeIcon } from "./components/icons";
 import { SkipLinkArea } from "./components/SkipLinks";
-import {
-  CANONICAL_DOMAIN,
-  SITE_DESCRIPTION,
-  UMAMI_DRAFTS_ID,
-  UMAMI_ID,
-} from "./data/config";
+import { UMAMI_DRAFTS_ID, UMAMI_ID } from "./data/config";
 import { isDrafts, isLocalhost } from "./utils/is-host";
 import {
   headerScrolled,
@@ -182,10 +176,6 @@ export default function Root() {
         {isDrafts() && <Meta name="robots" content="noindex" />}
         <Link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <Link rel="icon" type="image/png" href="/favicon.png" />
-        <HeadMetadata
-          url={`https://${CANONICAL_DOMAIN}/`}
-          description={SITE_DESCRIPTION}
-        />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
         <Link
           rel="preconnect"

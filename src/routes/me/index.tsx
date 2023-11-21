@@ -1,6 +1,7 @@
 import { createSignal, For } from "solid-js";
-import { Title } from "solid-start";
 
+import { HeadMetadata } from "~/components/HeadMetadata";
+import { CANONICAL_DOMAIN } from "~/data/config";
 import { toggleTheme } from "~/utils/theme";
 
 import { CAREER } from "./career";
@@ -170,7 +171,6 @@ function Career() {
 function Notes() {
   return (
     <section class="flex flex-col gap-2">
-      <Title>Not Dani Guardiola's Linkedin</Title>
       <h1 class="text-2xl font-bold text-accent">Notes</h1>
       <h2 class="font-bold text-dark-invert mt-6">Languages</h2>
       <p>
@@ -243,6 +243,13 @@ function Notes() {
 export default function Me() {
   return (
     <div class="main-container px-4 py-16 sm:py-32 flex flex-col gap-8 text-dark-invert">
+      <HeadMetadata
+        url={`https://${CANONICAL_DOMAIN}/me`}
+        title={"Not Dani Guardiola's Linkedin"}
+        description={"About me & career"}
+        image="/open-graph/hacking-linkedin.png"
+        type="website"
+      />
       <Heading />
       <Introduction />
       <Career />
