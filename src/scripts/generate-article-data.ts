@@ -6,7 +6,14 @@ import matter from "gray-matter";
 import prettier from "prettier";
 
 import type { ArticleMetadata } from "~/data/articles";
-import { ALLOWED_TOPICS, REQUIRED_ARTICLE_FIELDS } from "~/data/config";
+import {
+  ALLOWED_TOPICS,
+  BASE_PAGE_TITLE,
+  CANONICAL_DOMAIN,
+  NAME,
+  REQUIRED_ARTICLE_FIELDS,
+  SITE_DESCRIPTION,
+} from "~/data/config";
 import { isDrafts, isLocalhost } from "~/utils/is-host";
 
 const __filename = Bun.fileURLToPath(new URL(import.meta.url));
@@ -15,6 +22,8 @@ const __dirname = path.dirname(__filename);
 const ARTICLES_BASE_PATH = path.resolve(__dirname, "../routes/article");
 const OUTPUT_DIR = path.resolve(__dirname, "../data/generated");
 const OUTPUT_FILE_PATH = path.resolve(__dirname, OUTPUT_DIR, "articles.ts");
+const PUBLIC_DIR = path.resolve(__dirname, "../../public");
+const RSS_FILE_PATH = path.resolve(__dirname, PUBLIC_DIR, "rss.xml");
 
 async function getArticleFilePaths() {
   const pathList = await fs.readdir(ARTICLES_BASE_PATH);
@@ -112,9 +121,51 @@ async function generateOutputFile(articleMetadataList: ArticleMetadata[]) {
   await formatFile(OUTPUT_FILE_PATH);
 }
 
+const RSS_HEADER = `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+  <channel>
+    <title>${BASE_PAGE_TITLE}</title>
+    <link>https://${CANONICAL_DOMAIN}/rss.xml</link>
+    <description>${SITE_DESCRIPTION}</description>
+    `;
+const RSS_FOOTER = `
+  </channel>
+</rss>
+`;
+
+function generateRssItem({ title, id, description, date }: ArticleMetadata) {
+  const localDate = new Date(date);
+  const formattedUtcDate = new Date(
+    Date.UTC(
+      localDate.getFullYear(),
+      localDate.getMonth(),
+      localDate.getDate(),
+      9,
+      0,
+      0,
+      0
+    )
+  ).toUTCString();
+  return `    <item>
+      <title>${title}</title>
+      <link>https://${CANONICAL_DOMAIN}/article/${id}</link>
+      <description>${description}</description>
+      <author>hi@daniguardio.la (${NAME})</author>
+      <guid>${id}</guid>
+      <pubDate>${formattedUtcDate}</pubDate>
+    </item>`;
+}
+
+async function generateRSS(articleMetadataList: ArticleMetadata[]) {
+  const items = articleMetadataList.map(generateRssItem).join("\n");
+  const file = `${RSS_HEADER}\n${items}\n${RSS_FOOTER}`;
+  await Bun.write(RSS_FILE_PATH, file);
+}
+
 async function main() {
   const articleMetadataList = await getArticleMetadataList();
   await generateOutputFile(articleMetadataList);
+  await generateRSS(articleMetadataList);
 }
 
 await main();
