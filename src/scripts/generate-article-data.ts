@@ -122,10 +122,11 @@ async function generateOutputFile(articleMetadataList: ArticleMetadata[]) {
 }
 
 const RSS_HEADER = `<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${BASE_PAGE_TITLE}</title>
-    <link>https://${CANONICAL_DOMAIN}/rss.xml</link>
+    <link>https://${CANONICAL_DOMAIN}/</link>
+    <atom:link href="https://${CANONICAL_DOMAIN}/rss.xml" rel="self" type="application/rss+xml" />
     <description>${SITE_DESCRIPTION}</description>
     `;
 const RSS_FOOTER = `
@@ -146,12 +147,13 @@ function generateRssItem({ title, id, description, date }: ArticleMetadata) {
       0
     )
   ).toUTCString();
+  const url = `https://${CANONICAL_DOMAIN}/article/${id}`;
   return `    <item>
       <title>${title}</title>
-      <link>https://${CANONICAL_DOMAIN}/article/${id}</link>
+      <link>${url}</link>
       <description>${description}</description>
       <author>hi@daniguardio.la (${NAME})</author>
-      <guid>${id}</guid>
+      <guid isPermaLink="true">${url}</guid>
       <pubDate>${formattedUtcDate}</pubDate>
     </item>`;
 }
