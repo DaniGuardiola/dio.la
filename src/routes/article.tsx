@@ -5,6 +5,7 @@ import { createEffect, createMemo, createSignal, For, Show } from "solid-js";
 import { A, Outlet, useNavigate } from "solid-start";
 
 import { Comments } from "~/components/Comments";
+import { Subscribe } from "~/components/Comments/Subscribe";
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
@@ -250,6 +251,9 @@ export default function ArticleLayout() {
               <SkipLink id="article-content" />
               <Outlet />
             </MDXContent>
+            <section aria-label="Email newsletter">
+              <Subscribe />
+            </section>
             <section aria-label="Comments">
               {/* see https://github.com/giscus/giscus/blob/main/CHANGELOG.md#2022-03-19 */}
               <SkipLink id="comments" class="giscus" />
