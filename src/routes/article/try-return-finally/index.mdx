@@ -1,0 +1,153 @@
+---
+date: 2000/1/1
+title: "Try, return, finally: a curious JavaScript pattern"
+description: There's life beyond the return if you're willing to try.
+topics:
+  - js
+---
+
+# The end is `return`
+
+One of the first things you'll learn in JavaScript is that the `return` keyword ends a function's execution.
+
+For instance, the extremely common "early return" pattern relies on this fact.
+
+```ts twoslash
+declare const someCondition: boolean;
+declare function someOtherLogic(): void;
+// ---cut---
+function earlyReturn() {
+  if (someCondition) return "early";
+
+  // no "else" needed
+  someOtherLogic();
+}
+```
+
+This behavior has some implications. Consider the following example.
+
+```ts twoslash
+declare function getOutputValue(): "output value";
+declare function someOtherLogic(): void;
+// ---cut---
+function doSomething() {
+  return getOutputValue();
+
+  someOtherLogic();
+}
+```
+
+If you do this, `someOtherLogic` will never be called, because the function exits after the `return` statement. This is called "dead code", and some tools will even automatically remove it for you.
+
+A common way to work around this is to store the output value to be able to return it afterwards.
+
+```ts twoslash
+declare function getOutputValue(): "output value";
+declare function someOtherLogic(): void;
+// ---cut---
+function doSomething() {
+  const result = getOutputValue();
+
+  someOtherLogic();
+
+  return result;
+}
+```
+
+One classic example is a React context consumer which ensures the context is present.
+
+```ts twoslash
+import { useContext, type Context } from "react";
+type MyContextValue = { something: string };
+declare const MyContext: Context<MyContextValue | undefined>;
+// ---cut---
+function useMyContext() {
+  const value = useContext(MyContext);
+
+  if (!value) throw new Error("MyContext is not available");
+
+  return value;
+}
+```
+
+# Life beyond `return`
+
+Now, consider this.
+
+```ts twoslash
+declare function getOutputValue(): "output value";
+declare function someOtherLogic(): void;
+// ---cut---
+function doSomething() {
+  try {
+    return getOutputValue();
+  } finally {
+    someOtherLogic();
+  }
+}
+```
+
+Will `someOtherLogic` be called? Surprisingly, the answer is **yes**. Specifically, this is what will happen:
+
+1. The `try` block is executed.
+2. The `getOutputValue()` function is called.
+3. The `finally` block is executed.
+4. The `someOtherLogic()` function is called.
+5. The output value of the previous `getOutputValue()` call is returned.
+
+I found out about this after reading the source of [Lexical's `readEditorState` function](https://github.com/facebook/lexical/blob/a0d5e95ec0371dae915b5c000e2bc68f029644d3/packages/lexical/src/LexicalUpdates.ts#L391-L410), where some cleanup logic needs to run before returning the output value.
+
+```ts twoslash {13-19}
+import type { LexicalEditor, EditorState } from "lexical";
+
+let isReadOnlyMode = true;
+let activeEditorState: null | EditorState = null;
+let activeEditor: null | LexicalEditor = null;
+// ---cut---
+export function readEditorState<V>(
+  editorState: EditorState,
+  callbackFn: () => V
+): V {
+  const previousActiveEditorState = activeEditorState;
+  const previousReadOnlyMode = isReadOnlyMode;
+  const previousActiveEditor = activeEditor;
+
+  activeEditorState = editorState;
+  isReadOnlyMode = true;
+  activeEditor = null;
+
+  try {
+    return callbackFn();
+  } finally {
+    activeEditorState = previousActiveEditorState;
+    isReadOnlyMode = previousReadOnlyMode;
+    activeEditor = previousActiveEditor;
+  }
+}
+```
+
+---
+
+Is this a good idea? I don't know. It's definitely clever, but it's also a bit surprising.
+
+# Bonus: `return` in `finally`
+
+Can you guess what will be logged when the following code runs?
+
+```ts twoslash
+function doSomething() {
+  try {
+    return "try";
+  } finally {
+    return "finally";
+  }
+}
+
+console.log(doSomething());
+```
+
+The answer is `"finally"`. The `return` in the `finally` block overrides the `return` in the `try` block.
+
+> [Here's a sandbox](https://stackblitz.com/edit/js-ynxcqz?file=index.js) if you want to see for yourself. Open the console to see the output.
+
+Stay weird, JavaScript.
