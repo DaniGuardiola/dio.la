@@ -571,11 +571,13 @@ export function readEditorState<V>(
   isReadOnlyMode = true;
   activeEditor = null;
 
-  return callbackFn();
+  const result = callbackFn();
 
   activeEditorState = previousActiveEditorState;
   isReadOnlyMode = previousReadOnlyMode;
   activeEditor = previousActiveEditor;
+
+  return result;
 }
 ```
 
