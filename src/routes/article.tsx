@@ -203,6 +203,14 @@ function Footer(props: { metadata: ArticleMetadata }) {
           >
             @daniguardio_la
           </a>
+          {" · "}
+          <a
+            class="hover:underline focus-ring-white rounded"
+            target="_blank"
+            href="/rss.xml"
+          >
+            RSS feed
+          </a>
         </p>
       </div>
     </footer>
