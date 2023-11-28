@@ -1,12 +1,12 @@
 ---
-date: 2000/1/1
+date: 2023/11/28
 title: "Try, return, finally: a curious JavaScript pattern"
 description: There's life beyond the return if you're willing to try.
 topics:
   - js
 ---
 
-# The end is `return`
+# `return` is the end
 
 One of the first things you'll learn in JavaScript is that the `return` keyword ends a function's execution.
 
@@ -128,7 +128,7 @@ export function readEditorState<V>(
 
 ---
 
-Is this a good idea? I don't know. It's definitely clever, but it's also a bit surprising.
+Is this a good idea? I don't know. It's definitely clever, but it can also be a bit surprising.
 
 # Bonus: `return` in `finally`
 
@@ -151,3 +151,14 @@ The answer is `"finally"`. The `return` in the `finally` block overrides the `re
 > [Here's a sandbox](https://stackblitz.com/edit/js-ynxcqz?file=index.js) if you want to see for yourself. Open the console to see the output.
 
 Stay weird, JavaScript.
+
+---
+
+PD: here are a some related places in the V8 and Chromium codebases.
+
+- [A test for `return` in `finally`](https://source.chromium.org/chromium/chromium/src/+/main:v8/test/message/try-finally-return-in-finally.jsw)
+- [`TryCatch` class headers](https://v8docs.nodesource.com/node-0.8/d4/da0/v8_8h_source.html#l03354)
+- [`TryCatch` class reference](https://v8docs.nodesource.com/node-0.8/d4/dc6/classv8_1_1_try_catch.html)
+- [Chromium wrapper of the `TryCatch` class](https://source.chromium.org/chromium/chromium/src/+/main:gin/try_catch.h?q=TryCatch&ss=chromium%2Fchromium%2Fsrc)
+
+Thanks @spirobel (on Discord) for sharing these with me!
