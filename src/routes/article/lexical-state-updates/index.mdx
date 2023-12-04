@@ -581,6 +581,10 @@ export function readEditorState<V>(
 }
 ```
 
+> I simplified this snippet to make it easier to follow, the original function uses a different pattern. I wrote about it:
+>
+> [Try, return, finally: a curious JavaScript pattern](/article/try-return-finally)
+
 # Commit scheduling and batching
 
 The commit phase of an update (`commitPendingUpdates`) is [scheduled in a microtask](https://github.com/facebook/lexical/blob/a0d5e95ec0371dae915b5c000e2bc68f029644d3/packages/lexical/src/LexicalUpdates.ts#L950) by default, meaning that it will only happen after all other synchronous code has finished executing.

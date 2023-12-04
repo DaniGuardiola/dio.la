@@ -39,7 +39,7 @@ function doSomething() {
 
 If you do this, `someOtherLogic` will never be called, because the function exits after the `return` statement. This is called "dead code", and some tools will even automatically remove it for you.
 
-A common way to work around this is to store the output value to be able to return it afterwards.
+A common way to work around this is to store the output value to be able to return it afterward.
 
 ```ts twoslash
 declare function getOutputValue(): "output value";
@@ -126,9 +126,11 @@ export function readEditorState<V>(
 }
 ```
 
+> If you're curious, I wrote about this and more in my [Lexical state updates](/article/lexical-state-updates) article.
+
 ---
 
-Is this a good idea? I don't know. It's definitely clever, but it can also be a bit surprising.
+Is this a good idea? I don't know. It's clever, definitely, but it can also be a bit surprising.
 
 # Bonus: `return` in `finally`
 
@@ -154,11 +156,11 @@ Stay weird, JavaScript.
 
 ---
 
-PD: here are a some related places in the V8 and Chromium codebases.
+PD: here are some related places in the V8 and Chromium codebases.
 
-- [A test for `return` in `finally`](https://source.chromium.org/chromium/chromium/src/+/main:v8/test/message/try-finally-return-in-finally.jsw)
+- [A test for `return` in `finally`](https://source.chromium.org/chromium/chromium/src/+/main:v8/test/message/try-finally-return-in-finally.js)
 - [`TryCatch` class headers](https://v8docs.nodesource.com/node-0.8/d4/da0/v8_8h_source.html#l03354)
 - [`TryCatch` class reference](https://v8docs.nodesource.com/node-0.8/d4/dc6/classv8_1_1_try_catch.html)
 - [Chromium wrapper of the `TryCatch` class](https://source.chromium.org/chromium/chromium/src/+/main:gin/try_catch.h?q=TryCatch&ss=chromium%2Fchromium%2Fsrc)
 
-Thanks @spirobel (on Discord) for sharing these with me!
+Thank you @spirobel (on Discord) for sharing these with me!
