@@ -16,6 +16,7 @@ import transparentLogo from "./img/transparent-logo.png";
 import { Link } from "./shared";
 import incubator from "./video/incubator.mp4";
 import timedoser2 from "./video/timedoser-2.mp4";
+import timedoserSneakPeek from "./video/timedoser-sneak-peek.mp4";
 
 type CareerEntry = {
   logo?: string;
@@ -23,6 +24,8 @@ type CareerEntry = {
   at: string;
   from: string;
   to?: string;
+  duration?: string;
+  stack?: string[];
   description: JSX.Element;
   details?: JSX.Element;
 };
@@ -32,6 +35,8 @@ export const CAREER = (): CareerEntry[] => [
     role: "Personal project",
     at: "TimeDoser 1.0",
     from: "2013",
+    duration: "1 year",
+    stack: ["JavaScript", "HTML", "CSS", "Chrome platform"],
     description: (
       <>
         <p>A time-tracking app for Chrome.</p>
@@ -59,7 +64,7 @@ export const CAREER = (): CareerEntry[] => [
               <img
                 class="min-w-0"
                 src={timedoserDesktop}
-                alt="TimeDoser running in a desktop"
+                alt="TimeDoser running on a desktop"
               />
               <img
                 class="min-w-0"
@@ -77,10 +82,12 @@ export const CAREER = (): CareerEntry[] => [
   },
   {
     logo: dataTrendsLogo,
-    role: "Frontend",
+    role: "Frontend engineer",
     at: "DataTrends",
     from: "September 2014",
     to: "September 2015",
+    duration: "1 year",
+    stack: ["JavaScript", "PHP", "Laravel", "D3"],
     description: (
       <>
         <p>DataTrends was a B2B big data company at the time.</p>
@@ -117,9 +124,11 @@ export const CAREER = (): CareerEntry[] => [
   },
   {
     at: "Limitless Project",
-    role: "Founder",
+    role: "Founder, designer and engineer",
     from: "October 2015",
     to: "February 2016",
+    duration: "5 months",
+    stack: ["JavaScript", "Apache Cordova", "PHP", "Laravel", "Pencil"],
     description: (
       <>
         <p>
@@ -161,10 +170,12 @@ export const CAREER = (): CareerEntry[] => [
   },
   {
     logo: milingualLogo,
-    role: "Full-stack",
+    role: "Full-stack engineer",
     at: "Milingual",
     from: "November 2015",
-    to: "January 2016",
+    to: "October 2016",
+    duration: "1 year (part-time)",
+    stack: ["JavaScript", "Python", "CodeIgniter", "Django"],
     description: (
       <>
         <p>
@@ -185,6 +196,8 @@ export const CAREER = (): CareerEntry[] => [
     at: "TimeDoser 2.0",
     from: "February 2016",
     to: "April 2016",
+    duration: "3 months",
+    stack: ["JavaScript", "Polymer", "Web Components", "Chrome platform"],
     description: (
       <>
         <p>
@@ -214,10 +227,12 @@ export const CAREER = (): CareerEntry[] => [
   },
   {
     logo: transparentLogo,
-    role: "Backend",
+    role: "Backend/data engineer",
     at: "Transparent Intelligence",
     from: "July 2016",
-    to: "July 2017",
+    to: "August 2017",
+    duration: "1 year and 2 months",
+    stack: ["JavaScript", "Node.js", "MongoDB", "Redis"],
     description: (
       <>
         <p>
@@ -241,6 +256,8 @@ export const CAREER = (): CareerEntry[] => [
     at: "TimeDoser 3.0-alpha (abandoned)",
     from: "July 2017",
     to: "November 2017",
+    duration: "5 months",
+    stack: ["JavaScript", "React", "Redux", "MobX", "Electron"],
     description: (
       <>
         <p>
@@ -262,9 +279,11 @@ export const CAREER = (): CareerEntry[] => [
   {
     logo: horbitoLogo,
     at: "Horbito",
-    role: "Backend",
+    role: "Backend engineer",
     from: "November 2017",
     to: "April 2018",
+    duration: "6 months",
+    stack: ["TypeScript", "Node.js", "MongoDB", "Redis", "Docker", "AWS"],
     description: (
       <>
         <p>
@@ -276,7 +295,7 @@ export const CAREER = (): CareerEntry[] => [
         <List
           items={[
             "Reduced technical debt and modernized the platform's backend.",
-            "Rebuilt part of the dev/sysops, including CI, container orchestration, automated QA, a CLI tool that automated most tasks for developers, a private NPM registry, and more.",
+            "Rebuilt part of the dev/sysops setup, including CI, container orchestration, automated QA, a CLI tool that automated most tasks for developers, a private NPM registry, and more.",
             "Audited the security and improved it by implementing a Vault (Hashicorp) based system in the AWS platform for production secrets, creating strict networking policies (like VPCs), and more.",
             "Helped improve code quality by introducing QA tooling, good practices and project templates, and giving weekly coding talks to employees.",
           ]}
@@ -289,33 +308,43 @@ export const CAREER = (): CareerEntry[] => [
     at: "Coinwallet",
     from: "May 2018",
     to: "September 2018",
+    duration: "5 months",
+    stack: [
+      "TypeScript",
+      "React Native",
+      "Bitcoin",
+      "Blockchain",
+      "Cryptography",
+    ],
     description: (
       <>
         <p>
-          Coinwallet was a non-profit project that I started, with the aim of
-          building a Bitcoin lightweight wallet in React Native.
+          Coinwallet was a Bitcoin wallet phone app that I built as a personal
+          non-profit project.
         </p>
         <p>
-          The ultimate goal was to use it with a Bitcoin-based fork called
-          Faircoin, a currency that was intended for fair trade and circular
-          economy. The fork would have been called Fairwallet.
+          The goal (besides learning TypeScript, React Native, and blockchain
+          tech) was to use it with Faircoin, a Bitcoin-like currency focused on
+          fair trade and circular economy. The fork would have been called
+          Fairwallet.
         </p>
         <p>
-          The project was ultimately abandoned because there were controversies
-          in the Faircoin community that I wanted to distance myself from. The
-          Bitcoin wallet had reached a functional state by then, but was not
-          released because it would've been irresponsible to do without proper
-          security audits.
+          The project was eventually abandoned due to unfortunate controversies
+          in the Faircoin community, which I chose to distance myself from.
+          Although the app was functional, I didn't release it due to the lack
+          of necessary security audits and future maintenance.
         </p>
       </>
     ),
   },
   {
     logo: airbusLogo,
-    role: "Blockchain developer and architect",
+    role: "Tech lead and lockchain architect/engineer",
     at: "Airbus (Sopra Steria)",
-    from: "December 2018",
-    to: "December 2020",
+    from: "November 2018",
+    to: "January 2020",
+    duration: "2 years and 2 months",
+    stack: ["Python", "Blockchain", "Bitcoin Script", "Cryptography"],
     description: (
       <>
         <p>
@@ -324,21 +353,36 @@ export const CAREER = (): CareerEntry[] => [
           helped shape and build a complete blockchain solution along with a
           talented team of developers.
         </p>
-        <p>I led the development team, which consisted of 8 people.</p>
         <p>
-          Unfortunately, the project was canceled after 2 years due to
-          circumstances related to the Covid-19 pandemic, which affected Airbus
-          and their investments in R+D.
+          I led the development team, which consisted of 8 people. The project,
+          called Vincoli, found its first real-world application as a private
+          network used by European air forces to track aircraft maintenance,
+          parts, and repairs between multiple untrusted parties. The Royal
+          Netherlands Air Force was the first to adopt it during the beta phase.
+        </p>
+        <p>
+          It was very successful, but it was unfortunately canceled after 2
+          years due to the COVID-19 pandemic, which heavily affected Airbus and
+          its investments in R+D at the time.
         </p>
       </>
     ),
   },
   {
     logo: guideLogo,
-    role: "Frontend and design system",
+    role: "Full-stack/design system engineer",
     at: "Guide",
     from: "May 2021",
     to: "February 2023",
+    duration: "1 year and 10 months",
+    stack: [
+      "TypeScript",
+      "React",
+      "Next.js",
+      "GraphQL",
+      "Prisma",
+      "Tailwind CSS",
+    ],
     description: (
       <>
         <p>
@@ -362,9 +406,10 @@ export const CAREER = (): CareerEntry[] => [
               </Link>{" "}
               using Slate).
             </>,
-            "Contributed core and structural UI features to the product, including the main app navigation interface (fully keyboard accessible), the page layouting system, and coordination of floating/modal elements like nested dialogs.",
-            "Pushed for better accessibility in both the product and design system, both through code and education for my teammates.",
-            "Contributed specific features to the product.",
+            "Contributed core features to the product, including the main app navigation and layout system, and coordination of floating/modal elements like nested dialogs.",
+            "Built the permissions system for the product at the API, backend and frontend levels.",
+            "Contributed other full-stack features to the product.",
+            "Pushed for better accessibility by contributing code and educating my teammates.",
           ]}
         />
       </>
@@ -372,10 +417,18 @@ export const CAREER = (): CareerEntry[] => [
   },
   {
     logo: createLogo,
-    role: "Frontend and design systems",
+    role: "Fullstack/AI/design system engineer",
     at: "Create",
     from: "May 2023",
     to: "October 2023",
+    duration: "6 months",
+    stack: [
+      "TypeScript",
+      "React",
+      "Next.js",
+      "AI agents / GPT",
+      "Tailwind CSS",
+    ],
     description: (
       <>
         <p>
@@ -407,7 +460,7 @@ export const CAREER = (): CareerEntry[] => [
               shadcn/ui.
             </>,
             "Built advanced tooling to introspect AI-generated code and provide feedback to the AI agent.",
-            "Contributed features to the product, such as AI-generated placeholder images as part of generative UI.",
+            "Contributed full-stack features to the product, such as AI-generated placeholder images as part of generative UI.",
           ]}
         />
       </>
@@ -418,7 +471,33 @@ export const CAREER = (): CareerEntry[] => [
     at: "TimeDoser 3.0",
     from: "November 2023",
     to: "Present",
-    description: "Stay tuned...",
+    duration: "(work in progress)",
+    stack: [
+      "TypeScript",
+      "Solid.js",
+      "Electron",
+      "React",
+      "XState",
+      "Ink",
+      "Tailwind CSS",
+    ],
+    description: (
+      <>
+        <p>
+          <b>Fun fact: </b>I created (and open-sourced) a version of{" "}
+          <Link href="https://github.com/DaniGuardiola/classy-ink">
+            Tailwind CSS for command line UIs
+          </Link>{" "}
+          specifically for this project.{" "}
+        </p>
+        <p>
+          Here's a sneak peek! This is the CLI version, which is secondary. The
+          desktop app is where the surprises are... 🤐
+        </p>
+        <video src={timedoserSneakPeek} autoplay muted loop controls />
+        <p class="italic">Psst! Reach out if you want to beta test 😉</p>
+      </>
+    ),
   },
 ];
 

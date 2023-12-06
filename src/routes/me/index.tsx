@@ -1,4 +1,4 @@
-import { createSignal, For } from "solid-js";
+import { createSignal, For, Show } from "solid-js";
 
 import { HeadMetadata } from "~/components/HeadMetadata";
 import { CANONICAL_DOMAIN } from "~/data/config";
@@ -19,18 +19,13 @@ function Heading() {
   );
 }
 
-type SkillProps = {
-  children: string;
-};
-
-function Skill(props: SkillProps) {
-  return <li class="list-disc list-inside">{props.children}</li>;
-}
-
 function Introduction() {
   return (
     <section aria-label="Introduction" class="flex flex-col gap-4 text-base">
-      <p>Passionate about software and user interfaces. Nerd.</p>
+      <p>
+        Passionate about software and user interfaces. TypeScript and React
+        expert.
+      </p>
       <div class="flex gap-2 flex-wrap">
         <details class="border-2 border-accent rounded p-2">
           <summary class="select-none">A brief history of me</summary>
@@ -39,18 +34,16 @@ function Introduction() {
               When I was 4, my family's rusty old computer (still running
               Windows 98) became my first machine. They probably expected me to
               play games, but I was more interested in messing with the poor
-              computer. I would routinely delete system32 files until it stopped
-              working, just to see what would happen. Not long after, I
-              discovered webpages, and I'd spend hours creating random websites
-              with the ancient{" "}
+              computer by running experiments like deleting system files until
+              it crashed. I soon discovered webpages, which I'd spend hours
+              creating with the ancient{" "}
               <Link href="https://en.wikipedia.org/wiki/Microsoft_FrontPage">
                 Microsoft FrontPage
               </Link>{" "}
               and an HTML book someone had gifted me for Christmas.
             </p>
             <p>
-              A few years later, when I was around 15, I learned how to code and
-              built my first app,{" "}
+              At 15, I learned how to code and built my first app,{" "}
               <Link href="https://chromewebstore.google.com/detail/timedoser/cmkneeaihlcdllananjlkmppnkdahdcc">
                 TimeDoser
               </Link>
@@ -67,18 +60,16 @@ function Introduction() {
               .
             </p>
             <p>
-              I soon caught the attention of a tech company, which hired me at
-              17 and kickstarted my professional career as a fulltime software
-              developer. Ever since, I've worked with companies (mostly
-              startups), built a few personal projects, and contributed to
-              open-source.
+              By 17, I had my first job at a tech company, launching my
+              professional career as a full-time software developer. Since then,
+              I've worked with companies (mostly startups), built a few personal
+              projects, and contributed to open-source.
             </p>
             <p>
-              For the past few years, I've worked with Silicon Valley startups,
-              specializing in front-end, design systems, rich text editors and
-              tooling. While I like building end products, there is something I
-              love even more: solving the complex bits (a.k.a. library code) to
-              make it simpler for others to build. I enjoy a good challenge.
+              I recent years, I've worked with Silicon Valley startups,
+              specializing in TypeScript, React, Next.js, design systems, rich
+              text editors and tooling. I love building and I never waste a
+              chance to take on ambitious tasks. I enjoy a good challenge.
             </p>
           </div>
         </details>
@@ -86,21 +77,33 @@ function Introduction() {
           <summary class="select-none">Skills and knowledge</summary>
           <div class="flex flex-col gap-8 text-base pt-4">
             <p>
-              I don't believe in listing every single technology/programming
-              language I've ever learned. As I build more stuff, the list gets
-              longer, harder to parse, and less meaningful.
+              I've worked with many technologies and stacks, but I don't think
+              listing every little thing is useful. Instead, here's a brief list
+              of the things I currently have professional expertise in:
             </p>
-            <p>
-              Instead, here's a brief list with some items I have deep knowledge
-              about. Feel free to reach out with a specific role/project for
-              more relevant details.
-            </p>
-            <ul>
-              <Skill>Web platform: HTML, CSS, web APIs</Skill>
-              <Skill>JavaScript and TypeScript (certified wizard™)</Skill>
-              <Skill>React and Solid</Skill>
-              <Skill>ASTs, tooling, compilers, code generation...</Skill>
+            <ul class="list-disc list-inside">
+              <li>Web platform: HTML, CSS, web APIs.</li>
+              <li>JavaScript and TypeScript (certified wizard™).</li>
+              <li>React and Solid.js.</li>
+              <li>Next.js, Tailwind CSS, Radix, Ariakit...</li>
+              <li>Node.js, Prisma, GraphQL, PostgreSQL...</li>
+              <li>ASTs, tooling, compilers, code generation...</li>
             </ul>
+            <p>
+              Additionally, I'm always working on side projects for fun, and I
+              try to reach outside of my comfort zone so I can learn new things.
+              Some recent examples include a Game Boy emulator built from
+              scratch in Rust, a version of{" "}
+              <Link href="https://github.com/DaniGuardiola/classy-ink">
+                Tailwind CSS for command line UIs (Classy Ink)
+              </Link>
+              , a{" "}
+              <Link href="https://chromewebstore.google.com/detail/khan-academy-completionis/moeckikflfdglgklfmmmbogemfgoahcm">
+                Khan Academy progress tracker
+              </Link>{" "}
+              browser extension, and a CSS variable inspector that uses the
+              DevTools protocols.
+            </p>
           </div>
         </details>
       </div>
@@ -153,10 +156,24 @@ function Career() {
                     <span class="font-bold">{entry.at}</span>
                     {entry.role && <span> · {entry.role}</span>}
                   </h1>
-                  <p class="text-sm text-subtle-invert font-bold uppercase">
-                    {entry.from}
-                    {entry.to && ` - ${entry.to}`}
+                  <p class="text-sm text-subtle-invert">
+                    <span class="uppercase font-bold">
+                      {entry.from}
+                      {entry.to && ` - ${entry.to}`}
+                    </span>
+                    <span>{entry.duration && ` · ${entry.duration}`}</span>
                   </p>
+                  <Show when={entry.stack?.length}>
+                    <div class="flex gap-2 flex-wrap mt-2">
+                      <For each={entry.stack}>
+                        {(tech) => (
+                          <span class="text-sm text-subtle-white-invert bg-accent text-white rounded px-2">
+                            {tech}
+                          </span>
+                        )}
+                      </For>
+                    </div>
+                  </Show>
                 </div>
                 <div class="flex flex-col gap-4">{entry.description}</div>
               </article>
@@ -172,17 +189,11 @@ function Notes() {
   return (
     <section class="flex flex-col gap-2">
       <h1 class="text-2xl font-bold text-accent">Notes</h1>
-      <h2 class="font-bold text-dark-invert mt-6">Languages</h2>
-      <p>
-        I am a native Spanish speaker, and proficient at English, having worked
-        with American companies exclusively for the past three years. I also
-        write and tweet in English.
-      </p>
       <h2 class="font-bold text-dark-invert mt-6">Remote work</h2>
       <p>
         I've spent about half of my career working remotely, and I love it. I've
         gotten good at working autonomously, managing my time, and communicating
-        asynchronously - even across multiple timezones.
+        asynchronously - even across multiple time zones.
       </p>
       <h2 class="font-bold text-dark-invert mt-6">Freelance work</h2>
       <p>
@@ -195,7 +206,7 @@ function Notes() {
         , some server-scripting tasks, and web-scraping tools.
       </p>
       <h2 class="font-bold text-dark-invert mt-6">
-        Free and open source software
+        Free and open-source software
       </h2>
       <p>
         I am an advocate for free (as in freedom) software, and I try to
@@ -204,6 +215,12 @@ function Notes() {
         <Link href="https://opencollective.com/ariakit">Ariakit</Link> project:
         $600 donated personally to date, and $1500 donated by my previous
         employer at my request.
+      </p>
+      <h2 class="font-bold text-dark-invert mt-6">Languages</h2>
+      <p>
+        I am proficient in English, having worked with American companies
+        exclusively for the past three years. Most of my writing (and tweeting)
+        is done in English too. I am also a native Spanish speaker
       </p>
       <h2 class="font-bold text-dark-invert mt-6">Fun facts</h2>
       <ul class="list-disc list-inside space-y-2">
@@ -229,7 +246,7 @@ function Notes() {
           domain redirects to this page. It might seem that I bought it just for
           the memes, but it is actually part of an exploit I've used in
           vulnerable job search websites just so that I could avoid creating a
-          Linkedin account.{" "}
+          LinkedIn account.{" "}
           <Link href="https://dio.la/article/unlinked">
             Here's the full story
           </Link>
@@ -240,26 +257,37 @@ function Notes() {
   );
 }
 
+function BackgroundTexture() {
+  return (
+    <div class="absolute -z-10 top-0 w-full h-[11rem] sm:h-[16rem] bg-[radial-gradient(circle_at_1px_1px,var(--subtle-invert)_1px,transparent_0)] bg-[length:30px_30px]">
+      <div class="absolute w-full h-full bg-gradient-to-b from-transparent to-gray-100 dark:to-neutral-950" />
+    </div>
+  );
+}
+
 export default function Me() {
   return (
-    <div class="main-container px-4 py-16 sm:py-32 flex flex-col gap-8 text-dark-invert">
-      <HeadMetadata
-        url={`https://${CANONICAL_DOMAIN}/me`}
-        title={"Not Dani Guardiola's Linkedin"}
-        description={"About me & career"}
-        image="/open-graph/hacking-linkedin.png"
-        type="website"
-      />
-      <Heading />
-      <Introduction />
-      <Career />
-      <Notes />
-      <button
-        class="mt-16 self-start text-subtle-invert underline hover:decoration-2 hover:text-dark-invert"
-        onClick={toggleTheme}
-      >
-        Switch theme
-      </button>
-    </div>
+    <>
+      <BackgroundTexture />
+      <div class="main-container px-4 py-16 sm:py-32 flex flex-col gap-8 text-dark-invert">
+        <HeadMetadata
+          url={`https://${CANONICAL_DOMAIN}/me`}
+          title={"Not Dani Guardiola's Linkedin"}
+          description={"About me & career"}
+          image="/open-graph/hacking-linkedin.png"
+          type="website"
+        />
+        <Heading />
+        <Introduction />
+        <Career />
+        <Notes />
+        <button
+          class="mt-16 self-start text-subtle-invert underline hover:decoration-2 hover:text-dark-invert"
+          onClick={toggleTheme}
+        >
+          Switch theme
+        </button>
+      </div>
+    </>
   );
 }
