@@ -7,8 +7,8 @@ import { SkipLink, SkipLinks } from "~/components/SkipLinks";
 import { CANONICAL_DOMAIN } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
 
-const TITLE = "Dani Guardiola (me!)";
-const DESCRIPTION = "Software engineer, math and physics student.";
+const TITLE = "About Dani Guardiola";
+const DESCRIPTION = "Software engineer, math and physics enthusiast.";
 const PATHNAME = "/about";
 const IMAGE_URL: string | undefined = "/img/me.webp";
 
