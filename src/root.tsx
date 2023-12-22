@@ -157,7 +157,7 @@ function DraftsNotice() {
   );
 }
 
-const FULL_PAGE_PATHS = ["/me"];
+const FULL_PAGE_PATHS = ["/me", "/me/"];
 
 export default function Root() {
   setUpPageScroll();

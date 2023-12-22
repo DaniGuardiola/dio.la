@@ -10,6 +10,12 @@ export function isDarkTheme() {
   // light theme if the user wants it" because the default for
   // "prefers-color-scheme" is "light" and "no-preference" was
   // removed from the spec, so this is the only way ¯\_(ツ)_/¯
+
+  // previous version:
+
+  // if (typeof window === "undefined") return false;
+  // if (localStorage.theme === "dark") return true;
+  // if (localStorage.theme === "light") return false;
   // return (
   //   !("theme" in localStorage) &&
   //   window.matchMedia("(prefers-color-scheme: dark)").matches

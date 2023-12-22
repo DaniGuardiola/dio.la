@@ -26,20 +26,53 @@ type CareerEntry = {
   to?: string;
   duration?: string;
   stack?: string[];
-  description: JSX.Element;
-  details?: JSX.Element;
+  description: () => JSX.Element;
+  shortDescription?: () => JSX.Element;
 };
 
-export const CAREER = (): CareerEntry[] => [
+export const CAREER: CareerEntry[] = [
   {
     role: "Personal project",
     at: "TimeDoser 1.0",
     from: "2013",
     duration: "1 year",
-    stack: ["JavaScript", "HTML", "CSS", "Chrome platform"],
-    description: (
+    stack: ["JavaScript", "HTML", "CSS", "Chrome API"],
+    shortDescription: () => (
+      <>
+        <p>
+          At 15, I built a time-tracking{" "}
+          <Link href="https://chromewebstore.google.com/detail/cmkneeaihlcdllananjlkmppnkdahdcc">
+            Chrome app
+          </Link>
+          .
+        </p>
+        <p>
+          59k+ installs, 23k+ <span title="weekly active users">WAU</span>,{" "}
+          <Link href="https://chromewebstore.google.com/detail/timedoser/cmkneeaihlcdllananjlkmppnkdahdcc/reviews">
+            high user rating
+          </Link>
+          .
+        </p>
+        <p>
+          Featured in{" "}
+          <Link href="https://lifehacker.com/timedoser-is-a-pomodoro-timer-for-chrome-1639626091">
+            Lifehacker
+          </Link>{" "}
+          and{" "}
+          <Link href="https://www.omgchrome.com/pomodoro-app-for-google-chrome/">
+            OMG! Chrome!
+          </Link>
+          .
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>A time-tracking app for Chrome.</p>
+        <p>
+          I built it when I was 15, and it reached over 59k+ installs, 23k+
+          weekly active users, and a high user rating.
+        </p>
         <p>
           Inspired by{" "}
           <Link href="https://en.wikipedia.org/wiki/Pomodoro_Technique">
@@ -82,13 +115,25 @@ export const CAREER = (): CareerEntry[] => [
   },
   {
     logo: dataTrendsLogo,
-    role: "Frontend engineer",
+    role: "Full-stack",
     at: "DataTrends",
     from: "September 2014",
     to: "September 2015",
     duration: "1 year",
     stack: ["JavaScript", "PHP", "Laravel", "D3"],
-    description: (
+    shortDescription: () => (
+      <>
+        <p>
+          ML classification tool,{" "}
+          <Link href="https://web.archive.org/web/20161116104500/https://www.datatrends.es/datafeelings/">
+            Data Feelings
+          </Link>
+          , and <Link href="https://twitter.com/paperkit">Paperkit</Link> (UI
+          framework).
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>DataTrends was a B2B big data company at the time.</p>
         <List
@@ -128,8 +173,22 @@ export const CAREER = (): CareerEntry[] => [
     from: "October 2015",
     to: "February 2016",
     duration: "5 months",
-    stack: ["JavaScript", "Apache Cordova", "PHP", "Laravel", "Pencil"],
-    description: (
+    stack: ["JavaScript", "Apache Cordova", "PHP", "Laravel"],
+    shortDescription: () => (
+      <>
+        <p>
+          Urban sports (e.g. parkour){" "}
+          <Link href="https://daniguardiola.github.io/pencil-material-template/">
+            learning app
+          </Link>
+          .
+        </p>
+        <p>
+          Built <Link href={incubator}>Incubator</Link> to crowdsource content.
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>
           A friend and I partnered to work on an app for learning urban sports
@@ -170,13 +229,21 @@ export const CAREER = (): CareerEntry[] => [
   },
   {
     logo: milingualLogo,
-    role: "Full-stack engineer",
+    role: "Full-stack",
     at: "Milingual",
     from: "November 2015",
     to: "October 2016",
     duration: "1 year (part-time)",
     stack: ["JavaScript", "Python", "CodeIgniter", "Django"],
-    description: (
+    shortDescription: () => (
+      <>
+        <p>
+          Maintained legacy platform, built new platform, prototyped mobile app
+          UI.
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>
           Milingual was a platform for language exchange groups with teachers.
@@ -197,8 +264,19 @@ export const CAREER = (): CareerEntry[] => [
     from: "February 2016",
     to: "April 2016",
     duration: "3 months",
-    stack: ["JavaScript", "Polymer", "Web Components", "Chrome platform"],
-    description: (
+    stack: ["JavaScript", "Polymer", "Web Components"],
+    shortDescription: () => (
+      <>
+        <p>
+          Full revamp of{" "}
+          <Link href="https://chromewebstore.google.com/detail/cmkneeaihlcdllananjlkmppnkdahdcc">
+            TimeDoser
+          </Link>
+          .
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>
           A full redesign and rewrite of{" "}
@@ -233,7 +311,14 @@ export const CAREER = (): CareerEntry[] => [
     to: "August 2017",
     duration: "1 year and 2 months",
     stack: ["JavaScript", "Node.js", "MongoDB", "Redis"],
-    description: (
+    shortDescription: () => (
+      <>
+        <p>
+          Reverse-engineering, web scraping, data processing and visualization.
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>
           <Link href="https://web.archive.org/web/20210813095727/https://seetransparent.com/en/">
@@ -253,12 +338,23 @@ export const CAREER = (): CareerEntry[] => [
     ),
   },
   {
-    at: "TimeDoser 3.0-alpha (abandoned)",
+    at: "TimeDoser 3.0 alpha",
     from: "July 2017",
     to: "November 2017",
     duration: "5 months",
     stack: ["JavaScript", "React", "Redux", "MobX", "Electron"],
-    description: (
+    shortDescription: () => (
+      <>
+        <p>
+          Radical redesign of{" "}
+          <Link href="https://chromewebstore.google.com/detail/cmkneeaihlcdllananjlkmppnkdahdcc">
+            TimeDoser
+          </Link>
+          , built with the goal of learning new technologies.
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>
           A new iteration of TimeDoser, featuring a radically new design and
@@ -284,7 +380,15 @@ export const CAREER = (): CareerEntry[] => [
     to: "April 2018",
     duration: "6 months",
     stack: ["TypeScript", "Node.js", "MongoDB", "Redis", "Docker", "AWS"],
-    description: (
+    shortDescription: () => (
+      <>
+        <p>
+          Reduced technical debt, improved dev/sysops, security and code
+          quality.
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>
           <Link href="https://web.archive.org/web/20180829000619/https://www.horbito.com/">
@@ -309,14 +413,15 @@ export const CAREER = (): CareerEntry[] => [
     from: "May 2018",
     to: "September 2018",
     duration: "5 months",
-    stack: [
-      "TypeScript",
-      "React Native",
-      "Bitcoin",
-      "Blockchain",
-      "Cryptography",
-    ],
-    description: (
+    stack: ["TypeScript", "React Native", "Blockchain", "Cryptography"],
+    shortDescription: () => (
+      <>
+        <p>
+          Bitcoin wallet phone app. Built for the Faircoin non-profit project.
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>
           Coinwallet was a Bitcoin wallet phone app that I built as a personal
@@ -339,13 +444,25 @@ export const CAREER = (): CareerEntry[] => [
   },
   {
     logo: airbusLogo,
-    role: "Tech lead and lockchain architect/engineer",
+    role: "Tech lead and blockchain architect/engineer",
     at: "Airbus (Sopra Steria)",
     from: "November 2018",
     to: "January 2020",
     duration: "2 years and 2 months",
     stack: ["Python", "Blockchain", "Bitcoin Script", "Cryptography"],
-    description: (
+    shortDescription: () => (
+      <>
+        <p>
+          Led a team of 8 to build a novel smart-contract engine and private
+          blockchain solution for Airbus Defence and Space.
+        </p>
+        <p>
+          Used by European air forces (including the Royal Netherlands Air
+          Force) to track aircraft logistics. .
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>
           At Sopra, I worked on a blockchain project for Airbus Defence and
@@ -383,7 +500,23 @@ export const CAREER = (): CareerEntry[] => [
       "Prisma",
       "Tailwind CSS",
     ],
-    description: (
+    shortDescription: () => (
+      <>
+        <p>
+          Built <Link href="https://www.guide.co/">Guide</Link>'s{" "}
+          <Link href="https://atlas.guide.co/">design system</Link>, Notion-like{" "}
+          <Link href="https://atlas.guide.co/?path=/story/components-contenteditor">
+            rich text editor
+          </Link>{" "}
+          (and{" "}
+          <Link href="https://atlas.guide.co/?path=/story/components-texteditor">
+            a previous version
+          </Link>
+          ), permissions system, and multiple product features.
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>
           <Link href="https://www.guide.co/">Guide</Link> is an American startup
@@ -429,7 +562,23 @@ export const CAREER = (): CareerEntry[] => [
       "AI agents / GPT",
       "Tailwind CSS",
     ],
-    description: (
+    shortDescription: () => (
+      <>
+        <p>
+          Built{" "}
+          <Link href="https://github.com/Create-Inc/archetype">
+            a "design system system"
+          </Link>
+          , a{" "}
+          <Link href="https://archetype-ui-storybook.created.app/">
+            design system starter
+          </Link>{" "}
+          (shadcn/ui inspired), advanced tooling/features for AI agents, and
+          multiple product features.
+        </p>
+      </>
+    ),
+    description: () => (
       <>
         <p>
           <Link href="https://www.create.xyz/">Create</Link> is a San Francisco
@@ -481,21 +630,11 @@ export const CAREER = (): CareerEntry[] => [
       "Ink",
       "Tailwind CSS",
     ],
-    description: (
+    description: () => (
       <>
         <p>
-          <b>Fun fact: </b>I created (and open-sourced) a version of{" "}
-          <Link href="https://github.com/DaniGuardiola/classy-ink">
-            Tailwind CSS for command line UIs
-          </Link>{" "}
-          specifically for this project.{" "}
+          Work in progress! <Link href={timedoserSneakPeek}>(sneak peek)</Link>
         </p>
-        <p>
-          Here's a sneak peek! This is the CLI version, which is secondary. The
-          desktop app is where the surprises are... 🤐
-        </p>
-        <video src={timedoserSneakPeek} autoplay muted loop controls />
-        <p class="italic">Psst! Reach out if you want to beta test 😉</p>
       </>
     ),
   },

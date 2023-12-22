@@ -19,11 +19,14 @@ type HeadMetadataProps = {
   type?: "website" | "article";
   url?: string;
   image?: string;
+  titleSuffix?: boolean;
 };
 
 export function HeadMetadata(props: HeadMetadataProps) {
   const title = () =>
-    `${props.title ? `${props.title} | ` : ""}${BASE_PAGE_TITLE}`;
+    props.titleSuffix === false
+      ? props.title
+      : `${props.title ? `${props.title} | ` : ""}${BASE_PAGE_TITLE}`;
   return (
     <>
       <Title>{title()}</Title>

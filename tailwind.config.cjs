@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const plugin = require("tailwindcss/plugin");
+const {
+  tailwindPrintVariantPlugin,
+} = require("./src/lib/tailwind-print-variant");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -35,6 +38,7 @@ module.exports = {
     },
   },
   plugins: [
+    tailwindPrintVariantPlugin,
     plugin(function ({ addVariant }) {
       addVariant("exclusive-hover", "&:hover:not(:has(.hover-exclude:hover))");
       addVariant("targeted-hover", "&:has(.hover-target:hover)");
