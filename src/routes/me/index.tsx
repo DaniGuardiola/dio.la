@@ -32,7 +32,7 @@ function setRecentFirst(value: boolean) {
 function Heading() {
   return (
     <div>
-      <div class="flex items-baseline justify-between">
+      <div class="flex flex-col-reverse md:flex-row items-baseline justify-between">
         <h1 class="font-bold text-5xl">Dani Guardiola</h1>
         <span class="text-subtle-invert text-sm">
           <span class="not-print:hidden">
@@ -230,7 +230,7 @@ function Introduction() {
 
 function CareerTldr() {
   return (
-    <section class="space-y-8 text-dark-invert columns-2 gap-10">
+    <section class="space-y-8 text-dark-invert md:columns-2 gap-10">
       <div class="flex items-baseline gap-4">
         <h1 class="text-2xl font-bold text-accent">Career</h1>
         <span class="text-subtle-invert text-sm print:hidden">
