@@ -24,9 +24,9 @@ export type ArticleMetadata = {
 // ----
 
 const highlightsIds: ArticleId[] = [
+  "the-open-closed-component-part-1",
   "lexical-state-updates",
   "colorful-avatars",
-  "use-image-is-loaded",
   "unlinked",
 ];
 
