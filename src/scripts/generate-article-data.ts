@@ -159,7 +159,10 @@ function generateRssItem({ title, id, description, date }: ArticleMetadata) {
 }
 
 async function generateRSS(articleMetadataList: ArticleMetadata[]) {
-  const items = articleMetadataList.map(generateRssItem).join("\n");
+  const items = articleMetadataList
+    .filter(({ draft }) => !draft)
+    .map(generateRssItem)
+    .join("\n");
   const file = `${RSS_HEADER}\n${items}\n${RSS_FOOTER}`;
   await Bun.write(RSS_FILE_PATH, file);
 }
