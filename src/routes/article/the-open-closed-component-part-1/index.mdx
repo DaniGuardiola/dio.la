@@ -1,6 +1,5 @@
 ---
-draft: true
-date: 2000/1/1
+date: 2024/2/22
 title: The open/closed component
 description: A powerful pattern to build extensible UI components that do more with less.
 topics:
@@ -56,7 +55,7 @@ function Button({ variant, onClick }) {
 
 That works, but further down the line, you'll probably need other `<button />` props, such as `disabled`, `type`, `form`, etc.
 
-It makes sense then to just collect the "custom" props like `variant` (e.g. with destructuring), and pass the rest straight down to the `<button />` element:
+It then makes sense to just collect the "custom" props like `variant` (e.g. with destructuring), and pass the rest straight down to the `<button />` element:
 
 ```jsx
 function Button({ variant, ...props }: ButtonProps) {
@@ -76,7 +75,7 @@ function Button({ variant, ...props }: ButtonProps) {
 }
 ```
 
-However, that doesn't fix anything, it simply switches the problem around. Now, the variant class will take precedence, and the `className` prop will be ignored.
+However, that doesn't fix anything, it simply switches the problem around. Now, the variant class will take precedence, and the incoming `className` prop will be ignored.
 
 ## The solution
 
@@ -136,9 +135,9 @@ So it's not just that you **can't** update the source code, it's that you **don'
 
 Native HTML elements are good examples of this. You can't modify how they work directly, but you can extend them to fit your needs by adding attributes and event listeners. When you build a component, you're essentially extending a native element (even on non-web platforms like React Native!).
 
-This pattern is really neat because it allows you to create components that are **also extendable**, on top of native ones. If you're building a custom button and you apply this pattern, you're allowing users to interface both with your custom features (e.g. `variant`) and with the native element ones (e.g. `onClick`).
+This pattern is really neat because it allows you to create components that are **also extensible**, on top of native ones. If you're building a custom button and you apply this pattern, you're allowing users to interface both with your custom features (e.g. `variant`) and with the ones provided by the native element (e.g. `onClick`).
 
-Even better, you can create other custom components that extend your custom components, creating a "cascade" of extendability.
+Even better, you can create additional custom components that extend your custom components, creating a "cascade" of extensibility.
 
 > If this sounds familiar, that's because it's just good old [object-oriented programming](https://en.wikipedia.org/wiki/Object-oriented_programming)! The [open/closed principle](https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle) is an OOP concept.
 
