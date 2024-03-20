@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import matter from "@gr2m/gray-matter";
 import { ESLint } from "eslint";
-import matter from "gray-matter";
 import prettier from "prettier";
 
 import type { ArticleMetadata } from "~/data/articles";

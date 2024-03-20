@@ -33,7 +33,7 @@
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "eslint-plugin-solid": "^0.13.0",
-    "gray-matter": "^4.0.3",
+    "@gr2m/gray-matter": "^4.0.3-with-pr-137",
     "katex": "^0.16.9",
     "lexical": "^0.12.2",
     "postcss": "^8.4.31",
