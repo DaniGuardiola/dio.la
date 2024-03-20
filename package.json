@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit --skipLibCheck",
     "lint": "eslint --ignore-path .gitignore .",
     "check": "bun lint && bun typecheck",
-    "build": "bun gen && solid-start build",
+    "build": "NODE_ENV=production bun gen && solid-start build",
     "start": "solid-start start",
     "prod": "bun build && bun start"
   },

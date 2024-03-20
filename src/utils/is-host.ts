@@ -15,14 +15,14 @@ export function isLocalhost() {
     )
       console.log("isLocalhost failed client side");
   } else {
-    const { NODE_ENV, VITE_VERCEL_ENV } = process.env;
+    const { NODE_ENV, VERCEL_ENV } = process.env;
     if (
       NODE_ENV === "development" ||
-      (VITE_VERCEL_ENV && VITE_VERCEL_ENV === "development")
+      (VERCEL_ENV && VERCEL_ENV === "development")
     )
       console.log("isLocalhost failed server side", {
         NODE_ENV,
-        VITE_VERCEL_ENV,
+        VERCEL_ENV,
       });
   }
 
@@ -31,9 +31,8 @@ export function isLocalhost() {
       document.location.host.startsWith(host)
     );
 
-  const { NODE_ENV, VITE_VERCEL_ENV } = process.env;
+  const { NODE_ENV, VERCEL_ENV } = process.env;
   return Boolean(
-    NODE_ENV === "development" ||
-      (VITE_VERCEL_ENV && VITE_VERCEL_ENV === "development")
+    NODE_ENV === "development" || (VERCEL_ENV && VERCEL_ENV === "development")
   );
 }
