@@ -86,8 +86,6 @@ async function getArticleMetadataList() {
     if (aTime !== bTime) return bTime - aTime;
     return a.title.localeCompare(b.title);
   });
-  console.log("isLocalhost", isLocalhost());
-  console.log("isDrafts", isDrafts());
   return isLocalhost() || isDrafts()
     ? metadataList
     : metadataList.filter((metadata) => !metadata.draft);

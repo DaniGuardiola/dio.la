@@ -7,6 +7,25 @@ export function isDrafts() {
 }
 
 export function isLocalhost() {
+  if (typeof document !== "undefined") {
+    if (
+      ["localhost:", "127.0.0.1:"].some((host) =>
+        document.location.host.startsWith(host)
+      )
+    )
+      console.log("isLocalhost failed client side");
+  } else {
+    const { NODE_ENV, VITE_VERCEL_ENV } = process.env;
+    if (
+      NODE_ENV === "development" ||
+      (VITE_VERCEL_ENV && VITE_VERCEL_ENV === "development")
+    )
+      console.log("isLocalhost failed server side", {
+        NODE_ENV,
+        VITE_VERCEL_ENV,
+      });
+  }
+
   if (typeof document !== "undefined")
     return ["localhost:", "127.0.0.1:"].some((host) =>
       document.location.host.startsWith(host)
