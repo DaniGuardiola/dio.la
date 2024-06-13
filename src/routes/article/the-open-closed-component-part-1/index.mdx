@@ -246,13 +246,13 @@ A way I like to think about this is that you're taking a native element or compo
 
 ## When inheritance enables composition
 
-In component-oriented UI frameworks like React and Solid.js, a recommended best practice is to [use composition instead of inheritance](<(https://legacy.reactjs.org/docs/composition-vs-inheritance.html)>).
+In component-oriented UI frameworks like React and Solid.js, a recommended best practice is to [use composition instead of inheritance](https://legacy.reactjs.org/docs/composition-vs-inheritance.html).
 
 Open/closed components seem to contradict this advice: they inherit and extend the behavior and API of a different element or component. Ironically though, building components this way enables **advanced composition patterns**.
 
 Notably, it enables **the "render as" pattern**, which consists of rendering a component as a different element or component. Many UI component libraries support this, though the exact implementation varies.
 
-The ([infamous](https://twitter.com/jjenzz/status/1423766700885954562)) `as` prop is probably the most known, but for the following examples, I'll use [the `render` prop from Ariakit](https://ariakit.org/composition).
+The ([infamous](https://twitter.com/jjenzz/status/1423766700885954562)) `as` prop is probably the most known, but for the following examples, I'll use [the `render` prop from Ariakit](https://ariakit.org/guide/composition).
 
 ```jsx
 <MyButton render={<a href="https://dio.la/" />} />
