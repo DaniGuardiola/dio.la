@@ -1,5 +1,5 @@
 ---
-date: 2024/2/22
+date: 2024/6/13
 title: The open/closed component
 description: A powerful pattern to build extensible UI components that do more with less.
 topics:
@@ -14,19 +14,17 @@ import { TheOpenClosedComponentIndex } from "~/components/ArticleSeriesIndex/The
 
 <TheOpenClosedComponentIndex />
 
-In this article, I'm going to talk about a pattern for building UI components in frameworks like React or Solid. A pattern that I've come to understand as a **must-have** for almost every single component I build.
+There is a pattern that I've come to understand as a **must-have** for many of the UI components I build. I would dare to say it is one of the most powerful ideas I've ever encountered as a frontend developer.
 
-I'm talking about the **open/closed** pattern, as coined by [Diego Haz](https://haz.dev/) (author of [Ariakit](https://ariakit.org/)), who introduced this concept in [this Twitter thread](https://twitter.com/diegohaz/status/1305450112890662914).
+I'm talking about "the **open/closed** component", as coined by [Diego Haz](https://haz.dev/) (author of [Ariakit](https://ariakit.org/)), who introduced this concept in [this Twitter thread](https://twitter.com/diegohaz/status/1305450112890662914).
 
-Note that developers have been doing some of these things for a long time, but it's great to have a name and some specific guidelines for it.
+This pattern has been silently implemented by many for a long time, and thanks to Diego, we now have a name for it. In this series, I'll explain what it is, why it's so powerful, and how to build components that follow this pattern.
 
-Let's start with a common example.
-
-# A props situation
+# A Game of Props
 
 ## The problem
 
-When building and using a component, there is a situation that happens very often. Consider the following React example:
+If you've been in the frontend game for long enough, this situation might be familiar. Consider the following React example:
 
 ```jsx
 function Button({ variant }) {
@@ -43,9 +41,9 @@ function App() {
 }
 ```
 
-This looks fine. Just one (kind of important) problem... The buttons are _useless_! There is no way to pass a click event listener!
+This looks fine, just one little problem... The buttons are _useless_! There is no way to pass a click event listener!
 
-We could fix it by adding an `onClick` prop to the `Button` component:
+To fix this, let's add an `onClick` prop to the `Button` component:
 
 ```jsx
 function Button({ variant, onClick }) {
@@ -53,21 +51,118 @@ function Button({ variant, onClick }) {
 }
 ```
 
-That works, but further down the line, you'll probably need other `<button />` props, such as `disabled`, `type`, `form`, etc.
+That does the trick. Further down the line, you'll inevitably need other `<button />` props, such as `disabled`, `type`, `form`, etc.
 
-It then makes sense to just collect the "custom" props like `variant` (e.g. with destructuring), and pass the rest straight down to the `<button />` element:
+Instead of slowly adding them one by one over time as they come up, we can be smarter about it. We can collect the "custom" props like `variant` (through destructuring), and then pass the rest straight down to the `<button />` element:
 
 ```jsx
-function Button({ variant, ...props }: ButtonProps) {
+function Button({ variant, ...props }) {
   return <button className={variant} {...props} />;
 }
 ```
 
-Makes sense so far, but we're not done. What happens now if you pass a `className` prop to the `Button` component?
+It's been pretty straightforward so far, but here's where it starts to get a bit trickier. What happens if you now pass a `className` prop to the `Button` component?
 
-It will override `className={variant}` since a prop spread (`{...props}`) behaves like an object spread (or `Object.assign()`), which means that new properties replace previous ones.
+```tsx {4}
+function Button({ variant, ...props }) {
+  return <button className={variant} {...props} />;
+}
 
-That's not what we want, we need our variant class to be set. We could invert the order, like this:
+<Button variant="primary" className="my-class" />;
+```
+
+The `"my-class"` value -passed through `{...props}`- will take precedence over `"primary"` -passed through `className={variant}`.
+
+The resolved value that's passed to the `<button />` element will be `"my-class"`, and the `variant="primary"` will have no effect at all!
+
+---
+
+### Prop spreading and precedence
+
+Let's take a quick detour to explain what happens when you pass the same prop (like `className`) multiple times to a component, including as part of prop spreading (e.g. `<div {...props} />`).
+
+If you have a good grasp of this, feel free to skip ahead.
+
+> Passing props to a component results in the same behavior as declaring properties in an object.
+>
+> That's no coincidence: when the JSX source gets compiled into JavaScript, props are compiled into actual objects! Consider this example:
+>
+> ```jsx
+> <div propA="first" propB={123} propA="second" />
+> ```
+>
+> That JSX component will be typically compiled into something like this:
+>
+> ```jsx
+> jsx("div", {
+>   propA: "first",
+>   propB: 123,
+>   propA: "second",
+> });
+> ```
+>
+> In both cases, `propA` will be resolved with a value of `"second"`, since it comes last and overrides any previous props/properties with the same key. If we de-duplicate the keys and leave the final values, we get:
+>
+> ```jsx
+> <div propA="second" propB={123} />;
+>
+> // compiled:
+> jsx("div", {
+>   propA: "second",
+>   propB: 123,
+> });
+> ```
+>
+> When spreading, it's no different. The spread syntax for props and properties is simply syntax sugar for passing multiple key-value pairs at once. Consider the following:
+>
+> ```jsx
+> const props = {
+>   propA: "second",
+>   propC: "abc",
+> };
+>
+> <div propA="first" propB={123} {...props} propC="xyz" />;
+>
+> // compiled:
+> jsx("div", {
+>   propA: "first",
+>   propB: 123,
+>   ...props,
+>   propC: "xyz",
+> });
+> ```
+>
+> If we "flatten" the spreads into simple props, we get:
+>
+> ```tsx
+> <div propA="first" propB={123} propA="second" propC="abc" propC="xyz" />;
+>
+> // compiled:
+> jsx("div", {
+>   propA: "first",
+>   propB: 123,
+>   propA: "second",
+>   propC: "abc",
+>   propC: "xyz",
+> });
+> ```
+>
+> Which in turn, de-duplicates to:
+>
+> ```jsx
+> <div propA="second" propB={123} propC="xyz" />;
+>
+> // compiled:
+> jsx("div", {
+>   propA: "second",
+>   propB: 123,
+>   propC: "xyz",
+> });
+> ```
+
+---
+
+Of course, we don't want `variant="primary"` to be ignored, we need our variant class to be set. We could try inverting the order, like this:
 
 ```jsx
 function Button({ variant, ...props }: ButtonProps) {
@@ -79,13 +174,15 @@ However, that doesn't fix anything, it simply switches the problem around. Now, 
 
 ## The solution
 
-The obvious solution is to merge the classes:
+Since multiple CSS classes can be applied to an element, we can simply merge all values together:
 
 ```jsx
 function Button({ variant, ...props }) {
   return <button {...props} className={`${variant} ${props.className}`} />;
 }
 ```
+
+Note how we're still passing `className` twice (once through the spread, and once explicitly). This is fine as long as the merged version is last, as it will take precedence.
 
 We can go further, and merge other props as well, like event handlers:
 
@@ -104,17 +201,17 @@ function Button({ variant, ...props }) {
 }
 ```
 
-> Note that these two examples are simplified and incomplete. I go into more detail on these topics in the next part of the series.
+> Note that these two examples are simplified and incomplete. I go into a lot more detail on these topics in the next part of the series.
 
-This strategy is great, but we can't merge every prop. Normally, only `className`, `style` and event handlers are safe to merge.
+This strategy is great, but we can't merge every prop. The amount of props that can be merged is actually rather small: `className`, `style`, `ref`, and event handlers.
 
-The only solution is to let other external props override the internal ones. This is normally okay since the internal props are usually just "defaults", and users know what they're doing (most of the time, anyway!).
+While we can't merge non-mergeable props (duh!), we can let external props override the internal ones. With this approach, the values passed internally can be thought of as "defaults" for the underlying element or component. Defaults that the user can override if they need to.
 
-# What is the open/closed pattern?
+# What is an open/closed component?
 
-This approach to handling props is a part of the **open/closed** pattern. Hopefully, the previous example will make it easier to understand.
+The approach to handling props outlined in the previous example is a part of building an **open/closed** component.
 
-Here's how Diego defined it:
+Here's how [Diego](https://haz.dev/) defined it:
 
 > The open/closed (...) component:
 >
@@ -129,37 +226,112 @@ This is a critical thing to understand. As Diego put it:
 
 > A component is closed for modification when you **don't need** to update its source code to extend its functionality.
 
-So it's not just that you **can't** update the source code, it's that you **don't need** to.
+It's not just that you **can't** update the source code, it's that you **don't need** to.
 
 ## Sprinkles on top
 
-Native HTML elements are good examples of this. You can't modify how they work directly, but you can extend them to fit your needs by adding attributes and event listeners. When you build a component, you're essentially extending a native element (even on non-web platforms like React Native!).
+Native HTML elements are great examples of the open/closed principle in action. You can't alter their core functionality, but you can enhance them with attributes and event listeners to suit your needs.
 
-This pattern is really neat because it allows you to create components that are **also extensible**, on top of native ones. If you're building a custom button and you apply this pattern, you're allowing users to interface both with your custom features (e.g. `variant`) and with the ones provided by the native element (e.g. `onClick`).
+This concept also applies when you develop your components. By designing components that don't obscure the underlying elements, you allow users to access both the native capabilities and any custom features you've added.
 
-Even better, you can create additional custom components that extend your custom components, creating a "cascade" of extensibility.
+For example, if you create a custom button, users can interact with both the button's native functionality (e.g. `onClick`) and any additional features you've designed (e.g. `variant`).
+
+![invert || A diagram representing the idea above with an example of a Button component](button-sprinkles.png)
+
+By following the open/closed principle, more components can be created on top of existing components, creating a hierarchy of components that build on each other.
 
 > If this sounds familiar, that's because it's just good old [object-oriented programming](https://en.wikipedia.org/wiki/Object-oriented_programming)! The [open/closed principle](https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle) is an OOP concept.
 
 A way I like to think about this is that you're taking a native element or component, and adding a few sprinkles of functionality (or aesthetics) on top of it.
 
-![A diagram representing the idea above with an example of a Button component](button-sprinkles.png)
+## When inheritance enables composition
 
-## Open/closed vs. wrapping
+In component-oriented UI frameworks like React and Solid.js, a recommended best practice is to [use composition instead of inheritance](<(https://legacy.reactjs.org/docs/composition-vs-inheritance.html)>).
 
-While there's no exact hard distinction between a wrapper component and an open/closed component, I see them as opposites.
+Open/closed components seem to contradict this advice: they inherit and extend the behavior and API of a different element or component. Ironically though, building components this way enables **advanced composition patterns**.
 
-In both cases, you're effectively wrapping something else, that much is true.
+Notably, it enables **the "render as" pattern**, which consists of rendering a component as a different element or component. Many UI component libraries support this, though the exact implementation varies.
 
-The key difference is that a wrapper component behaves like a "black box", with a custom API. It might pass down a prop or two, but even then it's not uncommon to see, for example, props called `onSelect` or `action` which are passed down to `onClick` and which exclude the `event` argument.
+The ([infamous](https://twitter.com/jjenzz/status/1423766700885954562)) `as` prop is probably the most known, but for the following examples, I'll use [the `render` prop from Ariakit](https://ariakit.org/composition).
 
-This can make sense sometimes, of course. For example, the [React Aria](https://react-spectrum.adobe.com/react-aria/) library has a [`usePress`](https://react-spectrum.adobe.com/react-aria/usePress.html) utility that wraps all kinds of pointer events (touch, mouse...) and exposes a custom, unified API for them. That can be an immensely useful thing to have.
+```jsx
+<MyButton render={<a href="https://dio.la/" />} />
+```
 
-The way I think about this, though, is that it's probably better to always start with open/closed, and only opt into wrapping (and out of open/closed) when you have really good reasons to do so.
+The example above will render `MyButton` -including its custom styles and behavior- as an `<a>` HTML element (instead of the default `<button>`) that links to my blog. We can also do this with a component:
+
+```jsx
+<MyTab render={<Link href="/new" />}>New</Tab>
+```
+
+In this case, `MyTab` will be rendered as a `Link` (here, `Link` could be a framework-specific component that handles routing, [e.g. in Next.js](https://nextjs.org/docs/app/api-reference/components/link)).
+
+It's important to understand what we mean by "rendered as", so let's break it down:
+
+- `MyTab` renders a `<button>` element by default. It passes it a few props, like `className` for styling.
+- `Link` renders an `<a>` element under the hood, and passes it a few props as well. For example, to handle client-side routing, it passes an `onClick` handler. It also passes the `href` prop down to `<a>`.
+
+![invert || A diagram representing the ideas above](composition-1.png)
+
+When we make `MyTab` "render as" a `Link`, the props that it would pass to `<button>` (like `className`) are now passed to `Link` instead. In this way, a "chain" of components is created where props flow down until they ultimately reach the underlying HTML element.
+
+![invert || A diagram representing the idea above](composition-2.png)
+
+Note how `Link` forwards the `className` prop down to `<a>`. If this wasn't the case, then the `MyTab` component would lose its appearance!
+
+![invert || A diagram representing the idea above](composition-3.png)
+
+This is because `MyTab` has an HTML-element-shaped "hole". By default, that hole is filled with a `<button>`, but it can be filled with anything else that behaves like an HTML element.
+
+How does an HTML element behave then? Among other things, it accepts CSS classes that are reflected in the HTML document tree.
+
+If `className` is ignored by `Link`, then we can't say it behaves like an HTML element. That's why this example breaks!
 
 ---
 
-> _"Enough philosophical stuff!"_ you say. _"How do I actually build an open/closed component?"_
+To avoid this kind of problem, Radix has a couple of rules, including ["Your component must spread props"](https://www.radix-ui.com/primitives/docs/guides/composition#your-component-must-spread-props). Similarly, Ariakit indicates that ["Custom components must be open for extension"](https://ariakit.org/guide/composition#custom-components-must-be-open-for-extension), which can be broken down into a few rules including "Spread all props (...)".
+
+In other words, the components **must be open/closed**! These two libraries (as well as many others) have HTML-element-shaped holes everywhere, and all of their components are designed to be open/closed and _fit into those holes_.
+
+This unlocks amazing composition patterns, like the following example [from the Radix docs](https://www.radix-ui.com/primitives/docs/guides/composition#composing-multiple-primitives):
+
+```jsx {2-6}
+<Dialog.Root>
+  <Tooltip.Root>
+    <Tooltip.Trigger asChild>
+      <Dialog.Trigger asChild>
+        <MyButton>Open dialog</MyButton>
+      </Dialog.Trigger>
+    </Tooltip.Trigger>
+    <Tooltip.Portal>...</Tooltip.Portal>
+  </Tooltip.Root>
+
+  <Dialog.Portal>...</Dialog.Portal>
+</Dialog.Root>
+```
+
+Radix is low-level, so it can be a little verbose. In your own component library, with the right abstractions, composition can become even simpler!
+
+For example, this is [a real example](https://atlas.guide.co/?path=/story/stories-menu--trigger-with-tooltip) from a component library I build in the past:
+
+```jsx {1-5}
+<Menu.Root>
+  <Tooltip content="More options">
+    <Menu.Trigger>
+      <Button icon={optionsIcon} />
+    </Menu.Trigger>
+  </Tooltip>
+  <Menu.Content>...</Menu.Content>
+</Menu.Root>
+```
+
+This is a **button** that acts as a **menu trigger** and a **tooltip trigger**. It renders as a single `<button>` element but has the behavior of all three components.
+
+This is all enabled by open/closed components, along with the "render as" pattern!
+
+---
+
+> _'Enough philosophical stuff!'_ you say. _'How do I actually build an open/closed component?'_
 
 Okay, okay. We'll do it in the next article (in React for now).
 
