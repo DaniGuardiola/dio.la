@@ -1,7 +1,7 @@
 ---
 date: 2024/6/13
 title: The open/closed component
-description: A powerful pattern to build extensible UI components that do more with less.
+description: A powerful pattern for building extensible UI components that achieve more with less.
 topics:
   - design-systems
   - js
@@ -11,6 +11,7 @@ imageUrl: /open-graph/the-open-closed-component-part-1.png
 ---
 
 import { TheOpenClosedComponentIndex } from "~/components/ArticleSeriesIndex/TheOpenClosedComponentIndex";
+import { Blitz } from "~/components/Blitz";
 
 <TheOpenClosedComponentIndex />
 
@@ -81,7 +82,7 @@ The resolved value that's passed to the `<button />` element will be `"my-class"
 
 Let's take a quick detour to explain what happens when you pass the same prop (like `className`) multiple times to a component, including as part of prop spreading (e.g. `<div {...props} />`).
 
-If you have a good grasp of this, feel free to skip ahead.
+If you already understand these concepts, feel free to skip ahead.
 
 > Passing props to a component results in the same behavior as declaring properties in an object.
 >
@@ -205,7 +206,7 @@ function Button({ variant, ...props }) {
 
 This strategy is great, but we can't merge every prop. The amount of props that can be merged is actually rather small: `className`, `style`, `ref`, and event handlers.
 
-While we can't merge non-mergeable props (duh!), we can let external props override the internal ones. With this approach, the values passed internally can be thought of as "defaults" for the underlying element or component. Defaults that the user can override if they need to.
+While we can't merge non-mergeable props (duh!), we can let external props override the internal ones. With this approach, the values passed internally can be thought of as "defaults" for the underlying element or component. Defaults that the user can override if needed.
 
 # What is an open/closed component?
 
@@ -215,7 +216,7 @@ Here's how [Diego](https://haz.dev/) defined it:
 
 > The open/closed (...) component:
 >
-> A component that is based on the open/closed principle, which states that “software entities (classes, modules, functions, etc.) should be **open for extension**, but **closed for modification**”.
+> A component that is based on the open/closed principle, which states that "software entities (classes, modules, functions, etc.) should be **open for extension**, but **closed for modification**".
 
 Let's digest this:
 
@@ -238,7 +239,7 @@ For example, if you create a custom button, users can interact with both the but
 
 ![invert || A diagram representing the idea above with an example of a Button component](button-sprinkles.png)
 
-By following the open/closed principle, more components can be created on top of existing components, creating a hierarchy of components that build on each other.
+By following the open/closed principle, more components can be created on top of existing components, forming a hierarchy of components that build on each other.
 
 > If this sounds familiar, that's because it's just good old [object-oriented programming](https://en.wikipedia.org/wiki/Object-oriented_programming)! The [open/closed principle](https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle) is an OOP concept.
 
@@ -296,23 +297,48 @@ In other words, the components **must be open/closed**! These two libraries (as 
 This unlocks amazing composition patterns, like the following example [from the Radix docs](https://www.radix-ui.com/primitives/docs/guides/composition#composing-multiple-primitives):
 
 ```jsx {2-6}
-<Dialog.Root>
-  <Tooltip.Root>
-    <Tooltip.Trigger asChild>
-      <Dialog.Trigger asChild>
+<RadixDialog.Root>
+  <RadixTooltip.Root>
+    <RadixTooltip.Trigger asChild>
+      <RadixDialog.Trigger asChild>
         <MyButton>Open dialog</MyButton>
-      </Dialog.Trigger>
-    </Tooltip.Trigger>
-    <Tooltip.Portal>...</Tooltip.Portal>
-  </Tooltip.Root>
+      </RadixDialog.Trigger>
+    </RadixTooltip.Trigger>
+    <RadixTooltip.Portal>...</RadixTooltip.Portal>
+  </RadixTooltip.Root>
 
-  <Dialog.Portal>...</Dialog.Portal>
-</Dialog.Root>
+  <RadixDialog.Portal>...</RadixDialog.Portal>
+</RadixDialog.Root>
 ```
 
-Radix is low-level, so it can be a little verbose. In your own component library, with the right abstractions, composition can become even simpler!
+Not only that but since both libraries follow the same principles, you can mix and match components without any issues!
 
-For example, this is [a real example](https://atlas.guide.co/?path=/story/stories-menu--trigger-with-tooltip) from a component library I build in the past:
+Below, I've rewritten the example replacing the Radix tooltip and the custom button with Ariakit components.
+
+```jsx {2-6}
+<RadixDialog.Root>
+  <Ariakit.TooltipProvider>
+    <Ariakit.TooltipAnchor
+      render={
+        <RadixDialog.Trigger asChild>
+          <Ariakit.Button>Open dialog</Ariakit.Button>
+        </RadixDialog.Trigger>
+      }
+    ></Ariakit.TooltipAnchor>
+    <Tooltip.Portal>...</Tooltip.Portal>
+  </Ariakit.TooltipProvider>
+
+  <RadixDialog.Portal>...</RadixDialog.Portal>
+</RadixDialog.Root>
+```
+
+Here's a live demo of Radix and Ariakit working together:
+
+<Blitz blitzId="vitejs-vite-zchpdx" file="src/App.tsx" />
+
+Both Radix and Ariakit are fairly low-level, so they can be a little verbose. In your own component library, with the right abstractions, composition can become even simpler!
+
+This is [a real example](https://atlas.guide.co/?path=/story/stories-menu--trigger-with-tooltip) from a component library I built in the past:
 
 ```jsx {1-5}
 <Menu.Root>

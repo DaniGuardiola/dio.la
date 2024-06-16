@@ -30,7 +30,7 @@
       @apply lg:content-["#"] absolute left-[-.9em]
 
     & a
-      @apply text-dark-invert
+      @apply text-dark-invert no-underline hover:underline
 
     & + *
       @apply mt-0
@@ -39,7 +39,7 @@
     @apply bg-white dark:bg-black mx-auto my-[1.8em] rounded lg:rounded-lg shadow
 
   & a
-    @apply text-accent hover:underline focus-ring rounded-sm focus-scroll-target
+    @apply text-accent underline underline-offset-4 decoration-1 hover:decoration-2 focus-ring rounded-sm focus-scroll-target
 
     & img
       @apply transition-shadow hover:shadow-lg
@@ -50,7 +50,7 @@
 
   & blockquote
     @apply article-rounded
-    @apply relative overflow-hidden bg-gray-200 dark:bg-neutral-900 font-roboto-slab -mx-4 py-4 px-8 my-[1.25em]
+    @apply relative overflow-hidden bg-gray-200 dark:bg-neutral-800 font-roboto-slab -mx-4 py-4 px-8 my-[1.25em]
 
     &::before
       @apply content-[""] absolute inset-y-0 left-0 w-2 bg-gray-500 dark:bg-neutral-800
@@ -65,7 +65,7 @@
         @apply mb-[-1em]
 
   & hr
-    @apply my-[3em] border-t border-gray-200
+    @apply my-[3em] border-t border-black/10 dark:border-white/20
 
   & ul
     @apply list-disc

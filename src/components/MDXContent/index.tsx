@@ -83,11 +83,7 @@ function Pre(props: ComponentProps<"pre">) {
     <pre
       {...props}
       onScroll={(event) => setScrollXDebounced(event.currentTarget.scrollLeft)}
-      style={
-        typeof props.style === "string"
-          ? `--scroll-x:${scrollX()}px;${props.style}`
-          : { ...props.style, "--scroll-x": `${scrollX()}px` }
-      }
+      style={{ "--scroll-x": `${scrollX()}px` }}
     />
   );
 }

@@ -74,10 +74,12 @@ function ThemeToggle() {
 function Header() {
   return (
     <header
-      class="fixed z-20 inset-x-0 top-0 bg-white/95 dark:bg-black/95 select-none transition-[height] flex items-center overflow-hidden"
+      class="fixed z-20 inset-x-0 top-0 select-none transition-[height,background-color] flex items-center overflow-hidden"
       classList={{
-        "h-[5rem] sm:h-[11.25rem]": !headerScrolled(),
-        "h-[3.5rem] sm:h-[4.5rem]": headerScrolled(),
+        "h-[5rem] sm:h-[11.25rem] bg-white/95 dark:bg-neutral-900":
+          !headerScrolled(),
+        "h-[3.5rem] sm:h-[4.5rem] bg-white/80 dark:bg-neutral-900/80":
+          headerScrolled(),
         "shadow-[0_2px_4px_rgba(0,0,0,.25)]": !scrolledAtTop(),
       }}
     >
