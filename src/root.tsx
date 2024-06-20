@@ -76,7 +76,7 @@ function Header() {
     <header
       class="fixed z-20 inset-x-0 top-0 select-none transition-[height,background-color] flex items-center overflow-hidden"
       classList={{
-        "h-[5rem] sm:h-[11.25rem] bg-white/95 dark:bg-neutral-900":
+        "h-[5rem] sm:h-[11.25rem] bg-white/95 dark:bg-neutral-900/95":
           !headerScrolled(),
         "h-[3.5rem] sm:h-[4.5rem] bg-white/80 dark:bg-neutral-900/80":
           headerScrolled(),

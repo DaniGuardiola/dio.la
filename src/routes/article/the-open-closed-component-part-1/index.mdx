@@ -315,7 +315,7 @@ Not only that but since both libraries follow the same principles, you can mix a
 
 Below, I've rewritten the example replacing the Radix tooltip and the custom button with Ariakit components.
 
-```jsx {2-6}
+```jsx {2-8}
 <RadixDialog.Root>
   <Ariakit.TooltipProvider>
     <Ariakit.TooltipAnchor
@@ -324,7 +324,7 @@ Below, I've rewritten the example replacing the Radix tooltip and the custom but
           <Ariakit.Button>Open dialog</Ariakit.Button>
         </RadixDialog.Trigger>
       }
-    ></Ariakit.TooltipAnchor>
+    />
     <Tooltip.Portal>...</Tooltip.Portal>
   </Ariakit.TooltipProvider>
 
