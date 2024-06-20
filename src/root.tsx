@@ -36,10 +36,7 @@ function NavLink(props: ComponentProps<typeof A>) {
       {...props}
       activeClass="enabled font-bold text-accent pointer-events-none"
       inactiveClass="disabled hover:underline"
-      class={clsx(
-        "text-[1.1rem] leading-[1.5rem] focus-ring rounded-sm flex",
-        "sm:text-[1.25rem]"
-      )}
+      class="text-[1.1rem] leading-[1.3rem] focus-ring rounded-sm flex"
     >
       <span
         class={clsx(
@@ -55,9 +52,9 @@ function NavLink(props: ComponentProps<typeof A>) {
   );
 }
 
-function ThemeToggle() {
+function ThemeToggle(props: ComponentProps<"div">) {
   return (
-    <div class="ml-2 flex items-end">
+    <div {...props} class={clsx("ml-2 flex items-end", props.class)}>
       <button
         title="Toggle theme"
         aria-label="toggle theme"
@@ -121,7 +118,7 @@ function Header() {
             Dani Guardio<span class="text-accent">la</span>’s blog
           </p>
         </A>
-        <nav class={clsx("ml-auto flex items-end gap-3", "sm:gap-6")}>
+        <nav class={clsx("ml-auto flex items-end gap-2", "sm:gap-4")}>
           <NavLink href="/" end aria-label="articles">
             articles
           </NavLink>
@@ -136,7 +133,7 @@ function Header() {
             about
           </NavLink>
         </nav>
-        <ThemeToggle />
+        <ThemeToggle class="relative top-[.05rem]" />
       </div>
     </header>
   );
