@@ -45,6 +45,10 @@ export const [theme, setTheme] = createSignal<"light" | "dark">(
 
 export function toggleTheme() {
   if (typeof window === "undefined") return;
-  setTheme((previousTheme) => (previousTheme === "dark" ? "light" : "dark"));
-  localStorage.theme = theme();
+  function toggle() {
+    setTheme((previousTheme) => (previousTheme === "dark" ? "light" : "dark"));
+    localStorage.theme = theme();
+  }
+  if (!document.startViewTransition) return toggle();
+  document.startViewTransition(toggle);
 }

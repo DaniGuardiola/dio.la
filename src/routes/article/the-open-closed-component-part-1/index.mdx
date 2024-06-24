@@ -15,17 +15,21 @@ import { Blitz } from "~/components/Blitz";
 
 <TheOpenClosedComponentIndex />
 
-There is a pattern that I've come to understand as a **must-have** for many of the UI components I build. I would dare to say it is one of the most powerful ideas I've ever encountered as a frontend developer.
+There is a pattern that I've come to understand as a **must-have** for many of the UI components I build. I would dare to say it is one of the most powerful ideas I've ever encountered as a front-end developer.
 
 I'm talking about "the **open/closed** component", as coined by [Diego Haz](https://haz.dev/) (author of [Ariakit](https://ariakit.org/)), who introduced this concept in [this Twitter thread](https://twitter.com/diegohaz/status/1305450112890662914).
 
 This pattern has been silently implemented by many for a long time, and thanks to Diego, we now have a name for it. In this series, I'll explain what it is, why it's so powerful, and how to build components that follow this pattern.
 
+> **Note:** this article will use React in examples and explanations, but the pattern applies to most component-oriented frameworks.
+>
+> Future articles in the series might go over the details of implementing the pattern in other paradigms, like Solid.js or others.
+
 # A Game of Props
 
 ## The problem
 
-If you've been in the frontend game for long enough, this situation might be familiar. Consider the following React example:
+If you've been in the front-end game for long enough, this situation might be familiar. Consider the following React example:
 
 ```jsx
 function Button({ variant }) {
@@ -74,7 +78,7 @@ function Button({ variant, ...props }) {
 
 The `"my-class"` value -passed through `{...props}`- will take precedence over `"primary"` -passed through `className={variant}`.
 
-The resolved value that's passed to the `<button />` element will be `"my-class"`, and the `variant="primary"` will have no effect at all!
+The resolved value that's passed to the `<button />` element will be `"my-class"`, and `variant="primary"` will have no effect at all!
 
 ---
 
@@ -221,13 +225,13 @@ Here's how [Diego](https://haz.dev/) defined it:
 Let's digest this:
 
 - The component is **closed** for modification, meaning that you can't change the component itself. You can't edit its source code to adapt it to your needs!
-- The component is **open** for extension, meaning that you can extend it, **without** changing its implementation.
+- The component is **open** for extension, meaning that you can extend it **without** changing its implementation.
 
-This is a critical thing to understand. As Diego put it:
+This is a critical point to understand. As Diego put it:
 
 > A component is closed for modification when you **don't need** to update its source code to extend its functionality.
 
-It's not just that you **can't** update the source code, it's that you **don't need** to.
+It's not just that you **can't** update the source code, it's that you **don't need to**.
 
 ## Sprinkles on top
 
@@ -251,9 +255,9 @@ In component-oriented UI frameworks like React and Solid.js, a recommended best 
 
 Open/closed components seem to contradict this advice: they inherit and extend the behavior and API of a different element or component. Ironically though, building components this way enables **advanced composition patterns**.
 
-Notably, it enables **the "render as" pattern**, which consists of rendering a component as a different element or component. Many UI component libraries support this, though the exact implementation varies.
+Notably, it enables **the "render as" pattern** (also known by nerds like me as "polymorphism"), which consists of rendering a component as a different element or component. Many UI component libraries support this, though the exact implementation and API varies.
 
-The ([infamous](https://twitter.com/jjenzz/status/1423766700885954562)) `as` prop is probably the most known, but for the following examples, I'll use [the `render` prop from Ariakit](https://ariakit.org/guide/composition).
+The ([infamous](https://twitter.com/jjenzz/status/1423766700885954562)) `as` prop is probably the most known, and [Radix's `asChild` approach](https://www.radix-ui.com/primitives/docs/guides/composition) is also fairly well-known, but for the following examples, I'll use [the `render` prop from Ariakit](https://ariakit.org/guide/composition).
 
 ```jsx
 <MyButton render={<a href="https://dio.la/" />} />
@@ -286,15 +290,15 @@ This is because `MyTab` has an HTML-element-shaped "hole". By default, that hole
 
 How does an HTML element behave then? Among other things, it accepts CSS classes that are reflected in the HTML document tree.
 
-If `className` is ignored by `Link`, then we can't say it behaves like an HTML element. That's why this example breaks!
+If `className` is ignored by `Link`, then we can't say it behaves like an HTML element. That's why this last example would break!
 
----
+## The pieces fit
 
-To avoid this kind of problem, Radix has a couple of rules, including ["Your component must spread props"](https://www.radix-ui.com/primitives/docs/guides/composition#your-component-must-spread-props). Similarly, Ariakit indicates that ["Custom components must be open for extension"](https://ariakit.org/guide/composition#custom-components-must-be-open-for-extension), which can be broken down into a few rules including "Spread all props (...)".
+To ensure that the "render as" feature works smoothly, Radix has a couple of rules, including ["Your component must spread props"](https://www.radix-ui.com/primitives/docs/guides/composition#your-component-must-spread-props). Similarly, Ariakit indicates that ["Custom components must be open for extension"](https://ariakit.org/guide/composition#custom-components-must-be-open-for-extension), which can be broken down into a few rules including "Spread all props (...)".
 
 In other words, the components **must be open/closed**! These two libraries (as well as many others) have HTML-element-shaped holes everywhere, and all of their components are designed to be open/closed and _fit into those holes_.
 
-This unlocks amazing composition patterns, like the following example [from the Radix docs](https://www.radix-ui.com/primitives/docs/guides/composition#composing-multiple-primitives):
+This unlocks amazing composition patterns like the following example [from the Radix docs](https://www.radix-ui.com/primitives/docs/guides/composition#composing-multiple-primitives):
 
 ```jsx {2-6}
 <RadixDialog.Root>
@@ -311,7 +315,7 @@ This unlocks amazing composition patterns, like the following example [from the 
 </RadixDialog.Root>
 ```
 
-Not only that but since both libraries follow the same principles, you can mix and match components without any issues!
+Since Ariakit components are open/closed too, we can easily mix and match components from both libraries without any issues!
 
 Below, I've rewritten the example replacing the Radix tooltip and the custom button with Ariakit components.
 
@@ -351,14 +355,19 @@ This is [a real example](https://atlas.guide.co/?path=/story/stories-menu--trigg
 </Menu.Root>
 ```
 
-This is a **button** that acts as a **menu trigger** and a **tooltip trigger**. It renders as a single `<button>` element but has the behavior of all three components.
+In this snippet, we have a **button** that acts as a **menu trigger** and a **tooltip trigger**. It renders as a single `<button>` element but has the behavior of all three components.
 
-This is all enabled by open/closed components, along with the "render as" pattern!
+In conclusion, with the powerful "render as" pattern, we can mix:
+
+- HTML elements.
+- UI primitives from different libraries.
+- Custom components that extend HTML elements.
+- Custom components that extend UI primitives.
+
+And none of it would be possible without open/closed components!
 
 ---
 
-> _'Enough philosophical stuff!'_ you say. _'How do I actually build an open/closed component?'_
+Enough philosophy for now, let's learn how to build these in the next article! (coming soon)
 
-Okay, okay. We'll do it in the next article (in React for now).
-
-Stay tuned!
+<TheOpenClosedComponentIndex />
