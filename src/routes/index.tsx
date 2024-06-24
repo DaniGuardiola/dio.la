@@ -101,12 +101,6 @@ function MainHighlight(props: ArticleMetadata) {
       <article class="bg-white dark:bg-neutral-950 rounded-md space-y-1 overflow-hidden">
         <Show when={props.imageUrl}>
           <img
-            style={
-              {
-                // eslint-disable-next-line solid/style-prop
-                // "view-transition-name": `article-image-${props.id}`,
-              }
-            }
             alt="This article's main image"
             class="w-full aspect-[40/21]"
             src={props.imageUrl}
