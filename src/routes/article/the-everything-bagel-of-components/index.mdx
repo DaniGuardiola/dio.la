@@ -158,7 +158,7 @@ type CardProps = {
 // You can imagine the implementation...
 ```
 
-These props and conditionals are quickly adding up. We can easily imagine future variants that require even more props, like `hideFooter`, `image`, `rightAction.tooltip`, `middleAction`, and so on. You might have even seen this in your own codebase.
+These props and conditionals are quickly adding up. We can easily imagine future variants that require even more props, like `hideFooter`, `image`, `rightAction.tooltip`, `middleAction`, and so on. You might have even seen something like this in your codebase.
 
 This is what [Kyle Shevlin](https://twitter.com/kyleshevlin) calls "YAP-ing" ("Yet Another Prop" Syndrome). I stole the "Card" example above from his article: ["Quit Your YAP-ing"](https://kyleshevlin.com/quit-your-yapping/). Go read it!
 
@@ -182,6 +182,8 @@ YAP-ing presents many potential issues:
 
 I call this type of component (the one that YAPs) **the "everything bagel" component**: a component that tries to do everything and ends up becoming a mess over time.
 
+---
+
 <YoutubeVideo id="aJhKVICLi9s" />
 
 > The video above shows a TV anchor talking to the Dalai Lama. He tries to make a joke:
@@ -189,6 +191,8 @@ I call this type of component (the one that YAPs) **the "everything bagel" compo
 > _"The Dalai Lama walks into a pizza shop and says, 'Can you make me one with everything?'"_
 >
 > The Dalai Lama doesn't get it. I love this video.
+
+---
 
 Don't get me wrong, there is a time and place for "everything bagel" components! In fact, **I actively recommend** them as long as the following conditions are met:
 
