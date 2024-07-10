@@ -62,7 +62,7 @@ export function Subscribe() {
       <div class="flex gap-4">
         <input
           disabled={loading()}
-          class="grow shrink min-w-0 rounded text-dark px-4 focus:outline-2 focus:outline-accent ring ring-2 ring-inset ring-gray-200"
+          class="grow shrink min-w-0 rounded text-dark-invert placeholder:text-subtle-invert dark:text-white px-4 focus:outline-2 focus:outline-accent dark:focus:outline-white ring ring-2 ring-inset ring-gray-200 dark:[color-scheme:dark]"
           ref={emailInput!}
           type="email"
           name="fields[email]"

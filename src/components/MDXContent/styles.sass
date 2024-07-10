@@ -63,6 +63,8 @@
 
       &:last-child
         @apply mb-[-1em]
+    & a
+      @apply dark:text-green-600
 
   & hr
     @apply my-[3em] border-t border-black/10 dark:border-white/20
@@ -90,3 +92,6 @@
 
     & li
       @apply list-decimal
+
+  .dark & input
+    color-scheme: dark
