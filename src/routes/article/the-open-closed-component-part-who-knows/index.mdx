@@ -1,0 +1,242 @@
+---
+draft: true
+date: 2000/1/1
+title: Why open/closed? #usetheplatform
+description: A deeper look into the advantages of open/closed components, and why you should Use The Platform™.
+topics:
+  - design-systems
+  - js
+  - frontend
+imageUrl: /open-graph/the-open-closed-component-part-2.png
+---
+
+import { TheOpenClosedComponentIndex } from "~/components/ArticleSeriesIndex/TheOpenClosedComponentIndex";
+
+<TheOpenClosedComponentIndex />
+
+# Use the platform
+
+The web is a chaotic and beautiful amalgamation of technologies and APIs. Yes, it may be a _mess_, but it is _our mess_.
+
+It is tempting to try and abstract away the platform, reinvent all of the wheels, and build neat little black boxes so you can forget about what's below. But that dream is not only impossible, it's also a nightmare. The web is too vast and too complex to be tamed.
+
+Things used to be simpler a long time ago, but it's {new Date().getFullYear()} now. These days the web is, for the most part, "batteries included". Here are some of my favorite examples, including a lot of stuff we used to need custom abstractions or hacks for:
+
+- In **HTML**, we got...
+
+  - [Semantics:](https://developer.mozilla.org/en-US/docs/Glossary/semantics#semantic_elements) `<header>`, `<nav>`, `<main>`, `<article>`...
+  - [Media](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Using_HTML5_audio_and_video) and [custom rendering:](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas) `<video>`, `<audio>`, `<canvas>`.
+  - [Lazy loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading) of scripts, fonts, images and iframes.
+  - [Responsive images.](https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images)
+  - [Web components.](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
+  - [Details and summary.](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details)
+  - [Date and time inputs.](https://developer.mozilla.org/en-US/docs/Learn/Forms/HTML5_input_types#date_and_time_pickers)
+  - [Color picker input.](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/color)
+  - [Popovers!](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/popover)
+  - [Dialogs!](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog)
+
+- In **CSS**, we got...
+
+  - [Custom properties (A.K.A. CSS variables).](https://developer.mozilla.org/en-US/docs/Web/CSS/--*)
+  - [`:has()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:has), [`:is()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:is), and [`:where()`](https://developer.mozilla.org/en-US/docs/Web/CSS/:where).
+  - [Aspect ratio.](https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio)
+  - [Cascade layers.](https://developer.mozilla.org/en-US/docs/Web/CSS/Cascade#cascade_layers)
+  - [Grid](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout) and [flexbox](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Flexible_Box_Layout) layouts.
+  - [Logical properties.](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Logical_Properties)
+  - [Nesting.](https://developer.mozilla.org/en-US/docs/Web/CSS/Descendant_combinator)
+  - [Container](https://developer.mozilla.org/en-US/docs/Web/CSS/@container) and [style](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_size_and_style_queries) queries.
+  - [Viewport units.](https://developer.mozilla.org/en-US/docs/Web/CSS/length#relative_length_units_based_on_viewport)
+  - [Scroll snap.](https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-type)
+  - [Sticky positioning.](https://developer.mozilla.org/en-US/docs/Web/CSS/position#sticky)
+  - [Automatic dark mode.](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme)
+  - [Houdini.](https://developer.mozilla.org/en-US/docs/Web/API/Houdini_APIs)
+  - Experimental, proposed, or coming soon: [`anchor positioning`](https://developer.chrome.com/blog/anchor-positioning-api), [`scoping`](https://developer.mozilla.org/en-US/docs/Web/CSS/@scope), [stylable select](https://open-ui.org/components/selectlist/), [view transitions API](https://developer.mozilla.org/en-US/docs/Web/API/View_Transitions_API)...
+
+- In **JavaScript**, we got...
+
+  - [`const`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const) and [`let`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let).
+  - [Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) and [dynamic imports](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import).
+  - [`async` and `await`.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function)
+  - [Destructuring](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment), [spread](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax), and [rest](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters) syntax.
+  - [Arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions), [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining), [nullish coalescing](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator)...
+  - [Proxy](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) and [Reflect](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect).
+  - [Private class properties.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties)
+  - New array methods: [`map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map), [`filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter), [`reduce`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/Reduce)...
+  - New data structures: [Set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set), [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map), [WeakSet](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet), [WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap)...
+  - [Symbols.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol)
+  - [Iterators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols), [async iterators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/asyncIterator), and [generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator).
+  - [BigInt.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt)
+  - [Intl.](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl)
+  - [TypedArray](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray), [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer), [DataView](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView), [Atomics](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Atomics)...
+  - Experimental, proposed, or coming soon: [pipe operator](https://github.com/tc39/proposal-pipeline-operator), [record and tuple](https://github.com/tc39/proposal-record-tuple), [pattern matching](https://github.com/tc39/proposal-pattern-matching), [Temporal](https://github.com/tc39/proposal-temporal), [decorators](https://github.com/tc39/proposal-decorators), [import attributes](https://github.com/tc39/proposal-import-attributes), [JSON modules](https://github.com/tc39/proposal-json-modules)...
+
+- We got tons of great [**web APIs**:](https://developer.mozilla.org/en-US/docs/Web/API) `fetch`, `IntersectionObserver`, `ResizeObserver`, `WebSockets`, `WebRTC`, `Web Workers`, `Service Workers`, `IndexedDB`, `Web Storage`, `Web Audio`, `Web Speech`, `Web MIDI`, `WebUSB`, `Web Share`, `WebXR`... The list goes on and on.
+
+- [Progressive web apps](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps) got easier to build.
+
+- [WebAssembly](https://developer.mozilla.org/en-US/docs/WebAssembly) is now a thing.
+
+That is... a lot. _Please don't ask how long it took me to compile this list._
+
+This is not to say that you shouldn't build abstractions. You should, they are very useful!
+
+The point is that life is easier when they are built **_on top_** of the platform, instead of **_as a replacement_** for it. At the UI level, this is precisely what open/closed components enable.
+
+# The three R's of UI
+
+Most people are familiar with "the 3 R's": reduce, reuse, recycle. What not everyone knows is that these are in order of importance.
+
+In terms of ecological impact, recycling something is great, but it's better to reuse it (e.g. by repairing it). And it's even better if you can find a way to not use it -or use less of it- in the first place (reduce).
+
+With UI components, a similar logic can be applied:
+
+### Reduce
+
+If there's an HTML element that does what you need, use it.
+
+> ❌ DON'T
+>
+> ```jsx
+> <div onClick={action}>
+> <div onClick={() => window.location = "example.com")}>
+> ```
+>
+> ✅ DO
+>
+> ```jsx
+> <button onClick={action}>
+> <a href="example.com">
+> ```
+>
+> Please? Thank you.
+
+### Reuse
+
+If you truly need an abstraction, use a minimal version that can be easily reused and composed in many places.
+
+> ❌ DON'T
+>
+> Use [moment.js](https://momentjs.com/) for dates and times - it's big, monolithic, and has a lot of custom implementations of things that are already in the platform these days.
+>
+> [Read more.](https://momentjs.com/docs/#/-project-status/)
+>
+> ✅ DO
+>
+> Use native APIs like [`Intl.DateTimeFormat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat), [`Date`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date), [`Date.toLocaleString`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString)... composed with minimal and modular libraries like [`date-fns`](https://date-fns.org/).
+>
+> [Read more.](https://dockyard.com/blog/2020/02/14/you-probably-don-t-need-moment-js-anymore)
+>
+> ```jsx
+> import { isFuture } from "date-fns";
+>
+> function ConcertDateDisplay({ concertDate, artistName }) {
+>   const formattedDate = new Intl.DateTimeFormat("en-US", {
+>     year: "numeric",
+>     month: "long",
+>     day: "numeric",
+>   }).format(concertDate);
+>
+>   return (
+>     <div>
+>       {artistName}'s concert
+>       {isFuture(concertDate) ? " is scheduled for " : " took place on "}
+>       {formattedDate}.
+>     </div>
+>   );
+> }
+> ```
+
+### Recycle
+
+When HTML elements and platform features fall short, or when you simply need styled versions of them, then it's time to build your own components. Choose a base HTML element or UI primitive, extend it with your own styles and behavior, and make sure it's open/closed.
+
+> ❌ DON'T
+>
+> ```jsx
+> <MyButton
+>   action={{ on: "click-and-enter", callback: myCallback }}
+>   tooltip="My tooltip"
+>   tooltipPosition="top"
+> >
+>   Click me!
+> </MyButton>
+> // renders a <div>
+> ```
+>
+> Since everything is custom, and we're using a `<div>`, the component needs to implement custom logic to make it focusable, accessible by keyboard, discoverable to screen readers, etc. We also need to implement a tooltip and pass all event listeners internally, as it's the only way.
+>
+> ✅ DO
+>
+> ```jsx
+> <MyTooltip content="My tooltip" position="top">
+>   <MyButton onClick={myCallback}>Click me!</MyButton>
+> </MyTooltip>
+> // renders a <button>
+> ```
+>
+> Since we're extending a `<button>`, we get all of the native behavior for free. We can also compose it with other components like `MyTooltip`, which uses the "render as" pattern to add tooltip trigger behavior to it.
+>
+> This is only possible because `<MyButton>` is open/closed, and it can pass props like the required event listeners down to the underlying `<button>` element.
+
+---
+
+Beyond specific use cases, like the "render as" example from the previous section, open/closed components allow you to go about building your websites and web apps in a way that is more in tune with the platform:
+
+- First of all, there's the web. HTML, CSS, and JavaScript. The platform.
+- Then, add a little bit of UI framework. React, Solid.js, Svelte, Vue, Angular, or whatever you like. With a pinch of meta-framework (Next.js, Solid Start, Nuxt...).
+- Sprinkle some of your own styles on top. Maybe a couple of advanced features here and there. Open/closed components. Strong, accessible UI primitives from libraries like Ariakit or Radix. Nicer defaults. A few libraries to help too.
+
+Compose it all together and you have a recipe for success:
+
+- Reasonable bundle sizes. The web does most of the heavy lifting.
+- No need to learn custom APIs for anything that HTML elements -or the underlying UI primitives- or web APIs already do.
+- It will work forever. The web doesn't break, by design. Your abstractions and libraries might.
+- It's fast and performant. Your app will feel snappy and responsive.
+
+### But what about the constraints?
+
+This is the one and only concern everyone I've talked to about this brings up. I bet you're thinking about it too.
+
+I get it. I've been there too.
+
+When you're building primitives for other people to use, you want to retain control - if not, a lot of things can go wrong! On top of that, the web is messy, so abstracting away the chaos can be tempting.
+
+A neat little family of black boxes, where absolutely everything is under control, and nothing can ever go wrong. That's the dream, right?
+
+Since this is such a recurring reaction to the open/closed component pattern, I've dedicated a whole article to it in this series (coming soon, stay tuned). In a nutshell, in my humble (_but informed by experience_) opinion:
+
+- Thinking this is possible or even desirable is an instance of [magical thinking](https://en.wikipedia.org/wiki/Magical_thinking)
+- The (significantly larger) maintenance burden now falls on you.
+- Can't use new platform features.
+- It can backfire spectacularly and end up hurting the users, as I briefly discuss in the next section.
+
+In essence: the web, but _worse_ and _with extra steps_. Is it all worth it just so Dave from accounting can't set the wrong attribute on a button?
+
+Let me tell you a secret: Dave will find a way. Just let it go.
+
+**TL;DR: Control is an illusion.**
+
+## The case for accessibility
+
+Probably one of the most important reasons to use open/closed components is accessibility.
+
+The web is accessible by default. Native HTML elements, including form controls, buttons, links, labels, semantic elements, and more, are all accessible. They work with screen readers, keyboard navigation, and other assistive technologies. Out of the box!
+
+> This is not to say that you don't need to think about accessibility. Testing with screen readers, keyboard navigation, and other tools is still necessary. But you're starting from a good place.
+
+When you extend these components, you inherit their accessibility features. The same thing applies to accessibility-focused UI primitives from libraries like Ariakit and Radix.
+
+**HOWEVER!** Even if you do this, accessibility can still become challenging if components are black boxes. The web and UI primitives do a lot out of the box, but they aren't magic. A website or app is more than the sum of its components.
+
+When designing and testing for accessibility, there's often a need to reach for specific platform features, like ARIA attributes, focus management, and other advanced techniques. If your components are open/closed, you can easily extend them to support these features, but when they're not...
+
+Well, let me just say, good luck! You'll need to:
+
+- Involve the relevant teams to change all of the affected components.
+- Add the required features.
+- Think about how it fits into your custom API.
+- Test everything to ensure it doesn't break the rest of your neat little black boxes.
+
+It becomes a chore,
+
+<TheOpenClosedComponentIndex />
