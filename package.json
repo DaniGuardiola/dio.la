@@ -61,6 +61,7 @@
     "yaml": "^2.3.4"
   },
   "dependencies": {
+    "@ariakit/react": "^0.4.7",
     "@solidjs/meta": "^0.29.1",
     "@solidjs/router": "^0.9.1",
     "clsx": "^2.0.0",
