@@ -8,6 +8,7 @@ topics:
   - js
   - react
   - frontend
+imageUrl: /open-graph/the-everything-bagel-of-components.png
 ---
 
 When building complex repeatable pieces of UI, it's tempting to abstract everything into a single "black box" component.
@@ -405,13 +406,84 @@ There are many things to consider when choosing the exact structure and API of y
 
 As with slots, I also plan on writing a more in-depth article on compound components very soon, stay tuned!
 
-## Open/closed components
-
-TODO!
-
 ## Polymorphism
 
-TODO!
+> _Noun, [the ability to assume different forms or shapes.](https://en.wiktionary.org/wiki/polymorphism)_
+>
+> - [poly](https://en.wiktionary.org/wiki/poly-) - "many", from Ancient Greek's "polús"
+> - [morph](https://en.wiktionary.org/wiki/-morphism#English) - "shape", from Ancient Greek's "morphḗ"
+> - [ism](https://en.wiktionary.org/wiki/-ism#English) - just visit the link if you care 😇
+
+The word ["polymorphism"](<https://en.wikipedia.org/wiki/Polymorphism_(computer_science)>) sounds very complicated, but is fairly simple to understand in the context of components.
+
+When we say that a component is "polymorphic", we simply mean that it can be "rendered as" a different element or component than the default. Let's use a practical example:
+
+We have our card with a `<CardAction>` component which renders a `<button>` by default. But what if we want to render an `<a>` instead, to link to another page?
+
+![invert || The card layout described above.](./polymorphism.png)
+
+## Open/closed components
+
+What if we want to add a tooltip to an action in the card?
+
+We have a few options to implement this, but I'll reach for [the Ariakit `Tooltip` component](https://ariakit.org/components/tooltip) in this instance.
+
+> [The `title` HTML attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/title) behaves similar to a tooltip, but [it has significant accessibility issues](https://inclusive-components.design/tooltips-toggletips/).
+
+Ariakit's `Tooltip` is used like this:
+
+```tsx twoslash
+import * as Ariakit from "@ariakit/react";
+// ---cut---
+<Ariakit.TooltipProvider>
+  <Ariakit.TooltipAnchor render={<button>ACTION</button>} />
+  <Ariakit.Tooltip>Tooltip content</Ariakit.Tooltip>
+</Ariakit.TooltipProvider>;
+```
+
+The tooltip anchor is whatever you want to attach the tooltip to, while `Tooltip` contains the UI that will show up when the anchor is hovered or focused.
+
+Consider the following button:
+
+```tsx twoslash
+function doAction() {}
+// ---cut---
+<button onClick={doAction}>ACTION</button>;
+```
+
+If we want to add a tooltip to it, this is more or less what we need to happen, in simplified pseudocode form:
+
+```tsx twoslash
+import { useState } from "react";
+function doAction() {}
+const [showTooltip, setShowTooltip] = useState(false);
+// ---cut---
+<>
+  <button
+    onClick={doAction}
+    onPointerEnter={() => setShowTooltip(true)}
+    onPointerLeave={() => setShowTooltip(false)}
+  >
+    ACTION
+  </button>
+  {showTooltip && <div>My tooltip's content</div>}
+</>;
+```
+
+The rendered DOM will have the following structure:
+
+```html
+<button>ACTION</button>
+<div>My tooltip's content</div>
+```
+
+With proper styles, it will look like this:
+
+![invert || A card that contains an action that's being hovered, making its tooltip visible](./tooltip.png)
+
+For this to work with `<Ariakit.TooltipAnchor>`, we can't just naively pass the `<button>` as a child. That would cause it to become wrapped in a `<div>` (the actual tooltip anchor), which could break our layout and complicate things in many ways.
+
+We don't need a wrapper, we only need the button to handle certain event handlers like `onPointerEnter` and `onPointerLeave`. To make `<button>` the anchor, what we need is to render `<TooltipAnchor>` "as" our `<button>`.
 
 # Finding the balance
 
