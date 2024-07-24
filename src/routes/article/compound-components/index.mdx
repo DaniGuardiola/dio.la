@@ -1,0 +1,183 @@
+---
+draft: true
+date: 1970/1/1
+title: Compound components
+description: Draft.
+topics:
+  - design-systems
+  - js
+  - react
+  - frontend
+---
+
+# Namespacing
+
+## Flat
+
+```tsx
+<Menu>
+  <MenuButton />
+  <MenuPopover>
+    <MenuItem />
+    <MenuItem />
+  </MenuPopover>
+</Menu>
+```
+
+## Dot
+
+```tsx
+<Menu.Root>
+  <Menu.Button />
+  <Menu.Popover>
+    <Menu.Item />
+    <Menu.Item />
+  </Menu.Popover>
+</Menu.Root>
+```
+
+## Overloaded
+
+```tsx
+<Menu>
+  <Menu.Button />
+  <Menu.Popover>
+    <Menu.Item />
+    <Menu.Item />
+  </Menu.Popover>
+</Menu>
+```
+
+# Export styles
+
+## Named
+
+```tsx
+export function Menu() {}
+export function MenuButton() {}
+// ...
+```
+
+## Object
+
+```tsx
+export const Menu = {
+  root: function MenuRoot() {},
+  button: function MenuButton() {},
+  // ...
+};
+```
+
+> Note: `export default {}` is also possible, but [not ideal](https://blog.piotrnalepa.pl/2020/06/26/default-exports-vs-named-exports/).
+
+# Import styles
+
+## Flat
+
+```tsx
+import { Menu, MenuButton } from "ui-package";
+
+<Menu>
+  <MenuButton />
+  {/* ... */}
+</Menu>;
+```
+
+## Local "as"
+
+```tsx
+import * as Menu from "ui-package/menu";
+
+<Menu.Root>
+  <Menu.Button />
+  {/* ... */}
+</Menu.Root>;
+```
+
+## Global "as"
+
+```tsx
+import * as UI from "ui-package";
+
+<UI.Menu>
+  <UI.MenuButton />
+  {/* ... */}
+</UI.Menu>;
+```
+
+## Overloaded
+
+```tsx
+import { Menu } from "ui-package";
+
+<Menu>
+  <Menu.Button />
+  {/* ... */}
+</Menu>;
+```
+
+# Combinations
+
+## Flat
+
+```tsx
+<Menu>
+  <MenuButton />
+</Menu>
+```
+
+### Named export + flat import
+
+```tsx
+// Menu.tsx
+export function Menu() {}
+export function MenuButton() {}
+```
+
+```tsx
+// App.tsx
+import { Menu, MenuButton } from "ui-package";
+
+<Menu>
+  <MenuButton />
+</Menu>;
+```
+
+### Named export + local "as" import
+
+> Naming improved for readability:
+>
+> - `Menu` -> `Root`
+> - `MenuButton` -> `Button`
+
+```tsx
+// Menu.tsx
+export function Root() {}
+export function Button() {}
+```
+
+```tsx
+// App.tsx
+import * as Menu from "ui-package/menu";
+
+<Menu.Root>
+  <Menu.Button />
+</Menu.Root>;
+```
+
+### Named export + global "as" import
+
+```tsx
+// Menu.tsx
+export function Menu() {}
+export function MenuButton() {}
+```
+
+```tsx
+// App.tsx
+import * as UI from "ui-package";
+
+<UI.Menu>
+  <UI.MenuButton />
+</UI.Menu>;
+```
