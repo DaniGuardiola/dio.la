@@ -10,7 +10,7 @@ topics:
   - frontend
 ---
 
-# Namespacing
+# Namespaces
 
 ## Flat
 
@@ -48,7 +48,7 @@ topics:
 </Menu>
 ```
 
-# Export styles
+# Exports
 
 ## Named
 
@@ -62,17 +62,27 @@ export function MenuButton() {}
 
 ```tsx
 export const Menu = {
-  root: function MenuRoot() {},
-  button: function MenuButton() {},
+  Root: function MenuRoot() {},
+  Button: function MenuButton() {},
   // ...
 };
 ```
 
 > Note: `export default {}` is also possible, but [not ideal](https://blog.piotrnalepa.pl/2020/06/26/default-exports-vs-named-exports/).
 
-# Import styles
+## Overloaded
 
-## Flat
+```tsx
+export function Menu() {}
+Menu.Button = function MenuButton() {};
+// ...
+```
+
+> Note: `export default function ...` is also possible, but [not ideal](https://blog.piotrnalepa.pl/2020/06/26/default-exports-vs-named-exports/).
+
+# Imports
+
+## Named
 
 ```tsx
 import { Menu, MenuButton } from "ui-package";
@@ -105,28 +115,9 @@ import * as UI from "ui-package";
 </UI.Menu>;
 ```
 
-## Overloaded
+# Options
 
-```tsx
-import { Menu } from "ui-package";
-
-<Menu>
-  <Menu.Button />
-  {/* ... */}
-</Menu>;
-```
-
-# Combinations
-
-## Flat
-
-```tsx
-<Menu>
-  <MenuButton />
-</Menu>
-```
-
-### Named export + flat import
+## Flat + named export
 
 ```tsx
 // Menu.tsx
@@ -134,21 +125,54 @@ export function Menu() {}
 export function MenuButton() {}
 ```
 
+Pros and cons:
+
+| Score | Description            | Notes                                                                                                               |
+| ----- | ---------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| ✅    | Tree-shakable          | In all import styles, most bundler tools will tree-shake unused component parts.                                    |
+| ✅    | Auto-imports           | IDEs will automatically import the components (or parts) you use.                                                   |
+| ❌    | Component autocomplete | At most, you can start typing the name of the component (e.g. "Menu") to filter out other suggestions.              |
+| 🟠    | Library autocomplete   | The library namespace contains all parts of all components, making it hard to see available components at a glance. |
+
+Supports:
+
 ```tsx
-// App.tsx
-import { Menu, MenuButton } from "ui-package";
+// named import
+import { Menu, MenuButton } from "ui-package"; // or "ui-package/menu"
 
 <Menu>
   <MenuButton />
 </Menu>;
 ```
 
-### Named export + local "as" import
+```tsx
+// global "as" import
+import * as UI from "ui-package";
 
-> Naming improved for readability:
->
-> - `Menu` -> `Root`
-> - `MenuButton` -> `Button`
+<UI.Menu>
+  <UI.MenuButton />
+</UI.Menu>;
+```
+
+Also this (but ew):
+
+```tsx
+// local "as" import
+import * as Menu from "ui-package/menu";
+
+<Menu.Menu>
+  <Menu.MenuButton />
+</Menu.Menu>;
+```
+
+## Dot + named export
+
+| Score | Description            | Notes                                                                                                                              |
+| ----- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| ✅    | Tree-shakable          | This is the only option for dot namespacing that is tree-shakable.                                                                 |
+| ❌    | Auto-imports           | Users need to manually write the local "as" import every time.                                                                     |
+| ✅    | Component autocomplete | Suggestions for all parts (and only the parts) will show up after the dot.                                                         |
+| ❌    | Library autocomplete   | It's not possible to re-export at the top level since that'd cause conflicts (e.g. multiple `Root` parts of different components). |
 
 ```tsx
 // Menu.tsx
@@ -156,8 +180,10 @@ export function Root() {}
 export function Button() {}
 ```
 
+Supports:
+
 ```tsx
-// App.tsx
+// local "as" import
 import * as Menu from "ui-package/menu";
 
 <Menu.Root>
@@ -165,19 +191,96 @@ import * as Menu from "ui-package/menu";
 </Menu.Root>;
 ```
 
-### Named export + global "as" import
+## Dot + object export
+
+```tsx
+// Menu.tsx
+export const Menu = {
+  Root: function MenuRoot() {},
+  Button: function MenuButton() {},
+};
+```
+
+| Score | Description            | Notes                                                                                         |
+| ----- | ---------------------- | --------------------------------------------------------------------------------------------- |
+| ❌    | Tree-shakable          | Since it's exported as a single object, it's not tree-shakable.                               |
+| ✅    | Auto-imports           | IDEs will automatically import the components you use.                                        |
+| ✅    | Component autocomplete | Suggestions for all parts (and only the parts) will show up after the dot.                    |
+| ✅    | Library autocomplete   | Only the components (objects) will show up in the library autocomplete (and not their parts). |
+
+Supports:
+
+```tsx
+// named import
+import { Menu } from "ui-package"; // or "ui-package/menu"
+
+<Menu.Root>
+  <Menu.Button />
+</Menu.Root>;
+```
+
+```tsx
+// global "as" import
+import * as UI from "ui-package";
+
+<UI.Menu.Root>
+  <UI.Menu.Button />
+</UI.Menu.Root>;
+```
+
+Also this (but ew):
+
+```tsx
+// local "as" import
+import * as Menu from "ui-package/menu";
+
+<Menu.Menu.Root>
+  <Menu.Menu.Button />
+</Menu.Menu.Root>;
+```
+
+## Overloaded
 
 ```tsx
 // Menu.tsx
 export function Menu() {}
-export function MenuButton() {}
+Menu.Button = function MenuButton() {};
+```
+
+| Score | Description            | Notes                                                                                                                                              |
+| ----- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ❌    | Tree-shakable          | Since it's exported as a single function with properties, it's not tree-shakable.                                                                  |
+| ✅    | Auto-imports           | IDEs will automatically import the components you use.                                                                                             |
+| 🟠    | Component autocomplete | Suggestions for all parts will show up after the dot. Unfortunately, so will the function prototype methods and properties (`apply`, `call`, etc). |
+| ✅    | Library autocomplete   | Only the root components will show up in the library autocomplete (and not their parts).                                                           |
+
+Supports:
+
+```tsx
+// named import
+import { Menu } from "ui-package"; // or "ui-package/menu"
+
+<Menu>
+  <Menu.Button />
+</Menu>;
 ```
 
 ```tsx
-// App.tsx
+// global "as" import
 import * as UI from "ui-package";
 
 <UI.Menu>
-  <UI.MenuButton />
+  <UI.Menu.Button />
 </UI.Menu>;
+```
+
+Also this (but ew):
+
+```tsx
+// local "as" import
+import * as Menu from "ui-package/menu";
+
+<Menu.Menu>
+  <Menu.Menu.Button />
+</Menu.Menu>;
 ```
