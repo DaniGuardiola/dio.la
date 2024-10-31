@@ -415,7 +415,7 @@ function Notes() {
 function BackgroundTexture() {
   return (
     <div class="absolute -z-10 top-0 w-full h-[11rem] sm:h-[16rem] bg-[radial-gradient(circle_at_1px_1px,var(--subtle-invert)_1px,transparent_0)] bg-[length:30px_30px]">
-      <div class="absolute w-full h-full bg-gradient-to-b from-transparent to-gray-100 dark:to-neutral-950" />
+      <div class="absolute w-full h-full bg-gradient-to-b from-transparent to-gray-100 dark:to-neutral-900" />
     </div>
   );
 }
