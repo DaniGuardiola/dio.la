@@ -1,6 +1,7 @@
 import { For, type JSX } from "solid-js";
 
 import airbusLogo from "./img/airbus-logo.png";
+import automatticLogo from "./img/automattic-logo.png";
 import createLogo from "./img/create-logo.png";
 import dataTrendsLogo from "./img/data-trends-logo.png";
 import guideLogo from "./img/guide-logo.png";
@@ -634,6 +635,67 @@ export const CAREER: CareerEntry[] = [
       <>
         <p>
           Work in progress! <Link href={timedoserSneakPeek}>(sneak peek)</Link>
+        </p>
+      </>
+    ),
+  },
+  {
+    logo: automatticLogo,
+    role: "Frontend engineer",
+    at: "Automattic (WordPress core)",
+    from: "March 2024",
+    to: "October 2024",
+    duration: "8 months",
+    stack: ["TypeScript", "React"],
+    shortDescription: () => (
+      <>
+        <p>
+          Maintained low-level frontend code such as{" "}
+          <Link href="https://wordpress.github.io/gutenberg">
+            @wordpress/components
+          </Link>{" "}
+          as part of Team Calypso.
+        </p>
+        <p>
+          Resigned (sadly) in the midst of the{" "}
+          <Link href="https://bullenweg.org/">Matt Mullenweg</Link> vs. WP
+          Engine debacle.
+        </p>
+      </>
+    ),
+    description: () => (
+      <>
+        <p>
+          At <Link href="https://automattic.com/">Automattic</Link>, I
+          maintained low-level frontend code such as{" "}
+          <Link href="https://wordpress.github.io/gutenberg">
+            @wordpress/components
+          </Link>{" "}
+          and{" "}
+          <Link href="https://developer.wordpress.org/block-editor/reference-guides/packages/packages-compose/">
+            @wordpress/compose
+          </Link>{" "}
+          (both widely used across WordPress core and the WordPress ecosystem).
+          Some of those contributions are listed in{" "}
+          <Link href="https://profiles.wordpress.org/daniguardiola/">
+            my WordPress.org profile
+          </Link>
+          .
+        </p>
+        <p>
+          I also contributed to parts of WordPress.com, focused on accessibility
+          (which included educating and helping other teams), and shared
+          technical deep-dives with the internal community of automatticians.
+        </p>
+        <p>
+          I was part of Team Calypso, a squad in charge of critical frontend
+          libraries, tools, frameworks, and infrastructure.
+        </p>
+
+        <p>
+          In the midst of the{" "}
+          <Link href="https://bullenweg.org/">Matt Mullenweg</Link> vs. WP
+          Engine debacle, I made the (tough) decision to resign.
         </p>
       </>
     ),
