@@ -62,7 +62,7 @@ function Heading() {
         </span>
       </div>
       <p class="text-lg text-subtle-invert font-bold">
-        Software developer · 10+ years{" "}
+        Software developer · 11+ years{" "}
       </p>
     </div>
   );
