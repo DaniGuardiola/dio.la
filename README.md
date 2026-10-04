@@ -72,9 +72,8 @@ records were preserved. `tempo.dio.la` retains its existing Cloudflare Sites tar
 
 The obsolete home ACME record and wildcard Vercel routing were removed. The
 retired Kapture project and the six migrated Vercel projects were deleted after
-Cloudflare verification. There is no Vercel hosting fallback. The old Vercel DNS
-zone temporarily directs explicit web names to Cloudflare for cached delegation;
-remove that zone once delegation caches expire. The Pi4 now runs
+Cloudflare verification. The old Vercel DNS zone was also removed; Cloudflare
+is the only DNS provider and there is no Vercel hosting fallback. The Pi4 runs
 `cloudflare-ddns.timer` every five minutes to update `home` and `pi4` if the
 public IPv4 changes. See [DDNS setup](cloudflare/ddns/README.md).
 
