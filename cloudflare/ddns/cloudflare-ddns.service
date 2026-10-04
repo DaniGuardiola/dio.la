@@ -1,0 +1,9 @@
+[Unit]
+Description=Update home and pi4 Cloudflare DNS records
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/.local/bin/cloudflare-ddns.py
+NoNewPrivileges=true
+PrivateTmp=true
+TimeoutStartSec=120

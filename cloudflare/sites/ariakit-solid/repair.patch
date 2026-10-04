@@ -1,0 +1,36 @@
+diff --git a/packages/ariakit-solid-core/src/heading/heading-level.tsx b/packages/ariakit-solid-core/src/heading/heading-level.tsx
+index 5d6bb90..69fb8a5 100644
+--- a/packages/ariakit-solid-core/src/heading/heading-level.tsx
++++ b/packages/ariakit-solid-core/src/heading/heading-level.tsx
+@@ -1,6 +1,5 @@
+ import { useContext } from "solid-js";
+ import type { ReactNode } from "../utils/_port.ts";
+-import { $o } from "../utils/_props.ts";
+ import { HeadingContext } from "./heading-context.tsx";
+ import type { HeadingLevels } from "./utils.ts";
+ 
+@@ -20,8 +19,7 @@ import type { HeadingLevels } from "./utils.ts";
+  * </HeadingLevel>
+  * ```
+  */
+-export function HeadingLevel(__: HeadingLevelProps) {
+-  const [_] = $o(__, { level: undefined, children: undefined });
++export function HeadingLevel(_: HeadingLevelProps) {
+   const contextLevel = useContext(HeadingContext);
+   // biome-ignore format: [port]
+   const nextLevel = () => Math.max(
+diff --git a/packages/ariakit-solid-core/src/utils/hooks.ts b/packages/ariakit-solid-core/src/utils/hooks.ts
+index 6fcd6f3..bd59781 100644
+--- a/packages/ariakit-solid-core/src/utils/hooks.ts
++++ b/packages/ariakit-solid-core/src/utils/hooks.ts
+@@ -43,7 +43,8 @@ export function useWrapElement<P, Q = P & { wrapInstance: WrapInstance }>(
+   element: WrapInstanceValue,
+   _deps: Array<unknown>, // Only here to minimize the diff noise.
+ ): Q {
+-  return $(props as JSX.HTMLAttributes<any> & { wrapInstance?: WrapInstance })({
++  $(props as JSX.HTMLAttributes<any> & { wrapInstance?: WrapInstance })({
+     $wrapInstance: (props) => [...(props.wrapInstance ?? []), element],
+-  }) as Q;
++  });
++  return props as Q;
+ }

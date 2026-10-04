@@ -31,3 +31,4 @@ public/rss.xml
 functions/
 .wrangler
 .dev.vars
+cloudflare/sites/*/public/

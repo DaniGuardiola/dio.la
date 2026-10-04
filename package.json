@@ -17,12 +17,13 @@
     "build": "NODE_ENV=production bun gen && solid-start build",
     "build:cloudflare": "DEPLOY_TARGET=cloudflare bun run build",
     "preview:cloudflare": "wrangler pages dev dist/public",
-    "deploy:cloudflare": "bun run build:cloudflare && wrangler pages deploy dist/public --project-name dio-la",
+    "deploy:cloudflare": "bun run build:cloudflare && wrangler pages deploy dist/public --project-name dio-la --branch main",
     "build:cloudflare:drafts": "IS_DRAFTS=true VITE_IS_DRAFTS=true bun run build:cloudflare && bun src/scripts/prepare-cloudflare-drafts.ts",
     "preview:cloudflare:drafts": "wrangler --cwd .wrangler/drafts pages dev public",
     "deploy:cloudflare:drafts": "bun run build:cloudflare:drafts && wrangler --cwd .wrangler/drafts pages deploy public --project-name dio-la-drafts --branch main",
     "start": "solid-start start",
-    "prod": "bun build && bun start"
+    "prod": "bun build && bun start",
+    "deploy:cloudflare:redirects": "wrangler deploy --config cloudflare/redirects/wrangler.jsonc"
   },
   "dependencies": {
     "@ariakit/react": "^0.4.7",
@@ -66,7 +67,6 @@
     "solid-mdx": "^0.0.7",
     "solid-start-bun": "^0.3.10",
     "solid-start-cloudflare-pages": "0.3.10",
-    "solid-start-vercel": "^0.3.10",
     "tailwindcss": "^3.3.5",
     "typescript": "5.2.2",
     "undici": "^5.27.2",

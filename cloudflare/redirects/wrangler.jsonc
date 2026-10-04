@@ -1,0 +1,16 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "dio-redirects",
+  "main": "index.ts",
+  "compatibility_date": "2026-10-04",
+  "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    { "pattern": "pgp.dio.la", "custom_domain": true },
+    { "pattern": "www.dio.la", "custom_domain": true },
+    { "pattern": "h.dio.la", "custom_domain": true },
+    { "pattern": "u.dio.la", "custom_domain": true },
+    { "pattern": "h-utils.dio.la", "custom_domain": true },
+    { "pattern": "install-xr.dio.la", "custom_domain": true }
+  ],
+  "observability": { "enabled": true, "head_sampling_rate": 1 }
+}

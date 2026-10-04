@@ -12,6 +12,5 @@ export function isLocalhost() {
   if (typeof document !== "undefined")
     return ["localhost:", "127.0.0.1:"].some((host) => document.location.host.startsWith(host));
 
-  const { NODE_ENV, VERCEL_ENV } = process.env;
-  return Boolean(NODE_ENV === "development" || (VERCEL_ENV && VERCEL_ENV === "development"));
+  return process.env.NODE_ENV === "development";
 }
