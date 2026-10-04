@@ -18,6 +18,9 @@
     "build:cloudflare": "DEPLOY_TARGET=cloudflare bun run build",
     "preview:cloudflare": "wrangler pages dev dist/public",
     "deploy:cloudflare": "bun run build:cloudflare && wrangler pages deploy dist/public --project-name dio-la",
+    "build:cloudflare:drafts": "IS_DRAFTS=true VITE_IS_DRAFTS=true bun run build:cloudflare && bun src/scripts/prepare-cloudflare-drafts.ts",
+    "preview:cloudflare:drafts": "wrangler --cwd .wrangler/drafts pages dev public",
+    "deploy:cloudflare:drafts": "bun run build:cloudflare:drafts && wrangler --cwd .wrangler/drafts pages deploy public --project-name dio-la-drafts --branch main",
     "start": "solid-start start",
     "prod": "bun build && bun start"
   },

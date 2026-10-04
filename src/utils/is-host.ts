@@ -1,5 +1,8 @@
 export function isDrafts() {
-  if (typeof document !== "undefined") return document.location.host.startsWith("drafts.");
+  if (typeof document !== "undefined")
+    return (
+      import.meta.env.VITE_IS_DRAFTS === "true" || document.location.host.startsWith("drafts.")
+    );
 
   const { IS_DRAFTS } = process.env;
   return IS_DRAFTS === "true";
