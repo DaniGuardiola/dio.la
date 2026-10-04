@@ -1,13 +1,5 @@
 import clsx from "clsx";
-import {
-  type ComponentProps,
-  createMemo,
-  For,
-  Match,
-  Show,
-  splitProps,
-  Switch,
-} from "solid-js";
+import { type ComponentProps, createMemo, For, Match, Show, splitProps, Switch } from "solid-js";
 import { A, useNavigate, useSearchParams } from "solid-start";
 
 import { HeadMetadata } from "~/components/HeadMetadata";
@@ -18,13 +10,9 @@ import {
   ARTICLES_BY_YEAR_SORTED,
   HIGHLIGHTS,
   type Topic,
-  TOPICS_SORTED,
+  TOPICS_SORTED
 } from "~/data/articles";
-import {
-  ALLOWED_TOPICS,
-  CANONICAL_DOMAIN,
-  SITE_DESCRIPTION,
-} from "~/data/config";
+import { ALLOWED_TOPICS, CANONICAL_DOMAIN, SITE_DESCRIPTION } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
 
 // article url
@@ -51,7 +39,7 @@ const MONTHS = [
   "September",
   "October",
   "November",
-  "December",
+  "December"
 ];
 
 type DateLabelProps = ComponentProps<"time"> & {
@@ -77,8 +65,7 @@ function DateLabel(p0: DateLabelProps) {
     const year = date().getFullYear();
     const yearString = `, ${year}`;
     const shouldDisplayYear =
-      props.includeYear &&
-      (props.includeYear === "always" || new Date().getFullYear() !== year);
+      props.includeYear && (props.includeYear === "always" || new Date().getFullYear() !== year);
     return `${month} ${day}${shouldDisplayYear ? yearString : ""}`;
   });
 
@@ -100,11 +87,7 @@ function MainHighlight(props: ArticleMetadata) {
     >
       <article class="bg-white dark:bg-neutral-950 rounded-md space-y-1 overflow-hidden">
         <Show when={props.imageUrl}>
-          <img
-            alt="This article's main image"
-            class="w-full aspect-[40/21]"
-            src={props.imageUrl}
-          />
+          <img alt="This article's main image" class="w-full aspect-[40/21]" src={props.imageUrl} />
         </Show>
         <div class="p-6 space-y-3">
           <DateLabel
@@ -117,9 +100,7 @@ function MainHighlight(props: ArticleMetadata) {
           </h2>
 
           <Show when={!props.imageUrl}>
-            <p class="text-[1.125rem] text-subtle-invert">
-              {props.description}
-            </p>
+            <p class="text-[1.125rem] text-subtle-invert">{props.description}</p>
           </Show>
         </div>
       </article>
@@ -134,17 +115,11 @@ function Highlight(props: ArticleMetadata) {
       class="block rounded-md focus-ring-white focus-scroll-target group"
     >
       <article class="space-y-[.375rem] text-white">
-        <DateLabel
-          class="text-[.875rem] uppercase"
-          date={props.date}
-          includeYear
-        />
+        <DateLabel class="text-[.875rem] uppercase" date={props.date} includeYear />
         <h2 class="text-[1.25rem] font-bold leading-[1.5rem] group-hover:underline group-focus-visible:underline">
           {props.title}
         </h2>
-        <p class="text-[1.125rem] text-subtle-white leading-[1.375rem]">
-          {props.description}
-        </p>
+        <p class="text-[1.125rem] text-subtle-white leading-[1.375rem]">{props.description}</p>
       </article>
     </A>
   );
@@ -170,9 +145,7 @@ function Highlights() {
           <MainHighlight {...topHighlight} />
         </div>
         <div class="space-y-8 grow basis-0">
-          <For each={highlights}>
-            {(highlight) => <Highlight {...highlight} />}
-          </For>
+          <For each={highlights}>{(highlight) => <Highlight {...highlight} />}</For>
         </div>
       </div>
     </section>
@@ -213,16 +186,13 @@ function Topics() {
                 <li>
                   <A
                     href={getTopicUrl(id)}
-                    aria-label={`${id} (${amount} article${
-                      amount === 1 ? "" : "s"
-                    })`}
+                    aria-label={`${id} (${amount} article${amount === 1 ? "" : "s"})`}
                     class="text-[1.125rem] leading-none hover:underline focus-ring focus-scroll-target rounded-sm"
                     classList={{
-                      "font-bold pointer-events-none": topic() === id,
+                      "font-bold pointer-events-none": topic() === id
                     }}
                   >
-                    {`#${id}`}{" "}
-                    <span class="text-accent font-bold">{amount}</span>
+                    {`#${id}`} <span class="text-accent font-bold">{amount}</span>
                   </A>
                 </li>
               )}
@@ -238,9 +208,7 @@ function TopicBanner() {
   const [searchParams] = useSearchParams();
   const topic = () => searchParams.topic as Topic | undefined;
 
-  const topicExists = createMemo(
-    () => topic() && ALLOWED_TOPICS.includes(topic()!)
-  );
+  const topicExists = createMemo(() => topic() && ALLOWED_TOPICS.includes(topic()!));
 
   return (
     <Show when={topicExists()}>
@@ -278,10 +246,7 @@ type ArticleItemProps = ArticleMetadata & {
 function ArticleItem(props: ArticleItemProps) {
   const navigate = useNavigate();
   return (
-    <A
-      href={getArticleUrl(props.id)}
-      class="block rounded-md focus-ring focus-scroll-target group"
-    >
+    <A href={getArticleUrl(props.id)} class="block rounded-md focus-ring focus-scroll-target group">
       <article class="space-y-[.25rem]">
         <div class="flex gap-4">
           <DateLabel
@@ -308,9 +273,7 @@ function ArticleItem(props: ArticleItemProps) {
         <h2 class="text-[1.125rem] leading-[1.375rem] [.group:hover:not(:has(.hover-exclude:hover))_&]:underline group-focus-visible:underline">
           {props.title}
         </h2>
-        <p class="text-subtle-invert text-[1rem] leading-[1.1875rem]">
-          {props.description}
-        </p>
+        <p class="text-subtle-invert text-[1rem] leading-[1.1875rem]">{props.description}</p>
       </article>
     </A>
   );
@@ -319,16 +282,10 @@ function ArticleItem(props: ArticleItemProps) {
 type ArticleListProps = { topic?: Topic };
 
 function ArticleList(props: ArticleListProps) {
-  const topicExists = createMemo(
-    () => props.topic && ALLOWED_TOPICS.includes(props.topic)
-  );
+  const topicExists = createMemo(() => props.topic && ALLOWED_TOPICS.includes(props.topic));
   return (
     <>
-      <section
-        id="articles"
-        aria-label="articles"
-        class="focus-scroll-target p-4 lg:grow lg:pt-2"
-      >
+      <section id="articles" aria-label="articles" class="focus-scroll-target p-4 lg:grow lg:pt-2">
         <SkipLink id="article-list" />
         <TopicBanner />
         <div class="space-y-6">
@@ -338,15 +295,9 @@ function ArticleList(props: ArticleListProps) {
                 {([year, articles]) => {
                   const isCurrentYear = +year === new Date().getFullYear();
                   return (
-                    <section
-                      aria-label={`articles from ${year}`}
-                      class="space-y-6"
-                    >
+                    <section aria-label={`articles from ${year}`} class="space-y-6">
                       <Show when={!isCurrentYear}>
-                        <time
-                          class="block text-[1.125rem] font-bold pt-[1.25rem]"
-                          datetime={year}
-                        >
+                        <time class="block text-[1.125rem] font-bold pt-[1.25rem]" datetime={year}>
                           {year}
                         </time>
                       </Show>
@@ -367,8 +318,7 @@ function ArticleList(props: ArticleListProps) {
             <Match when={topicExists()}>
               <For
                 each={ARTICLES.filter(
-                  (article) =>
-                    props.topic && article.topics?.includes(props.topic)
+                  (article) => props.topic && article.topics?.includes(props.topic)
                 )}
               >
                 {(article) => <ArticleItem {...article} includeYear="always" />}
@@ -390,24 +340,16 @@ export default function Home() {
 
   return (
     <>
-      <HeadMetadata
-        url={`https://${CANONICAL_DOMAIN}/`}
-        description={SITE_DESCRIPTION}
-      />
+      <HeadMetadata url={`https://${CANONICAL_DOMAIN}/`} description={SITE_DESCRIPTION} />
       <SkipLinks
         links={[
           { id: "article-list", label: "article list" },
-          { id: "topics", label: "topics" },
+          { id: "topics", label: "topics" }
         ]}
       />
       <div class="space-y-6 pb-20">
         <Highlights />
-        <div
-          class={clsx(
-            "space-y-4",
-            "lg:flex lg:gap-x-12 lg:flex-row-reverse lg:main-container"
-          )}
-        >
+        <div class={clsx("space-y-4", "lg:flex lg:gap-x-12 lg:flex-row-reverse lg:main-container")}>
           <Topics />
           <ArticleList topic={topic()} />
         </div>

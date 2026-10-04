@@ -1,6 +1,5 @@
 export const BASE_PAGE_TITLE = "dio.la - Dani Guardiola's blog";
-export const SITE_DESCRIPTION =
-  "Software engineering, web development, and life!";
+export const SITE_DESCRIPTION = "Software engineering, web development, and life!";
 export const NAME = "Dani Guardiola";
 export const TWITTER_USERNAME = "daniguardio_la";
 export const CANONICAL_DOMAIN = "dio.la";
@@ -15,7 +14,7 @@ export const ALLOWED_TOPICS = [
   "lexical",
   "react",
   "design-systems",
-  "frontend",
+  "frontend"
 ] as const;
 export const REQUIRED_ARTICLE_FIELDS = ["date", "title", "description"];
 export const REPO = "DaniGuardiola/dio.la";

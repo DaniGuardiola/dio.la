@@ -2,8 +2,7 @@ import clsx from "clsx";
 import { type ComponentProps, createSignal, For, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 
-const [skipLinkAreaElement, setSkipLinkAreaElement] =
-  createSignal<HTMLElement>();
+const [skipLinkAreaElement, setSkipLinkAreaElement] = createSignal<HTMLElement>();
 
 export function SkipLinkArea() {
   return <div ref={setSkipLinkAreaElement} />;

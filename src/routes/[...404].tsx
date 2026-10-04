@@ -36,9 +36,7 @@ export default function NotFound() {
       <div class="bg-accent">
         <h1 class="px-4 py-8 lg:main-container text-white font-fira-code font-bold text-3xl">
           {text()}
-          <span class={blinking() ? "motion-safe:animate-blink" : undefined}>
-            _
-          </span>
+          <span class={blinking() ? "motion-safe:animate-blink" : undefined}>_</span>
         </h1>
       </div>
       <div class="p-4 min-h-[65vh] lg:main-container flex flex-col items-center justify-center space-y-8">

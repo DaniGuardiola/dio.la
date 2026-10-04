@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "import", "unicorn", "oxc"],
+  "jsPlugins": ["eslint-plugin-solid"],
+  "env": { "browser": true, "node": true, "es2021": true },
+  "globals": { "Bun": "readonly" },
+  "categories": { "correctness": "error" },
+  "rules": {
+    "typescript/no-unused-vars": "error",
+    "import/no-duplicates": "error",
+    "solid/jsx-no-duplicate-props": "error",
+    "solid/jsx-no-undef": "error",
+    "solid/no-unknown-namespaces": "error",
+    "solid/no-innerhtml": "error",
+    "solid/jsx-no-script-url": "error",
+    "solid/no-destructure": "error",
+    "solid/prefer-for": "error",
+    "solid/reactivity": "warn",
+    "solid/event-handlers": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.tsx"],
+      "rules": { "no-unassigned-vars": "off" }
+    }
+  ],
+  "ignorePatterns": ["dist", ".solid", "functions", "src/data/generated", "node_modules"]
+}

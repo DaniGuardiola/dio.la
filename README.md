@@ -54,8 +54,15 @@ IP change. No updater was found in the Pi's system services or user crontab.
 Keep the Vercel zone and deployments available until this is resolved and the
 cutover has been verified.
 
-The next migration stages are TanStack Start with Solid 2, Oxlint/Oxfmt,
-Tailwind 4, and an upgrade of the content pipeline and remaining dependencies.
+Linting uses Oxlint, including Solid rules through its JavaScript plugin support.
+Formatting and generated article data use Oxfmt. Run `bun run check` for lint,
+format, and type checks, or `bun run format` to format sources. Formatting does
+not rewrite embedded code examples, preserving Twoslash annotations. The
+`no-unassigned-vars` rule is disabled for TSX because Solid assigns JSX refs
+implicitly. Bun is pinned to 1.4.2 in `packageManager`.
+
+The next migration stages are TanStack Start with Solid 2, Tailwind 4, and an
+upgrade of the content pipeline and remaining dependencies.
 The Pages adapter is a bridge for the existing SolidStart 0.3 application;
 TanStack Start's official Cloudflare integration targets Workers with the
 Cloudflare Vite plugin.

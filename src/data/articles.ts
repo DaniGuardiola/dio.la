@@ -28,12 +28,10 @@ const highlightsIds: ArticleId[] = [
   "the-open-closed-component-part-1",
   "lexical-state-updates",
   "colorful-avatars",
-  "unlinked",
+  "unlinked"
 ];
 
-export const HIGHLIGHTS = highlightsIds
-  .filter(articleMetadataExists)
-  .map(findArticleMetadataById);
+export const HIGHLIGHTS = highlightsIds.filter(articleMetadataExists).map(findArticleMetadataById);
 
 export { ARTICLES };
 
@@ -51,13 +49,11 @@ export const TOPICS = ARTICLES.reduce(
   {} as Record<Topic, number>
 );
 
-export const TOPICS_SORTED = Object.entries(TOPICS).sort(
-  ([aName, aCount], [bName, bCount]) => {
-    const byCount = bCount - aCount;
-    if (byCount !== 0) return byCount;
-    return aName.localeCompare(bName);
-  }
-);
+export const TOPICS_SORTED = Object.entries(TOPICS).sort(([aName, aCount], [bName, bCount]) => {
+  const byCount = bCount - aCount;
+  if (byCount !== 0) return byCount;
+  return aName.localeCompare(bName);
+});
 
 export const ARTICLES_BY_YEAR = ARTICLES.reduce(
   (acc, article) => {

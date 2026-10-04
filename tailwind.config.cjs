@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const plugin = require("tailwindcss/plugin");
-const {
-  tailwindPrintVariantPlugin,
-} = require("./src/lib/tailwind-print-variant");
+const { tailwindPrintVariantPlugin } = require("./src/lib/tailwind-print-variant");
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -18,30 +16,30 @@ module.exports = {
         subtle: "#6f6f6f",
         "subtle-invert": "var(--subtle-invert)",
         "subtle-white": "#ffffffd1",
-        "subtle-white-invert": "var(--subtle-white-invert)",
+        "subtle-white-invert": "var(--subtle-white-invert)"
       },
       colors: {
         accent: "#046b46",
-        "black-invert": "rgb(var(--black-invert) / <alpha-value>)",
+        "black-invert": "rgb(var(--black-invert) / <alpha-value>)"
       },
       fontFamily: {
         inter: ['"Inter"', "sans-serif"],
         "fira-code": ['"Fira Code"', "monospace"],
-        "roboto-slab": ['"Roboto Slab"', "serif"],
+        "roboto-slab": ['"Roboto Slab"', "serif"]
       },
       listStyleType: {
-        "lower-latin": "lower-latin",
+        "lower-latin": "lower-latin"
       },
       animation: {
-        blink: "cursor-blink 1s steps(1) infinite",
-      },
-    },
+        blink: "cursor-blink 1s steps(1) infinite"
+      }
+    }
   },
   plugins: [
     tailwindPrintVariantPlugin,
     plugin(function ({ addVariant }) {
       addVariant("exclusive-hover", "&:hover:not(:has(.hover-exclude:hover))");
       addVariant("targeted-hover", "&:has(.hover-target:hover)");
-    }),
-  ],
+    })
+  ]
 };

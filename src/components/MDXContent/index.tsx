@@ -1,6 +1,5 @@
 import "./styles.sass";
 import "katex/dist/katex.min.css";
-
 import clsx from "clsx";
 import pDebounce from "p-debounce";
 import { type ComponentProps, createSignal, type JSX } from "solid-js";
@@ -38,7 +37,7 @@ const KATEX_TAGS = [
   "mglyph",
   "svg",
   "line",
-  "path",
+  "path"
 ];
 
 function Anchor(props: ComponentProps<typeof A>) {
@@ -163,16 +162,13 @@ export function MDXContent(props: MDXContentProps) {
           "data-err": DataErr,
           pre: Pre,
           YoutubeVideo,
-          ...KATEX_TAGS.reduce(
-            (obj, component) => ({ ...obj, [component]: stub(component) }),
-            {}
-          ),
+          ...KATEX_TAGS.reduce((obj, component) => ({ ...obj, [component]: stub(component) }), {}),
           ...Object.fromEntries(
             (["h1", "h2", "h3", "h4", "h5", "h6"] as const).map((type) => [
               type,
-              createHeading(type),
+              createHeading(type)
             ])
-          ),
+          )
         }}
       >
         {props.children}

@@ -39,9 +39,7 @@ export function ThemeScript() {
   );
 }
 
-export const [theme, setTheme] = createSignal<"light" | "dark">(
-  isDarkTheme() ? "dark" : "light"
-);
+export const [theme, setTheme] = createSignal<"light" | "dark">(isDarkTheme() ? "dark" : "light");
 
 export function toggleTheme() {
   if (typeof window === "undefined") return;

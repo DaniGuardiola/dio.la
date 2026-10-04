@@ -4,7 +4,7 @@ import {
   articleMetadataExists,
   findArticleMetadataById,
   getArticlePath,
-  useArticleLocation,
+  useArticleLocation
 } from "~/data/articles";
 import { type ArticleId } from "~/data/generated/articles";
 
@@ -14,8 +14,7 @@ type ArticleSeriesIndexProps = {
 };
 
 export function ArticleSeriesIndex(props: ArticleSeriesIndexProps) {
-  const data = () =>
-    props.articleIds.filter(articleMetadataExists).map(findArticleMetadataById);
+  const data = () => props.articleIds.filter(articleMetadataExists).map(findArticleMetadataById);
 
   const { articleId } = useArticleLocation();
   return (

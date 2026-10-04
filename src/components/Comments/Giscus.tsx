@@ -12,13 +12,7 @@ export type InputPosition = "top" | "bottom";
 
 export type Repo = `${string}/${string}`;
 
-export type Mapping =
-  | "url"
-  | "title"
-  | "og:title"
-  | "specific"
-  | "number"
-  | "pathname";
+export type Mapping = "url" | "title" | "og:title" | "specific" | "number" | "pathname";
 
 export type GenericString = string & Record<never, never>;
 

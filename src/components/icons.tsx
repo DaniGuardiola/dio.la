@@ -2,12 +2,7 @@ import { type ComponentProps } from "solid-js";
 
 export function LightThemeIcon(props: ComponentProps<"svg">) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 15 15"
-      fill="none"
-      {...props}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="none" {...props}>
       <path
         fill="currentColor"
         fill-rule="evenodd"
@@ -20,12 +15,7 @@ export function LightThemeIcon(props: ComponentProps<"svg">) {
 
 export function DarkThemeIcon(props: ComponentProps<"svg">) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 15 15"
-      fill="none"
-      {...props}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 15" fill="none" {...props}>
       <path
         fill="currentColor"
         fill-rule="evenodd"

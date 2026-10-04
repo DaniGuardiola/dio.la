@@ -11,8 +11,7 @@ declare global {
 export function setUpViewTransitions() {
   let doneRouting: ((value?: unknown) => void) | undefined;
   useBeforeLeave((event) => {
-    if (typeof document === "undefined" || !document.startViewTransition)
-      return;
+    if (typeof document === "undefined" || !document.startViewTransition) return;
     event.preventDefault();
     document.startViewTransition(
       () =>

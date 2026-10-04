@@ -6,7 +6,7 @@ async function subscribe(email: string) {
     const body = {
       "fields[email]": email,
       "ml-submit": "1",
-      anticsrf: "true",
+      anticsrf: "true"
     };
     const response = await fetch(
       "https://assets.mailerlite.com/jsonp/701331/forms/105550814312924511/subscribe",
@@ -14,12 +14,12 @@ async function subscribe(email: string) {
         body: new URLSearchParams(body),
         method: "POST",
         mode: "cors",
-        credentials: "omit",
+        credentials: "omit"
       }
     );
     const result = await response.json();
     if (result.success) return true;
-  } catch (e) {
+  } catch {
     return false;
   }
 
@@ -77,9 +77,7 @@ export function Subscribe() {
           disabled={loading()}
           class={clsx(
             "text-white py-2 px-4 rounded focus-ring",
-            loading()
-              ? "pointer-events-none bg-accent/80"
-              : "bg-accent hover:bg-accent/90"
+            loading() ? "pointer-events-none bg-accent/80" : "bg-accent hover:bg-accent/90"
           )}
           type="submit"
         >

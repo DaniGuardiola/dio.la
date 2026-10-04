@@ -25,7 +25,7 @@ type BlitzProps = ComponentProps<"iframe"> & {
 
 const DEFAULTS = {
   view: "preview",
-  hideNavigation: true,
+  hideNavigation: true
 };
 
 function toParamValue(value: string | number | boolean) {
@@ -34,19 +34,12 @@ function toParamValue(value: string | number | boolean) {
 }
 
 export function Blitz(props: BlitzProps) {
-  const [blitzProps, htmlProps] = splitProps(props, [
-    "blitzId",
-    "file",
-    "view",
-    "params",
-  ]);
+  const [blitzProps, htmlProps] = splitProps(props, ["blitzId", "file", "view", "params"]);
   const searchParams = () => {
     const params = new URLSearchParams({ embed: "1" });
 
     // Set defaults.
-    Object.entries(DEFAULTS).forEach(([key, value]) =>
-      params.set(key, toParamValue(value))
-    );
+    Object.entries(DEFAULTS).forEach(([key, value]) => params.set(key, toParamValue(value)));
 
     // Set user-defined values.
     if (blitzProps.file) params.set("file", blitzProps.file);
@@ -61,9 +54,7 @@ export function Blitz(props: BlitzProps) {
   return (
     <iframe
       loading="lazy"
-      src={`https://stackblitz.com/edit/${
-        blitzProps.blitzId
-      }?${searchParams()}`}
+      src={`https://stackblitz.com/edit/${blitzProps.blitzId}?${searchParams()}`}
       {...htmlProps}
       class={clsx(
         "w-[calc(100%+2rem)] min-h-[32rem] -mx-4 my-[1.25em] rounded-lg",

@@ -1,5 +1,4 @@
 import "./print.css";
-
 import { createEffect, createSignal, For, Show } from "solid-js";
 
 import { HeadMetadata } from "~/components/HeadMetadata";
@@ -12,9 +11,7 @@ import { Link } from "./shared";
 const [tldr, _setTldr] = createSignal(true);
 const [recentFirst, _setRecentFirst] = createSignal(false);
 
-const params = new URLSearchParams(
-  typeof window === "undefined" ? "" : window.location.search
-);
+const params = new URLSearchParams(typeof window === "undefined" ? "" : window.location.search);
 
 function setTldr(value: boolean) {
   _setTldr(value);
@@ -61,9 +58,7 @@ function Heading() {
           </span>
         </span>
       </div>
-      <p class="text-lg text-subtle-invert font-bold">
-        Software developer · 11+ years{" "}
-      </p>
+      <p class="text-lg text-subtle-invert font-bold">Software developer · 11+ years </p>
     </div>
   );
 }
@@ -74,13 +69,8 @@ function Skills() {
       when={tldr()}
       children={
         <ul>
-          <li>
-            HTML · CSS · JavaScript · TypeScript · web APIs · Tailwind CSS ·
-            Radix
-          </li>
-          <li>
-            React · Next.js · Node.js · Bun · Prisma · GraphQL · PostgreSQL
-          </li>
+          <li>HTML · CSS · JavaScript · TypeScript · web APIs · Tailwind CSS · Radix</li>
+          <li>React · Next.js · Node.js · Bun · Prisma · GraphQL · PostgreSQL</li>
         </ul>
       }
       fallback={
@@ -101,10 +91,7 @@ function Introduction() {
   return (
     <section aria-label="Introduction" class="flex flex-col gap-4 text-base">
       <Show when={!tldr()}>
-        <p>
-          Passionate about software and user interfaces. TypeScript and React
-          expert.
-        </p>
+        <p>Passionate about software and user interfaces. TypeScript and React expert.</p>
       </Show>
       <Show
         when={tldr()}
@@ -142,12 +129,11 @@ function Introduction() {
               <summary class="select-none">A brief history of me</summary>
               <div class="flex flex-col gap-8 text-base pt-4">
                 <p>
-                  When I was 4, my family's rusty old computer (still running
-                  Windows 98) became my first machine. They probably expected me
-                  to play games, but I was more interested in messing with the
-                  poor computer by running experiments like deleting system
-                  files until it crashed. I soon discovered webpages, which I'd
-                  spend hours creating with the ancient{" "}
+                  When I was 4, my family's rusty old computer (still running Windows 98) became my
+                  first machine. They probably expected me to play games, but I was more interested
+                  in messing with the poor computer by running experiments like deleting system
+                  files until it crashed. I soon discovered webpages, which I'd spend hours creating
+                  with the ancient{" "}
                   <Link href="https://en.wikipedia.org/wiki/Microsoft_FrontPage">
                     Microsoft FrontPage
                   </Link>{" "}
@@ -158,9 +144,9 @@ function Introduction() {
                   <Link href="https://chromewebstore.google.com/detail/timedoser/cmkneeaihlcdllananjlkmppnkdahdcc">
                     TimeDoser
                   </Link>
-                  , which reached over 59k+ installs, 23k+ weekly active users,
-                  and a high user rating. It also garnered media attention,
-                  being featured on a few websites, including{" "}
+                  , which reached over 59k+ installs, 23k+ weekly active users, and a high user
+                  rating. It also garnered media attention, being featured on a few websites,
+                  including{" "}
                   <Link href="https://lifehacker.com/timedoser-is-a-pomodoro-timer-for-chrome-1639626091">
                     Lifehacker
                   </Link>{" "}
@@ -171,16 +157,14 @@ function Introduction() {
                   .
                 </p>
                 <p>
-                  By 17, I had my first job at a tech company, launching my
-                  professional career as a full-time software developer. Since
-                  then, I've worked with companies (mostly startups), built a
-                  few personal projects, and contributed to open-source.
+                  By 17, I had my first job at a tech company, launching my professional career as a
+                  full-time software developer. Since then, I've worked with companies (mostly
+                  startups), built a few personal projects, and contributed to open-source.
                 </p>
                 <p>
-                  I recent years, I've worked with Silicon Valley startups,
-                  specializing in TypeScript, React, Next.js, design systems,
-                  rich text editors and tooling. I love building and I never
-                  waste a chance to take on ambitious tasks. I enjoy a good
+                  I recent years, I've worked with Silicon Valley startups, specializing in
+                  TypeScript, React, Next.js, design systems, rich text editors and tooling. I love
+                  building and I never waste a chance to take on ambitious tasks. I enjoy a good
                   challenge.
                 </p>
               </div>
@@ -189,10 +173,9 @@ function Introduction() {
               <summary class="select-none">Skills and knowledge</summary>
               <div class="flex flex-col gap-8 text-base pt-4">
                 <p>
-                  I've worked with many technologies and stacks, but I don't
-                  think listing every little thing is useful. Instead, here's a
-                  brief list of the things I currently have professional
-                  expertise in:
+                  I've worked with many technologies and stacks, but I don't think listing every
+                  little thing is useful. Instead, here's a brief list of the things I currently
+                  have professional expertise in:
                 </p>
                 <Skills />
               </div>
@@ -206,20 +189,13 @@ function Introduction() {
           <>
             <p>
               I blog at <Link href="https://dio.la">dio.la</Link>, tweet at{" "}
-              <Link href="https://twitter.com/daniguardio_la">
-                @daniguardio_la
-              </Link>
-              , and publish open-source at{" "}
-              <Link href="https://github.com/DaniGuardiola">
-                github.com/DaniGuardiola
-              </Link>
-              .
+              <Link href="https://twitter.com/daniguardio_la">@daniguardio_la</Link>, and publish
+              open-source at{" "}
+              <Link href="https://github.com/DaniGuardiola">github.com/DaniGuardiola</Link>.
             </p>
             <p>
-              Reach me at{" "}
-              <Link href="mailto:hi@daniguardio.la">hi@daniguardio.la</Link> or
-              schedule a call through{" "}
-              <Link href="https://cal.com/dio.la/30min">cal.com/dio.la</Link>.
+              Reach me at <Link href="mailto:hi@daniguardio.la">hi@daniguardio.la</Link> or schedule
+              a call through <Link href="https://cal.com/dio.la/30min">cal.com/dio.la</Link>.
             </p>
           </>
         }
@@ -303,9 +279,7 @@ function Career() {
             <>
               {index() !== 0 && <hr class="border-black-invert/20" />}
               <article class="flex flex-col gap-6">
-                {entry.logo && (
-                  <img src={entry.logo} class="max-h-12 rounded self-start" />
-                )}
+                {entry.logo && <img src={entry.logo} class="max-h-12 rounded self-start" />}
                 <div>
                   <h1>
                     <span class="font-bold">{entry.at}</span>
@@ -346,66 +320,51 @@ function Notes() {
       <h1 class="text-2xl font-bold text-accent">Notes</h1>
       <h2 class="font-bold text-dark-invert mt-6">Remote work</h2>
       <p>
-        I've spent about half of my career working remotely, and I love it. I've
-        gotten good at working autonomously, managing my time, and communicating
-        asynchronously - even across multiple time zones.
+        I've spent about half of my career working remotely, and I love it. I've gotten good at
+        working autonomously, managing my time, and communicating asynchronously - even across
+        multiple time zones.
       </p>
       <h2 class="font-bold text-dark-invert mt-6">Freelance work</h2>
       <p>
-        Throughout my career, I've worked on multiple freelance projects. I've
-        created from simple static pages to full-fledged applications. Other
-        examples include{" "}
-        <Link href="https://github.com/DaniGuardiola/telegram-welcome-bot">
-          a Telegram bot
-        </Link>
-        , some server-scripting tasks, and web-scraping tools.
+        Throughout my career, I've worked on multiple freelance projects. I've created from simple
+        static pages to full-fledged applications. Other examples include{" "}
+        <Link href="https://github.com/DaniGuardiola/telegram-welcome-bot">a Telegram bot</Link>,
+        some server-scripting tasks, and web-scraping tools.
       </p>
-      <h2 class="font-bold text-dark-invert mt-6">
-        Free and open-source software
-      </h2>
+      <h2 class="font-bold text-dark-invert mt-6">Free and open-source software</h2>
       <p>
-        I am an advocate for free (as in freedom) software, and I try to
-        contribute to the community whenever possible. Most of my side projects
-        are open-source, and I donate regularly. Notably, I'm a top donor to the{" "}
-        <Link href="https://opencollective.com/ariakit">Ariakit</Link> project:
-        $600 donated personally to date, and $1500 donated by my previous
-        employer at my request.
+        I am an advocate for free (as in freedom) software, and I try to contribute to the community
+        whenever possible. Most of my side projects are open-source, and I donate regularly.
+        Notably, I'm a top donor to the{" "}
+        <Link href="https://opencollective.com/ariakit">Ariakit</Link> project: $600 donated
+        personally to date, and $1500 donated by my previous employer at my request.
       </p>
       <h2 class="font-bold text-dark-invert mt-6">Languages</h2>
       <p>
-        I am proficient in English, having worked with American companies
-        exclusively for the past three years. Most of my writing (and tweeting)
-        is done in English too. I am also a native Spanish speaker
+        I am proficient in English, having worked with American companies exclusively for the past
+        three years. Most of my writing (and tweeting) is done in English too. I am also a native
+        Spanish speaker
       </p>
       <h2 class="font-bold text-dark-invert mt-6">Fun facts</h2>
       <ul class="list-disc list-inside space-y-2">
         <li>
-          My team was a runner-up at the 2017 European Techcrunch hackathon. The
-          project was a conditional basic income financed by distributed crypto
-          mining in websites.{" "}
-          <Link href="https://devpost.com/software/altrui-st">
-            Here's the pitch
-          </Link>
-          .
+          My team was a runner-up at the 2017 European Techcrunch hackathon. The project was a
+          conditional basic income financed by distributed crypto mining in websites.{" "}
+          <Link href="https://devpost.com/software/altrui-st">Here's the pitch</Link>.
         </li>
         <li>
-          I built this resume with Solid and Tailwind CSS. You can read the
-          source{" "}
+          I built this resume with Solid and Tailwind CSS. You can read the source{" "}
           <Link href="https://github.com/DaniGuardiola/dio.la/blob/main/src/routes/me/index.tsx">
             here
           </Link>
           .
         </li>
         <li>
-          The <Link href="https://notmylinkedin.com/">notmylinkedin.com</Link>{" "}
-          domain redirects to this page. It might seem that I bought it just for
-          the memes, but it is actually part of an exploit I've used in
-          vulnerable job search websites just so that I could avoid creating a
-          LinkedIn account.{" "}
-          <Link href="https://dio.la/article/unlinked">
-            Here's the full story
-          </Link>
-          .
+          The <Link href="https://notmylinkedin.com/">notmylinkedin.com</Link> domain redirects to
+          this page. It might seem that I bought it just for the memes, but it is actually part of
+          an exploit I've used in vulnerable job search websites just so that I could avoid creating
+          a LinkedIn account.{" "}
+          <Link href="https://dio.la/article/unlinked">Here's the full story</Link>.
         </li>
       </ul>
     </section>

@@ -4,11 +4,7 @@ export function LexicalExplainedIndex() {
   return (
     <ArticleSeriesIndex
       name="Lexical, explained"
-      articleIds={[
-        "lexical-explained",
-        "what-is-a-node",
-        "lexical-state-updates",
-      ]}
+      articleIds={["lexical-explained", "what-is-a-node", "lexical-state-updates"]}
     />
   );
 }

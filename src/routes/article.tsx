@@ -14,7 +14,7 @@ import {
   articleMetadataExists,
   findArticleMetadataById,
   getArticlePath,
-  useArticleLocation,
+  useArticleLocation
 } from "~/data/articles";
 import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
@@ -29,10 +29,8 @@ function useArticleData() {
   if (!articleMetadataExists(articleId())) return "not-found";
 
   const metadata = () => findArticleMetadataById(articleId());
-  const host =
-    typeof document !== "undefined" ? document.location.host : CANONICAL_DOMAIN;
-  const protocol =
-    typeof document !== "undefined" ? document.location.protocol : "https";
+  const host = typeof document !== "undefined" ? document.location.host : CANONICAL_DOMAIN;
+  const protocol = typeof document !== "undefined" ? document.location.protocol : "https";
   const articleUrl = () => `${protocol}//${host}${articlePathname()}`;
 
   return { metadata, articleUrl, articlePathname };
@@ -55,14 +53,13 @@ function ArticleHeader(props: ArticleHeaderProps) {
     const isCurrentYear = date.getFullYear() === new Date().getFullYear();
     return {
       short: format(date, `MMM d${!isCurrentYear ? ", yyyy" : ""}`),
-      long: format(date, `MMMM do${!isCurrentYear ? ", yyyy" : ""}`),
+      long: format(date, `MMMM do${!isCurrentYear ? ", yyyy" : ""}`)
     };
   });
 
   const [heightOffsetEl, setHeightOffsetEl] = createSignal<HTMLElement>();
   const { animateBannerRef, animateBannerStyle } = useAnimateBanner({
-    heightOffsetEl: () =>
-      props.metadata.imageUrl ? heightOffsetEl() : undefined,
+    heightOffsetEl: () => (props.metadata.imageUrl ? heightOffsetEl() : undefined)
   });
 
   return (
@@ -83,8 +80,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
             <span class="sm:hidden">{date().short}</span>
             <span class="max-sm:hidden">{date().long}</span>
             <span class="font-bold"> · </span>
-            {props.readingMinutes} min<span class="max-sm:hidden">ute</span>{" "}
-            read
+            {props.readingMinutes} min<span class="max-sm:hidden">ute</span> read
             <span class="font-bold"> · </span>
             <a
               href={tweetIntentUrl()}
@@ -95,12 +91,8 @@ function ArticleHeader(props: ArticleHeaderProps) {
               tweet
             </a>
           </p>
-          <h1 class="font-roboto-slab text-[2.5rem] leading-[1.2]">
-            {props.metadata.title}
-          </h1>
-          <p class="text-[1.125rem] text-subtle-white py-2">
-            {props.metadata.description}
-          </p>
+          <h1 class="font-roboto-slab text-[2.5rem] leading-[1.2]">{props.metadata.title}</h1>
+          <p class="text-[1.125rem] text-subtle-white py-2">{props.metadata.description}</p>
         </div>
       </header>
       <Show when={props.metadata.imageUrl}>
@@ -170,9 +162,7 @@ function Footer(props: { metadata: ArticleMetadata }) {
               href={getArticlePath(props.metadata.prev!.id)}
             >
               <span class="font-bold">{"<-"} Previous:</span>{" "}
-              <span class="group-hover:underline">
-                {props.metadata.prev?.title}
-              </span>
+              <span class="group-hover:underline">{props.metadata.prev?.title}</span>
             </A>
           </p>
         </Show>
@@ -183,9 +173,7 @@ function Footer(props: { metadata: ArticleMetadata }) {
               href={getArticlePath(props.metadata.next!.id)}
             >
               <span class="font-bold">Next:</span>{" "}
-              <span class="group-hover:underline">
-                {props.metadata.next?.title}
-              </span>
+              <span class="group-hover:underline">{props.metadata.next?.title}</span>
               <span class="font-bold">{" ->"}</span>{" "}
             </A>
           </p>
@@ -200,11 +188,7 @@ function Footer(props: { metadata: ArticleMetadata }) {
             @daniguardio_la
           </a>
           {" · "}
-          <a
-            class="hover:underline focus-ring-white rounded"
-            target="_blank"
-            href="/rss.xml"
-          >
+          <a class="hover:underline focus-ring-white rounded" target="_blank" href="/rss.xml">
             RSS feed
           </a>
         </p>
@@ -240,7 +224,7 @@ export default function ArticleLayout() {
       <SkipLinks
         links={[
           { id: "article-content", label: "article content" },
-          { id: "comments", label: "comments" },
+          { id: "comments", label: "comments" }
         ]}
       />
       <div>

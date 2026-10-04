@@ -12,11 +12,11 @@ import remarkMath from "remark-math";
 import remarkMdxImages from "remark-mdx-images";
 import remarkShikiTwoslash from "remark-shiki-twoslash";
 import devtools from "solid-devtools/vite";
-import solid from "solid-start/vite";
 // @ts-expect-error No types available yet.
 import bun from "solid-start-bun";
 import cloudflare from "solid-start-cloudflare-pages";
 import vercel from "solid-start-vercel";
+import solid from "solid-start/vite";
 import typescript, { type CompilerOptions } from "typescript";
 import { defineConfig } from "vite";
 
@@ -39,43 +39,40 @@ export default defineConfig({
               theme: "dark-plus",
               addTryButton: true,
               defaultCompilerOptions: {
-                target: typescript.ScriptTarget.ESNext,
-              } satisfies CompilerOptions,
-            },
+                target: typescript.ScriptTarget.ESNext
+              } satisfies CompilerOptions
+            }
           ],
           // a11yEmoji,
           remarkGfm,
           remarkFrontmatter,
           remarkMdxImages as any,
-          remarkMath,
+          remarkMath
         ],
         rehypePlugins: [
           [rehypeRaw, { passThrough: nodeTypes }],
           rehypeSlug,
           [rehypeExternalLinks, { target: "_blank", rel: ["noreferrer"] }],
-          rehypeKatex,
-        ],
+          rehypeKatex
+        ]
       }),
-      enforce: "pre",
+      enforce: "pre"
     },
-    !isVercel && !isCloudflare &&
+    !isVercel &&
+      !isCloudflare &&
       devtools({
         autoname: true,
         locator: {
           targetIDE: "vscode",
           componentLocation: true,
-          jsxLocation: true,
-        },
+          jsxLocation: true
+        }
       }),
     solid({
       extensions: [".mdx"],
-      adapter: isCloudflare
-        ? cloudflare({})
-        : isVercel
-          ? vercel({ edge: true })
-          : bun(),
-    }),
-  ],
+      adapter: isCloudflare ? cloudflare({}) : isVercel ? vercel({ edge: true }) : bun()
+    })
+  ]
 });
 
 // declare const test: import("typescript").CompilerOptions

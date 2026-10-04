@@ -12,9 +12,7 @@ type UseAnimateBannerOptions = {
   heightOffsetEl?: () => HTMLElement | undefined;
 };
 
-export function useAnimateBanner({
-  heightOffsetEl,
-}: UseAnimateBannerOptions = {}) {
+export function useAnimateBanner({ heightOffsetEl }: UseAnimateBannerOptions = {}) {
   const [bannerRef, setBannerRef] = createSignal<HTMLElement>();
   const [style, setStyle] = createSignal<JSX.CSSProperties>();
   const [done, setDone] = createSignal(false);
@@ -34,7 +32,7 @@ export function useAnimateBanner({
     // execute animation
     setStyle({
       transition: `height ${ANIMATION_DURATION}ms ease-out`,
-      height: `${to}px`,
+      height: `${to}px`
     });
     // wait for animation to end
     bannerRef()?.addEventListener("transitionend", cleanUp, { once: true });
@@ -50,8 +48,7 @@ export function useAnimateBanner({
     const previousHeight = (previousBannerHeight() ?? 0) - heightOffset;
 
     requestAnimationFrame(async () => {
-      if (!previousBannerHeight())
-        setPreviousBannerHeight(bannerHeight + heightOffset);
+      if (!previousBannerHeight()) setPreviousBannerHeight(bannerHeight + heightOffset);
       else {
         await triggerAnimation(previousHeight, bannerHeight, () =>
           setPreviousBannerHeight(bannerHeight + heightOffset)

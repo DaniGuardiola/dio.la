@@ -1,7 +1,6 @@
 // @refresh reload
 import "./root.sass";
 import "./fonts.sass";
-
 import clsx from "clsx";
 import { type ComponentProps, createMemo, Show, Suspense } from "solid-js";
 import {
@@ -15,18 +14,14 @@ import {
   Meta,
   Routes,
   Scripts,
-  useLocation,
+  useLocation
 } from "solid-start";
 
 import { DarkThemeIcon, LightThemeIcon } from "./components/icons";
 import { SkipLinkArea } from "./components/SkipLinks";
 import { UMAMI_DRAFTS_ID, UMAMI_ID } from "./data/config";
 import { isDrafts, isLocalhost } from "./utils/is-host";
-import {
-  headerScrolled,
-  scrolledAtTop,
-  setUpPageScroll,
-} from "./utils/page-scroll";
+import { headerScrolled, scrolledAtTop, setUpPageScroll } from "./utils/page-scroll";
 import { theme, ThemeScript, toggleTheme } from "./utils/theme";
 
 function NavLink(props: ComponentProps<typeof A>) {
@@ -73,11 +68,9 @@ function Header() {
     <header
       class="fixed z-20 inset-x-0 top-0 select-none transition-[height,background-color] flex items-center overflow-hidden"
       classList={{
-        "h-[5rem] sm:h-[11.25rem] bg-white/95 dark:bg-neutral-900/95":
-          !headerScrolled(),
-        "h-[3.5rem] sm:h-[4.5rem] bg-white/80 dark:bg-neutral-900/80":
-          headerScrolled(),
-        "shadow-[0_2px_4px_rgba(0,0,0,.25)]": !scrolledAtTop(),
+        "h-[5rem] sm:h-[11.25rem] bg-white/95 dark:bg-neutral-900/95": !headerScrolled(),
+        "h-[3.5rem] sm:h-[4.5rem] bg-white/80 dark:bg-neutral-900/80": headerScrolled(),
+        "shadow-[0_2px_4px_rgba(0,0,0,.25)]": !scrolledAtTop()
       }}
     >
       <div class="main-container px-4 w-full mx-auto flex">
@@ -96,7 +89,7 @@ function Header() {
             )}
             classList={{
               "sm:text-[5.375rem]": !headerScrolled(),
-              "sm:text-[3rem]": headerScrolled(),
+              "sm:text-[3rem]": headerScrolled()
             }}
           >
             <span class="group-hover:underline">dio</span>
@@ -106,13 +99,10 @@ function Header() {
             </span>
           </p>
           <p
-            class={clsx(
-              "max-sm:hidden",
-              "text-[1.4375rem] transition-[height,opacity]"
-            )}
+            class={clsx("max-sm:hidden", "text-[1.4375rem] transition-[height,opacity]")}
             classList={{
               "h-[2.1875rem]": !headerScrolled(),
-              "h-0 opacity-0": headerScrolled(),
+              "h-0 opacity-0": headerScrolled()
             }}
           >
             Dani Guardio<span class="text-accent">la</span>’s blog
@@ -149,8 +139,7 @@ function DraftsNotice() {
         You're looking at my <span class="font-bold">drafts</span>!
       </p>
       <p>
-        Visit the main site:{" "}
-        <span class="group-hover:underline font-bold text-accent">dio.la</span>
+        Visit the main site: <span class="group-hover:underline font-bold text-accent">dio.la</span>
       </p>
     </a>
   );
@@ -163,9 +152,7 @@ export default function Root() {
   // setUpViewTransitions(); // causes issues when navigating to a topic :(
 
   const location = useLocation();
-  const isFullPage = createMemo(() =>
-    FULL_PAGE_PATHS.some((path) => path === location.pathname)
-  );
+  const isFullPage = createMemo(() => FULL_PAGE_PATHS.some((path) => path === location.pathname));
 
   return (
     <Html class={theme()} lang="en" prefix="og: http://ogp.me/ns#">
@@ -176,11 +163,7 @@ export default function Root() {
         <Link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <Link rel="icon" type="image/png" href="/favicon.png" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossorigin="anonymous"
-        />
+        <Link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
         {!isLocalhost() && (
           <script
             async

@@ -1,12 +1,7 @@
 import { createEffect, createSignal } from "solid-js";
 import { useLocation } from "solid-start";
 
-import {
-  GH_DISCUSSIONS_CAT_ID,
-  GH_DISCUSSIONS_DRAFTS_CAT_ID,
-  REPO,
-  REPO_ID,
-} from "~/data/config";
+import { GH_DISCUSSIONS_CAT_ID, GH_DISCUSSIONS_DRAFTS_CAT_ID, REPO, REPO_ID } from "~/data/config";
 import { isDrafts, isLocalhost } from "~/utils/is-host";
 import { theme } from "~/utils/theme";
 
@@ -29,9 +24,7 @@ export function Comments() {
       repo={REPO}
       repoId={REPO_ID}
       categoryId={
-        isDrafts() || isLocalhost()
-          ? GH_DISCUSSIONS_DRAFTS_CAT_ID
-          : GH_DISCUSSIONS_CAT_ID
+        isDrafts() || isLocalhost() ? GH_DISCUSSIONS_DRAFTS_CAT_ID : GH_DISCUSSIONS_CAT_ID
       }
       mapping="pathname"
       strict="1"

@@ -1,9 +1,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import { ESLint } from "eslint";
 import matter from "gray-matter";
-import prettier from "prettier";
+import { format } from "oxfmt";
 
 import type { ArticleMetadata } from "~/data/articles";
 import {
@@ -12,7 +11,7 @@ import {
   CANONICAL_DOMAIN,
   NAME,
   REQUIRED_ARTICLE_FIELDS,
-  SITE_DESCRIPTION,
+  SITE_DESCRIPTION
 } from "~/data/config";
 import { isDrafts, isLocalhost } from "~/utils/is-host";
 
@@ -41,9 +40,7 @@ async function getArticleFilePaths() {
 
 function validateMetadata({ id, ...data }: ArticleMetadata) {
   if (REQUIRED_ARTICLE_FIELDS.some((key) => !(key in data) || key === ""))
-    throw new Error(
-      `Missing or empty required metadata fields in article with id "${id}"`
-    );
+    throw new Error(`Missing or empty required metadata fields in article with id "${id}"`);
 
   if (data.topics && !Array.isArray(data.topics))
     throw new Error(`Topics must be an array, article id: "${id}"`);
@@ -57,9 +54,7 @@ function validateMetadata({ id, ...data }: ArticleMetadata) {
       return invalid;
     })
   )
-    throw new Error(
-      `Invalid topic "${invalidTopic}" in article with id "${id}"`
-    );
+    throw new Error(`Invalid topic "${invalidTopic}" in article with id "${id}"`);
 }
 
 async function getArticleMetadata(articlePath: string) {
@@ -68,8 +63,7 @@ async function getArticleMetadata(articlePath: string) {
     data: Omit<ArticleMetadata, "id">;
   };
   const filename = path.parse(articlePath).name;
-  const id =
-    filename === "index" ? path.basename(path.dirname(articlePath)) : filename;
+  const id = filename === "index" ? path.basename(path.dirname(articlePath)) : filename;
   if (!id) throw new Error("Could not obtain article ID");
   // @ts-expect-error This is fine.
   validateMetadata({ id, ...data });
@@ -94,14 +88,14 @@ async function getArticleMetadataList() {
 async function formatFile(filepath: string) {
   const file = Bun.file(filepath);
   const content = await file.text();
-  const formatted = await prettier.format(content, { filepath });
-  return Bun.write(file, formatted);
-}
-
-async function autofixFile(filePath: string) {
-  const eslint = new ESLint({ fix: true });
-  const results = await eslint.lintFiles([filePath]);
-  await ESLint.outputFixes(results);
+  const formatted = await format(filepath, content, {
+    trailingComma: "none",
+    sortImports: {}
+  });
+  if (formatted.errors.length) {
+    throw new Error(`Could not format generated article data: ${JSON.stringify(formatted.errors)}`);
+  }
+  return Bun.write(file, formatted.code);
 }
 
 async function generateOutputFile(articleMetadataList: ArticleMetadata[]) {
@@ -113,11 +107,10 @@ async function generateOutputFile(articleMetadataList: ArticleMetadata[]) {
     `\nexport type ArticleId = ${ids.map((id) => `"${id}"`).join(" | ")}`,
     "\nexport const ARTICLES: ArticleMetadata[] = linkArticles(",
     JSON.stringify(articleMetadataList),
-    ")",
+    ")"
   ];
   await fs.mkdir(OUTPUT_DIR, { recursive: true });
   await Bun.write(OUTPUT_FILE_PATH, parts.join("\n"));
-  await autofixFile(OUTPUT_FILE_PATH);
   await formatFile(OUTPUT_FILE_PATH);
 }
 
@@ -137,15 +130,7 @@ const RSS_FOOTER = `
 function generateRssItem({ title, id, description, date }: ArticleMetadata) {
   const localDate = new Date(date);
   const formattedUtcDate = new Date(
-    Date.UTC(
-      localDate.getFullYear(),
-      localDate.getMonth(),
-      localDate.getDate(),
-      9,
-      0,
-      0,
-      0
-    )
+    Date.UTC(localDate.getFullYear(), localDate.getMonth(), localDate.getDate(), 9, 0, 0, 0)
   ).toUTCString();
   const url = `https://${CANONICAL_DOMAIN}/article/${id}`;
   return `    <item>

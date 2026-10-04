@@ -15,7 +15,7 @@ const IMAGE_URL: string | undefined = "/img/me.webp";
 function Header() {
   const [heightOffsetEl, setHeightOffsetEl] = createSignal<HTMLElement>();
   const { animateBannerRef, animateBannerStyle } = useAnimateBanner({
-    heightOffsetEl: () => (IMAGE_URL ? heightOffsetEl() : undefined),
+    heightOffsetEl: () => (IMAGE_URL ? heightOffsetEl() : undefined)
   });
 
   return (
