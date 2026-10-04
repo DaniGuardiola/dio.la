@@ -16,11 +16,24 @@ Welcome to my blog's source code!
 ## Tech
 
 - Coded in [TypeScript](https://www.typescriptlang.org/).
-- Built on [Solid](https://www.solidjs.com/) and [SolidStart](https://start.solidjs.com/).
+- Built on Solid 2 and [TanStack Start](https://tanstack.com/start/latest).
 - Styled with [Tailwind CSS](https://tailwindcss.com/) and, in some cases, [SASS](https://sass-lang.com/).
 - Content authored using [MDX](https://mdxjs.com/) v3.
 - Code highlighting (including interactive TypeScript blocks) powered by [`shiki-twoslash`](https://shikijs.github.io/twoslash/).
-- Hosted on [Cloudflare Pages](https://pages.cloudflare.com/) through the SolidStart Cloudflare Pages adapter.
+- Hosted on [Cloudflare Workers](https://workers.cloudflare.com/) through the Cloudflare Vite plugin.
+
+## Solid 2 compatibility
+
+Solid and its compiler/runtime packages are pinned to `2.0.0-rc.13`; TanStack
+Start and Router use their Solid 2 release candidate, `2.0.0-rc.8`. These are
+prerelease versions. The Bun patch for TanStack Start applies the
+[upstream server-function URL rename](https://github.com/TanStack/router/blob/solid-v2/packages/solid-start/src/server-functions-handler.ts)
+required by Solid RC 13. Remove it when a TanStack release includes that change.
+
+The local MDX provider supplies Solid 2 dynamic components for native HTML tags.
+MDX 3, existing Shiki/Twoslash styles, Giscus, and article assets remain supported.
+Resume display options use route search state and component context, avoiding
+shared server state across requests.
 
 ## Principles
 
@@ -35,24 +48,29 @@ Use Bun 1.4.2 and `bun install --frozen-lockfile`. `bun run check` runs Oxlint
 (with Solid rules), Oxfmt, and TypeScript. `bun run format` formats sources
 without rewriting embedded Twoslash examples.
 
-| Domain                                           | Cloudflare service       |
-| ------------------------------------------------ | ------------------------ |
-| dio.la                                           | Pages: dio-la            |
-| drafts.dio.la                                    | Pages: dio-la-drafts     |
-| rpc-anywhere.dio.la                              | Pages: dio-rpc-anywhere  |
-| ariakit-solid.dio.la                             | Pages: dio-ariakit-solid |
-| www, pgp, h, u, h-utils, install-xr under dio.la | Worker: dio-redirects    |
+| Domain                                           | Cloudflare service          |
+| ------------------------------------------------ | --------------------------- |
+| dio.la                                           | Worker: dio-la-start        |
+| drafts.dio.la                                    | Worker: dio-la-drafts-start |
+| rpc-anywhere.dio.la                              | Pages: dio-rpc-anywhere     |
+| ariakit-solid.dio.la                             | Pages: dio-ariakit-solid    |
+| www, pgp, h, u, h-utils, install-xr under dio.la | Worker: dio-redirects       |
 
 Production and drafts share this branch. Run `bun run deploy:cloudflare` or
-`bun run deploy:cloudflare:drafts` to build and deploy their production projects.
+`bun run deploy:cloudflare:drafts` to build and deploy their Workers.
 For local checks, build first, then run `bun run preview:cloudflare` or
-`bun run preview:cloudflare:drafts`. Pages uses direct uploads; Git pushes do
-not trigger deployments. Explicitly pass another branch to Wrangler for previews.
+`bun run preview:cloudflare:drafts`. Deployment uses the generated `dist/server/wrangler.json`, including the bundled
+server and client assets. Git pushes do not trigger deployments. Build and deploy
+one environment at a time: both builds share `dist` and generated article data.
+Custom domains are committed in Wrangler config; default `workers.dev` routes
+and version preview URLs are disabled.
 
 Draft builds set `IS_DRAFTS=true` and `VITE_IS_DRAFTS=true`. They retain the
 unpublished articles, draft banner, separate analytics ID, and noindex metadata.
-RSS excludes unpublished articles. The build stages a standard Wrangler config
-in `.wrangler/drafts`, because Pages requires the canonical configuration filename.
+RSS excludes unpublished articles. Article metadata and lazy MDX imports are
+generated from `src/content/article`; production builds exclude draft modules.
+The article loader preloads each MDX module before rendering. JSX declarations
+in MDX must use components so rendering happens inside the Solid owner.
 
 `bun run deploy:cloudflare:redirects` deploys the shortcut Worker. It preserves
 redirect status codes, paths, and query strings. `pgp` redirects to `/pgp.txt`;
@@ -61,7 +79,9 @@ shortcuts accept only the root path. Unrecognized hosts or paths return 404.
 
 See [the static sites deployment notes](cloudflare/sites/README.md) for the
 RPC demo and legacy Ariakit playground, including source revisions and the
-playground repairs. Their verified deployment artifacts are committed here.
+playground repairs. Their verified deployment artifacts are committed here. Default Pages URLs and
+preview URLs redirect to custom domains. The obsolete blog and drafts Pages
+projects were deleted after Worker verification.
 
 ## DNS migration
 
@@ -79,6 +99,5 @@ public IPv4 changes. See [DDNS setup](cloudflare/ddns/README.md).
 
 ## Next upgrade stages
 
-The existing SolidStart 0.3 Pages adapter bridges the hosting migration.
-TanStack Start/Solid compatibility, Tailwind 4, the MDX/highlighting pipeline,
-and remaining dependency upgrades are the next stages.
+Tailwind 4, the MDX/highlighting pipeline, and remaining dependency upgrades
+are the next stages.

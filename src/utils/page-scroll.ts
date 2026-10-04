@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 
 import { ARTICLE_SCROLL_OFFSET, HEADER_SCROLL_OFFSET } from "~/data/config";
 
@@ -14,10 +14,13 @@ function updateScrolled() {
 }
 
 export function setUpPageScroll() {
-  onMount(updateScrolled);
+  createEffect(() => undefined, updateScrolled);
 
-  createEffect(() => {
-    window?.addEventListener("scroll", updateScrolled);
-    onCleanup(() => window?.removeEventListener("scroll", updateScrolled));
-  });
+  createEffect(
+    () => undefined,
+    () => {
+      window?.addEventListener("scroll", updateScrolled);
+      onCleanup(() => window?.removeEventListener("scroll", updateScrolled));
+    }
+  );
 }

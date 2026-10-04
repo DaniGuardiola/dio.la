@@ -1,11 +1,13 @@
 import "./styles.sass";
 import "katex/dist/katex.min.css";
+import { type ComponentProps, type JSX } from "@solidjs/web";
+import { Dynamic } from "@solidjs/web";
 import clsx from "clsx";
 import pDebounce from "p-debounce";
-import { type ComponentProps, createSignal, type JSX } from "solid-js";
-import { Dynamic } from "solid-js/web";
-import { MDXProvider } from "solid-mdx";
-import { type A } from "solid-start";
+import { createSignal } from "solid-js";
+
+import { MDXProvider } from "~/utils/mdx";
+import { type A } from "~/utils/routing";
 
 const KATEX_TAGS = [
   "math",

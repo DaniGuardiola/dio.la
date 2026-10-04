@@ -123,12 +123,12 @@ export const UpdateFunction = () => (
   <span class="text-blue-700 font-bold">update function</span>
 );
 
-export const mutable = <span class="text-green-500 font-bold">✔</span>;
+export const Mutable = () => <span class="text-green-500 font-bold">✔</span>;
 
 export const lock = "🔒";
 
 - The {<CurrentState />} is **cloned**. This cloned state becomes the "{<PendingState />}".
-- The {<PendingState />} becomes {mutable} **mutable**.
+- The {<PendingState />} becomes {<Mutable />} **mutable**.
 - The {<UpdateFunction />} applies **changes** to the {<PendingState />}.
 - Once the {<UpdateFunction />} is done, the {<PendingState />} is {lock} **locked** (made immutable).
 - Reconciliation happens and the resulting changes are applied to the DOM.

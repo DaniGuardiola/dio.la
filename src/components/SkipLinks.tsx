@@ -1,6 +1,7 @@
+import { type ComponentProps } from "@solidjs/web";
+import { Portal } from "@solidjs/web";
 import clsx from "clsx";
-import { type ComponentProps, createSignal, For, Show } from "solid-js";
-import { Portal } from "solid-js/web";
+import { createSignal, For, Show } from "solid-js";
 
 const [skipLinkAreaElement, setSkipLinkAreaElement] = createSignal<HTMLElement>();
 

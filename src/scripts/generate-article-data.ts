@@ -18,7 +18,7 @@ import { isDrafts, isLocalhost } from "~/utils/is-host";
 const __filename = Bun.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 
-const ARTICLES_BASE_PATH = path.resolve(__dirname, "../routes/article");
+const ARTICLES_BASE_PATH = path.resolve(__dirname, "../content/article");
 const OUTPUT_DIR = path.resolve(__dirname, "../data/generated");
 const OUTPUT_FILE_PATH = path.resolve(__dirname, OUTPUT_DIR, "articles.ts");
 const PUBLIC_DIR = path.resolve(__dirname, "../../public");
@@ -156,6 +156,26 @@ async function main() {
   const articleMetadataList = await getArticleMetadataList();
   await generateOutputFile(articleMetadataList);
   await generateRSS(articleMetadataList);
+  const files = await getArticleFilePaths();
+  const entries = files
+    .filter((file) =>
+      articleMetadataList.some(
+        (article) =>
+          file.endsWith(`/${article.id}/index.mdx`) || file.endsWith(`/${article.id}.mdx`)
+      )
+    )
+    .map((file) => {
+      const id =
+        path.basename(file) === "index.mdx"
+          ? path.basename(path.dirname(file))
+          : path.basename(file, ".mdx");
+      const relative = path.relative(OUTPUT_DIR, file).split(path.sep).join("/");
+      return `${JSON.stringify(id)}: lazy(() => import(${JSON.stringify(relative)}))`;
+    });
+  await Bun.write(
+    path.join(OUTPUT_DIR, "article-components.ts"),
+    `import { lazy } from "solid-js";\nexport const ARTICLE_COMPONENTS = {${entries.join(",\n")}};\n`
+  );
 }
 
 await main();

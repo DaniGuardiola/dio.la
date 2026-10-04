@@ -1,32 +1,28 @@
-import "./print.css";
-import { createEffect, createSignal, For, Show } from "solid-js";
+import { useSearch, useNavigate } from "@tanstack/solid-router";
 
-import { HeadMetadata } from "~/components/HeadMetadata";
-import { CANONICAL_DOMAIN } from "~/data/config";
+import "./print.css";
+import { createContext, useContext, For, Show } from "solid-js";
+
 import { theme, toggleTheme } from "~/utils/theme";
 
 import { CAREER } from "./career";
 import { Link } from "./shared";
 
-const [tldr, _setTldr] = createSignal(true);
-const [recentFirst, _setRecentFirst] = createSignal(false);
-
-const params = new URLSearchParams(typeof window === "undefined" ? "" : window.location.search);
-
-function setTldr(value: boolean) {
-  _setTldr(value);
-  if (!value) params.set("tldr", "false");
-  else params.delete("tldr");
-  history.replaceState(null, "", "?" + params.toString());
-}
-function setRecentFirst(value: boolean) {
-  _setRecentFirst(value);
-  if (value) params.set("recent-first", "true");
-  else params.delete("recent-first");
-  history.replaceState(null, "", "?" + params.toString());
+type MeOptions = {
+  tldr: () => boolean;
+  recentFirst: () => boolean;
+  setTldr: (value: boolean) => void;
+  setRecentFirst: (value: boolean) => void;
+};
+const MeContext = createContext<MeOptions>();
+function useMeOptions() {
+  const options = useContext(MeContext);
+  if (!options) throw new Error("Missing profile options");
+  return options;
 }
 
 function Heading() {
+  const { tldr, setTldr } = useMeOptions();
   return (
     <div>
       <div class="flex flex-col-reverse md:flex-row items-baseline justify-between">
@@ -64,6 +60,7 @@ function Heading() {
 }
 
 function Skills() {
+  const { tldr } = useMeOptions();
   return (
     <Show
       when={tldr()}
@@ -88,6 +85,7 @@ function Skills() {
 }
 
 function Introduction() {
+  const { tldr } = useMeOptions();
   return (
     <section aria-label="Introduction" class="flex flex-col gap-4 text-base">
       <Show when={!tldr()}>
@@ -205,6 +203,7 @@ function Introduction() {
 }
 
 function CareerTldr() {
+  const { recentFirst, setRecentFirst } = useMeOptions();
   return (
     <section class="space-y-8 text-dark-invert md:columns-2 gap-10">
       <div class="flex items-baseline gap-4">
@@ -259,6 +258,7 @@ function CareerTldr() {
 }
 
 function Career() {
+  const { recentFirst, setRecentFirst } = useMeOptions();
   return (
     <section class="flex flex-col gap-4 text-dark-invert">
       <div class="flex items-baseline justify-between gap-4">
@@ -380,22 +380,32 @@ function BackgroundTexture() {
 }
 
 export default function Me() {
-  createEffect(() => {
-    _setTldr(params.get("tldr") !== "false");
-    _setRecentFirst(params.get("recent-first") === "true");
-  });
+  const search = useSearch({ strict: false });
+  const navigate = useNavigate();
+  const tldr = () => search().tldr !== false;
+  const recentFirst = () => search()["recent-first"] === true;
+  const setTldr = (value: boolean) => {
+    void navigate({
+      to: "/me",
+      replace: true,
+      search: (prev) => ({
+        ...prev,
+        tldr: value ? undefined : false,
+        "recent-first": prev["recent-first"]
+      })
+    });
+  };
+  const setRecentFirst = (value: boolean) => {
+    void navigate({
+      to: "/me",
+      replace: true,
+      search: (prev) => ({ ...prev, tldr: prev.tldr, "recent-first": value ? true : undefined })
+    });
+  };
   return (
-    <>
+    <MeContext value={{ tldr, recentFirst, setTldr, setRecentFirst }}>
       <BackgroundTexture />
       <div class="main-container px-4 py-16 sm:py-32 flex flex-col gap-8 text-dark-invert print:px-12 print:!py-16">
-        <HeadMetadata
-          url={`https://${CANONICAL_DOMAIN}/me`}
-          title={"Not Dani Guardiola's Linkedin"}
-          titleSuffix={false}
-          description={"About me & career"}
-          image="/open-graph/hacking-linkedin.png"
-          type="website"
-        />
         <Heading />
         <Introduction />
         <Show when={tldr()} children={<CareerTldr />} fallback={<Career />} />
@@ -409,6 +419,6 @@ export default function Me() {
           {theme() === "dark" ? "light" : "dark"} theme
         </button>
       </div>
-    </>
+    </MeContext>
   );
 }

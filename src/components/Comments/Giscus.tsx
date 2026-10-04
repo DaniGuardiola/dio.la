@@ -95,7 +95,7 @@ export interface GiscusWidgetAttributes {
   loading?: Loading;
 }
 
-declare module "solid-js" {
+declare module "@solidjs/web" {
   namespace JSX {
     interface IntrinsicElements {
       "giscus-widget": GiscusWidgetAttributes;
@@ -109,11 +109,18 @@ declare module "solid-js" {
 export function Giscus(props: GiscusProps) {
   const [mounted, setMounted] = createSignal(false);
 
-  createEffect(() => {
-    if (mounted()) return;
-    import("giscus");
-    setMounted(true);
-  });
+  createEffect(
+    () => undefined,
+    () => {
+      let disposed = false;
+      void import("giscus").then(() => {
+        if (!disposed) setMounted(true);
+      });
+      return () => {
+        disposed = true;
+      };
+    }
+  );
 
   return (
     <Show when={mounted()}>

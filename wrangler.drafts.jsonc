@@ -1,11 +1,19 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "dio-la-drafts",
-  "pages_build_output_dir": "dist/public",
+  "name": "dio-la-drafts-start",
+  "main": "@tanstack/solid-start/server-entry",
   "compatibility_date": "2026-10-04",
   "compatibility_flags": ["nodejs_compat"],
   "vars": {
     "IS_DRAFTS": "true",
     "NODE_ENV": "production"
-  }
+  },
+  "routes": [
+    {
+      "pattern": "drafts.dio.la",
+      "custom_domain": true
+    }
+  ],
+  "workers_dev": false,
+  "preview_urls": false
 }

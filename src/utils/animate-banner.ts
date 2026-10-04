@@ -1,4 +1,5 @@
-import { createSignal, type JSX, onCleanup, onMount } from "solid-js";
+import { type JSX } from "@solidjs/web";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 
 const ANIMATION_DURATION = 150;
 
@@ -40,22 +41,27 @@ export function useAnimateBanner({ heightOffsetEl }: UseAnimateBannerOptions = {
     setTimeout(cleanUp, ANIMATION_DURATION + 100);
   }
 
-  onCleanup(() => setDone(true));
-
-  onMount(() => {
-    const heightOffset = heightOffsetEl?.()?.offsetHeight ?? 0;
-    const bannerHeight = bannerRef()?.offsetHeight ?? 0;
-    const previousHeight = (previousBannerHeight() ?? 0) - heightOffset;
-
-    requestAnimationFrame(async () => {
-      if (!previousBannerHeight()) setPreviousBannerHeight(bannerHeight + heightOffset);
-      else {
-        await triggerAnimation(previousHeight, bannerHeight, () =>
-          setPreviousBannerHeight(bannerHeight + heightOffset)
-        );
-      }
-    });
+  onCleanup(() => {
+    if (typeof window !== "undefined") setDone(true);
   });
+
+  createEffect(
+    () => undefined,
+    () => {
+      const heightOffset = heightOffsetEl?.()?.offsetHeight ?? 0;
+      const bannerHeight = bannerRef()?.offsetHeight ?? 0;
+      const previousHeight = (previousBannerHeight() ?? 0) - heightOffset;
+
+      requestAnimationFrame(async () => {
+        if (!previousBannerHeight()) setPreviousBannerHeight(bannerHeight + heightOffset);
+        else {
+          await triggerAnimation(previousHeight, bannerHeight, () =>
+            setPreviousBannerHeight(bannerHeight + heightOffset)
+          );
+        }
+      });
+    }
+  );
 
   return { animateBannerRef: setBannerRef, animateBannerStyle: style };
 }

@@ -1,0 +1,74 @@
+diff --git a/dist/esm/server-functions-handler.js b/dist/esm/server-functions-handler.js
+index fc6d49794629fddf4241aa8548d819a332fa24da..1220062388a10d03d3e90f8afa57f1b12d548a8b 100644
+--- a/dist/esm/server-functions-handler.js
++++ b/dist/esm/server-functions-handler.js
+@@ -1,7 +1,7 @@
+ import { getSolidStartServerFunctionCodec } from "./solid-rpc-codec.js";
+ import { collectSolidStartFlightData } from "./solid-rpc-flight-server.js";
+ import { redirect } from "@tanstack/solid-router";
+-import { configureServerFunctionsServer, createNoJSHandler, handleServerFunctionRequest, parseServerFunctionUrl, registerFlightDataSource, serverFunctionUrl } from "@solidjs/web/server-functions/server";
++import { configureServerFunctionsServer, createNoJSHandler, handleServerFunctionRequest, parseServerFunctionActionUrl, registerFlightDataSource, serverFunctionActionUrl } from "@solidjs/web/server-functions/server";
+ import { getServerFnById } from "#tanstack-start-server-fn-resolver";
+ import { provideRequestEvent } from "@solidjs/web/storage";
+ import { getStartContext, runWithStartContext } from "@tanstack/start-storage-context";
+@@ -47,7 +47,7 @@ async function handleSolidServerFunctionRequest(request, options = {}) {
+ 	}, handleRequest);
+ }
+ function getSolidServerFunctionId(request) {
+-	const parsedId = parseServerFunctionUrl(request.url);
++	const parsedId = parseServerFunctionActionUrl(request.url);
+ 	if (parsedId) return parsedId;
+ 	const url = new URL(request.url);
+ 	const queryId = url.searchParams.get("id");
+@@ -56,9 +56,9 @@ function getSolidServerFunctionId(request) {
+ 	if (serverFnBase && url.pathname.startsWith(serverFnBase)) return url.pathname.slice(serverFnBase.length).split("/")[0];
+ }
+ function withSolidServerFunctionId(request, serverFnId) {
+-	if (parseServerFunctionUrl(request.url) === serverFnId) return request;
++	if (parseServerFunctionActionUrl(request.url) === serverFnId) return request;
+ 	const url = new URL(request.url);
+-	const canonicalUrl = new URL(serverFunctionUrl(serverFnId), url.origin);
++	const canonicalUrl = new URL(serverFunctionActionUrl(serverFnId), url.origin);
+ 	canonicalUrl.search = url.search;
+ 	return new Request(canonicalUrl, request);
+ }
+diff --git a/src/server-functions-handler.ts b/src/server-functions-handler.ts
+index 6dd10d49001d3a1e62ff18f21725b3226554d24a..f406d2c357e2202ac93c80e2a6e21f8e7fcec770 100644
+--- a/src/server-functions-handler.ts
++++ b/src/server-functions-handler.ts
+@@ -2,9 +2,9 @@ import {
+   configureServerFunctionsServer,
+   createNoJSHandler,
+   handleServerFunctionRequest,
+-  parseServerFunctionUrl,
++  parseServerFunctionActionUrl,
+   registerFlightDataSource,
+-  serverFunctionUrl,
++  serverFunctionActionUrl,
+ } from '@solidjs/web/server-functions/server'
+ import { redirect } from '@tanstack/solid-router'
+ import { provideRequestEvent } from '@solidjs/web/storage'
+@@ -94,7 +94,7 @@ export async function handleSolidServerFunctionRequest(
+ }
+ 
+ function getSolidServerFunctionId(request: Request) {
+-  const parsedId = parseServerFunctionUrl(request.url)
++  const parsedId = parseServerFunctionActionUrl(request.url)
+   if (parsedId) {
+     return parsedId
+   }
+@@ -117,12 +117,12 @@ function withSolidServerFunctionId(request: Request, serverFnId: string) {
+   // Solid resolves the function id from the request URL's pathname
+   // (endpoint mount + id segment). Requests that carried the id some other
+   // way (e.g. an `?id=` query) are rewritten onto that canonical shape.
+-  if (parseServerFunctionUrl(request.url) === serverFnId) {
++  if (parseServerFunctionActionUrl(request.url) === serverFnId) {
+     return request
+   }
+ 
+   const url = new URL(request.url)
+-  const canonicalUrl = new URL(serverFunctionUrl(serverFnId), url.origin)
++  const canonicalUrl = new URL(serverFunctionActionUrl(serverFnId), url.origin)
+   canonicalUrl.search = url.search
+   return new Request(canonicalUrl, request)
+ }

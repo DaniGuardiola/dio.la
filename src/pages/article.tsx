@@ -1,12 +1,9 @@
-import { Base } from "@solidjs/meta";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { createEffect, createMemo, createSignal, For, Show } from "solid-js";
-import { A, Outlet, useNavigate } from "solid-start";
 
 import { Comments } from "~/components/Comments";
 import { Subscribe } from "~/components/Comments/Subscribe";
-import { HeadMetadata } from "~/components/HeadMetadata";
 import { MDXContent } from "~/components/MDXContent";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
 import {
@@ -19,6 +16,7 @@ import {
 import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
 import { articleScrolled } from "~/utils/page-scroll";
+import { A, useNavigate } from "~/utils/routing";
 
 // reading speed
 const WORDS_PER_MINUTE = 250;
@@ -64,9 +62,6 @@ function ArticleHeader(props: ArticleHeaderProps) {
 
   return (
     <>
-      <Show when={typeof window !== "undefined"}>
-        <Base href={props.articleUrl} />
-      </Show>
       <header
         ref={(el) => {
           if (props.metadata.imageUrl) setHeightOffsetEl(el);
@@ -197,30 +192,26 @@ function Footer(props: { metadata: ArticleMetadata }) {
   );
 }
 
-export default function ArticleLayout() {
+export default function ArticleLayout(props: { children: import("@solidjs/web").JSX.Element }) {
   const articleData = useArticleData();
   if (articleData === "not-found")
     // eslint-disable-next-line solid/components-return-once
     return useNavigate()("/404", { replace: true });
-  const { metadata, articlePathname, articleUrl } = articleData;
+  const { metadata, articleUrl } = articleData;
 
-  let contentDiv: HTMLDivElement;
+  let contentDiv!: HTMLDivElement;
   const [readingMinutes, setReadingMinutes] = createSignal(1);
-  createEffect(() => {
-    const words = contentDiv.textContent?.trim().split(/\s+/).length ?? 0;
-    const minutes = Math.max(1, Math.floor(words / WORDS_PER_MINUTE));
-    setReadingMinutes(minutes);
-  });
+  createEffect(
+    () => undefined,
+    () => {
+      const words = contentDiv.textContent?.trim().split(/\s+/).length ?? 0;
+      const minutes = Math.max(1, Math.floor(words / WORDS_PER_MINUTE));
+      setReadingMinutes(minutes);
+    }
+  );
 
   return (
     <>
-      <HeadMetadata
-        url={`https://${CANONICAL_DOMAIN}${articlePathname()}`}
-        title={metadata().title}
-        description={metadata().description}
-        image={metadata().imageUrl} // TODO: support public dir path? (if starts with "/")
-        type="article"
-      />
       <SkipLinks
         links={[
           { id: "article-content", label: "article content" },
@@ -237,7 +228,7 @@ export default function ArticleLayout() {
           <div class="article-container p-4 space-y-16" ref={contentDiv!}>
             <MDXContent>
               <SkipLink id="article-content" />
-              <Outlet />
+              {props.children}
             </MDXContent>
             <section aria-label="Email newsletter">
               <Subscribe />

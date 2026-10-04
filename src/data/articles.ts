@@ -1,4 +1,4 @@
-import { useLocation } from "solid-start";
+import { useLocation } from "~/utils/routing";
 
 import { type ALLOWED_TOPICS } from "./config";
 import { type ArticleId, ARTICLES } from "./generated/articles";
@@ -74,7 +74,7 @@ export const ARTICLES_BY_YEAR_SORTED = Object.entries(ARTICLES_BY_YEAR).sort(
 
 export function useArticleLocation() {
   const location = useLocation();
-  const articlePathname = () => location.pathname.replace(/\/*$/, "");
+  const articlePathname = () => location().pathname.replace(/\/*$/, "");
   const articleId = () => {
     const match = articlePathname().match(/\S*\/([\S]*)/);
     if (!match) throw new Error("Missing article id");

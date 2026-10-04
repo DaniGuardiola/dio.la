@@ -18,7 +18,8 @@ async function subscribe(email: string) {
       }
     );
     const result = await response.json();
-    if (result.success) return true;
+    if (typeof result === "object" && result !== null && "success" in result && result.success)
+      return true;
   } catch {
     return false;
   }
@@ -35,7 +36,7 @@ export function Subscribe() {
     setSuccess(undefined);
   }
 
-  let emailInput: HTMLInputElement;
+  let emailInput!: HTMLInputElement;
   async function onSubmit(event: SubmitEvent) {
     event.preventDefault();
     setLoading(true);

@@ -2,9 +2,17 @@
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "import", "unicorn", "oxc"],
   "jsPlugins": ["eslint-plugin-solid"],
-  "env": { "browser": true, "node": true, "es2021": true },
-  "globals": { "Bun": "readonly" },
-  "categories": { "correctness": "error" },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "globals": {
+    "Bun": "readonly"
+  },
+  "categories": {
+    "correctness": "error"
+  },
   "rules": {
     "typescript/no-unused-vars": "error",
     "import/no-duplicates": "error",
@@ -21,8 +29,17 @@
   "overrides": [
     {
       "files": ["**/*.tsx"],
-      "rules": { "no-unassigned-vars": "off" }
+      "rules": {
+        "no-unassigned-vars": "off"
+      }
     }
   ],
-  "ignorePatterns": ["dist", ".solid", "functions", "src/data/generated", "node_modules"]
+  "ignorePatterns": [
+    "dist",
+    ".solid",
+    "functions",
+    "src/data/generated",
+    "node_modules",
+    "src/routeTree.gen.ts"
+  ]
 }

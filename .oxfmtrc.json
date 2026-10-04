@@ -3,5 +3,12 @@
   "trailingComma": "none",
   "sortImports": {},
   "embeddedLanguageFormatting": "off",
-  "ignorePatterns": ["dist", ".solid", "functions", "src/data/generated", "public/rss.xml"]
+  "ignorePatterns": [
+    "dist",
+    ".solid",
+    "functions",
+    "src/data/generated",
+    "public/rss.xml",
+    "src/routeTree.gen.ts"
+  ]
 }

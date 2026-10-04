@@ -1,21 +1,21 @@
 import { createEffect, createSignal } from "solid-js";
-import { useLocation } from "solid-start";
 
 import { GH_DISCUSSIONS_CAT_ID, GH_DISCUSSIONS_DRAFTS_CAT_ID, REPO, REPO_ID } from "~/data/config";
 import { isDrafts, isLocalhost } from "~/utils/is-host";
+import { useLocation } from "~/utils/routing";
 import { theme } from "~/utils/theme";
 
 import { Giscus } from "./Giscus";
 
 export function Comments() {
   const location = useLocation();
-  const [pathname, setPathname] = createSignal(location.pathname);
-  createEffect(() => setPathname(location.pathname));
-  let giscusWidgetEl: HTMLElement & { requestUpdate?: () => void };
+  const [pathname, setPathname] = createSignal(location().pathname);
+  createEffect(() => location().pathname, setPathname);
+  let giscusWidgetEl!: HTMLElement & { requestUpdate?: () => void };
 
-  createEffect(() => {
-    // SPA refresh hack
-    if (pathname()) setTimeout(() => giscusWidgetEl?.requestUpdate?.(), 50);
+  createEffect(pathname, () => {
+    const timer = setTimeout(() => giscusWidgetEl?.requestUpdate?.(), 50);
+    return () => clearTimeout(timer);
   });
 
   return (

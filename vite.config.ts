@@ -1,7 +1,10 @@
+import { cloudflare } from "@cloudflare/vite-plugin";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // import a11yEmoji from "@fec/remark-a11y-emoji";
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
+import solid from "@solidjs/vite-plugin";
+import { tanstackStart } from "@tanstack/solid-start/plugin/vite";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
@@ -11,23 +14,23 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkMdxImages from "remark-mdx-images";
 import remarkShikiTwoslash from "remark-shiki-twoslash";
-import devtools from "solid-devtools/vite";
-// @ts-expect-error No types available yet.
-import bun from "solid-start-bun";
-import cloudflare from "solid-start-cloudflare-pages";
-import solid from "solid-start/vite";
 import typescript, { type CompilerOptions } from "typescript";
 import { defineConfig } from "vite";
 
-const isCloudflare = process.env.DEPLOY_TARGET === "cloudflare";
-
 export default defineConfig({
+  resolve: { tsconfigPaths: true, alias: { "~": new URL("./src", import.meta.url).pathname } },
   plugins: [
+    cloudflare({
+      configPath:
+        process.env.VITE_IS_DRAFTS === "true" ? "wrangler.drafts.jsonc" : "wrangler.jsonc",
+      viteEnvironment: { name: "ssr" }
+    }),
+    tanstackStart(),
     {
       ...mdx({
         jsx: true,
-        jsxImportSource: "solid-js",
-        providerImportSource: "solid-mdx",
+        jsxImportSource: "@solidjs/web",
+        providerImportSource: "~/utils/mdx",
         elementAttributeNameCase: "html",
         stylePropertyNameCase: "css",
         remarkPlugins: [
@@ -37,7 +40,8 @@ export default defineConfig({
               theme: "dark-plus",
               addTryButton: true,
               defaultCompilerOptions: {
-                target: typescript.ScriptTarget.ESNext
+                target: typescript.ScriptTarget.ESNext,
+                ignoreDeprecations: "6.0"
               } satisfies CompilerOptions
             }
           ],
@@ -56,20 +60,6 @@ export default defineConfig({
       }),
       enforce: "pre"
     },
-    !isCloudflare &&
-      devtools({
-        autoname: true,
-        locator: {
-          targetIDE: "vscode",
-          componentLocation: true,
-          jsxLocation: true
-        }
-      }),
-    solid({
-      extensions: [".mdx"],
-      adapter: isCloudflare ? cloudflare({}) : bun()
-    })
+    solid({ ssr: true, extensions: [".mdx"] })
   ]
 });
-
-// declare const test: import("typescript").CompilerOptions

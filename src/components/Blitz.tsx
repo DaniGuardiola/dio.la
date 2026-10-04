@@ -1,5 +1,6 @@
+import { type ComponentProps } from "@solidjs/web";
 import clsx from "clsx";
-import { type ComponentProps, splitProps } from "solid-js";
+import { omit } from "solid-js";
 
 type BlitzProps = ComponentProps<"iframe"> & {
   blitzId: string;
@@ -34,7 +35,7 @@ function toParamValue(value: string | number | boolean) {
 }
 
 export function Blitz(props: BlitzProps) {
-  const [blitzProps, htmlProps] = splitProps(props, ["blitzId", "file", "view", "params"]);
+  const htmlProps = omit(props, "blitzId", "file", "view", "params");
   const searchParams = () => {
     const params = new URLSearchParams({ embed: "1" });
 
@@ -42,10 +43,10 @@ export function Blitz(props: BlitzProps) {
     Object.entries(DEFAULTS).forEach(([key, value]) => params.set(key, toParamValue(value)));
 
     // Set user-defined values.
-    if (blitzProps.file) params.set("file", blitzProps.file);
-    if (blitzProps.view) params.set("view", blitzProps.view);
-    if (blitzProps.params) {
-      for (const [key, value] of Object.entries(blitzProps.params)) {
+    if (props.file) params.set("file", props.file);
+    if (props.view) params.set("view", props.view);
+    if (props.params) {
+      for (const [key, value] of Object.entries(props.params)) {
         params.set(key, toParamValue(value));
       }
     }
@@ -54,7 +55,7 @@ export function Blitz(props: BlitzProps) {
   return (
     <iframe
       loading="lazy"
-      src={`https://stackblitz.com/edit/${blitzProps.blitzId}?${searchParams()}`}
+      src={`https://stackblitz.com/edit/${props.blitzId}?${searchParams()}`}
       {...htmlProps}
       class={clsx(
         "w-[calc(100%+2rem)] min-h-[32rem] -mx-4 my-[1.25em] rounded-lg",

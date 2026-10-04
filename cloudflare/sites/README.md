@@ -46,3 +46,20 @@ should pin its newly resolved dependencies and repeat browser checks.
 
 Verification covered headings, groups, separators, reactive element switching,
 and focus enable/disable behavior without browser errors.
+
+## Default Pages URLs
+
+The account-level Bulk Redirect list `dio_pages_custom_domains` sends both
+`dio-rpc-anywhere.pages.dev` and `dio-ariakit-solid.pages.dev`, including their
+preview subdomains, to their corresponding custom domains with HTTP 301.
+Subpath matching, path suffix preservation, and query preservation are enabled.
+This prevents duplicate content on default Pages URLs while retaining Pages
+hosting. The ruleset is `Dio Pages canonical domains`, in the
+`http_request_redirect` phase. These account resources are independent of Pages
+uploads. See [Cloudflare's setup guide](https://developers.cloudflare.com/pages/how-to/redirect-to-custom-domain/).
+
+List ID: `c63e3339dca040d8af389049140054dd`.
+Ruleset ID: `9e9e5a678ff04fc6a89dc6d550a50859`.
+
+The former blog projects `dio-la` and `dio-la-drafts` were deleted after their
+custom domains passed verification on TanStack Start Workers.

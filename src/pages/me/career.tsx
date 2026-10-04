@@ -1,4 +1,5 @@
-import { For, type JSX } from "solid-js";
+import { type JSX } from "@solidjs/web";
+import { For } from "solid-js";
 
 import airbusLogo from "./img/airbus-logo.png";
 import automatticLogo from "./img/automattic-logo.png";
