@@ -15,11 +15,13 @@ import devtools from "solid-devtools/vite";
 import solid from "solid-start/vite";
 // @ts-expect-error No types available yet.
 import bun from "solid-start-bun";
+import cloudflare from "solid-start-cloudflare-pages";
 import vercel from "solid-start-vercel";
 import typescript, { type CompilerOptions } from "typescript";
 import { defineConfig } from "vite";
 
 const isVercel = process.env.VERCEL === "1";
+const isCloudflare = process.env.DEPLOY_TARGET === "cloudflare";
 
 export default defineConfig({
   plugins: [
@@ -56,7 +58,7 @@ export default defineConfig({
       }),
       enforce: "pre",
     },
-    !isVercel &&
+    !isVercel && !isCloudflare &&
       devtools({
         autoname: true,
         locator: {
@@ -67,7 +69,11 @@ export default defineConfig({
       }),
     solid({
       extensions: [".mdx"],
-      adapter: isVercel ? vercel({ edge: true }) : bun(),
+      adapter: isCloudflare
+        ? cloudflare({})
+        : isVercel
+          ? vercel({ edge: true })
+          : bun(),
     }),
   ],
 });

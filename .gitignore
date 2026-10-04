@@ -26,3 +26,8 @@ Thumbs.db
 # Generated
 generated
 public/rss.xml
+
+# Cloudflare build output and local state
+functions/
+.wrangler
+.dev.vars
