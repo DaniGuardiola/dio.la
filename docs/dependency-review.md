@@ -1,7 +1,7 @@
 # Dependency and MDX review
 
 Reviewed October 5, 2026. MDX 3 and Shiki 4 were already current. The official
-Shiki Rehype integration and classic Twoslash renderer provide build-time syntax
+Shiki Rehype integration and rich Twoslash renderer provide build-time syntax
 highlighting and type hovers without shipping either compiler to the browser.
 Replacing them would add migration work without a demonstrated benefit.
 
@@ -70,7 +70,7 @@ TypeScript 7 has a different unstable API, rather than the classic one.
 An alternative implementation already exists:
 [Fumadocs PR #3533](https://github.com/fuma-nama/fumadocs/pull/3533), merged
 September 4, uses `typescript/unstable/sync`. It changes rendering and configuration
-and is not a direct replacement for our classic renderer. Evaluate it only with
+and is not a direct replacement for our Shiki renderer. Evaluate it only with
 verification of the existing UI, code hovers, queries, includes and playground links.
 
 When core Twoslash supports native TypeScript (or a verified replacement is adopted):

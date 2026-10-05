@@ -330,3 +330,29 @@ Syntax highlighting
 [3]: https://octodex.github.com/images/dinotocat.png
 [4]: https://octodex.github.com/images/saritocat.png "The Stormtroopocat"
 [5]: https://octodex.github.com/images/daftpunktocat-thomas.gif "The Dojocat"
+
+## Code annotations
+
+Matching brackets use nesting colors in every code block. Shiki comments below
+mark changes, focus a line and highlight a word; the directives are hidden from
+readers.
+
+```ts
+// [!code word:count]
+const previous = { count: 1 }; // [!code --]
+const updated = { count: 2 }; // [!code ++]
+console.log(updated.count); // [!code focus]
+console.log("Done"); // [!code highlight]
+```
+
+### Rich types and horizontal scrolling
+
+Hover a property before and after scrolling this deliberately wide example.
+The query below the code should remain visible without overlapping other lines.
+
+```ts twoslash
+/** A value used to verify rich hover documentation and long code lines. */
+const example = { count: 42, description: "This deliberately long description keeps the code wider than a narrow viewport so horizontal scrolling and tooltip positioning can be checked together." };
+example.count;
+//      ^?
+```

@@ -1,10 +1,9 @@
+import "@shikijs/twoslash/style-rich.css";
 import "./styles.css";
 import "katex/dist/katex.min.css";
 import { type ComponentProps, type JSX } from "@solidjs/web";
 import { Dynamic } from "@solidjs/web";
 import clsx from "clsx";
-import pDebounce from "p-debounce";
-import { createSignal } from "solid-js";
 
 import { MDXProvider } from "~/utils/mdx";
 
@@ -40,28 +39,6 @@ const KATEX_TAGS = [
   "line",
   "path"
 ];
-
-function DataLSP(props: ComponentProps<"span"> & { lsp: string }) {
-  return <span {...props} data-lsp={props.lsp} class={clsx("data-lsp", props.class)} />;
-}
-
-function DataErr(props: ComponentProps<"span">) {
-  return <span {...props} class={clsx("data-err", props.class)} />;
-}
-
-function Pre(props: ComponentProps<"pre">) {
-  const [scrollX, setScrollX] = createSignal(0);
-
-  const setScrollXDebounced = pDebounce(setScrollX, 100);
-
-  return (
-    <pre
-      {...props}
-      onScroll={(event) => setScrollXDebounced(event.currentTarget.scrollLeft)}
-      style={{ "--scroll-x": `${scrollX()}px` }}
-    />
-  );
-}
 
 function YoutubeVideo(props: { id: string }) {
   return (
@@ -133,9 +110,6 @@ export function MDXContent(props: MDXContentProps) {
       <MDXProvider
         components={{
           img: Image,
-          "data-lsp": DataLSP,
-          "data-err": DataErr,
-          pre: Pre,
           YoutubeVideo,
           ...KATEX_TAGS.reduce((obj, component) => ({ ...obj, [component]: stub(component) }), {}),
           ...Object.fromEntries(

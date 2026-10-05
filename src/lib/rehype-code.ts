@@ -1,6 +1,13 @@
+import { transformerColorizedBrackets } from "@shikijs/colorized-brackets";
 import rehypeShiki from "@shikijs/rehype";
-import { parseMetaHighlightString } from "@shikijs/transformers";
-import { rendererClassic, transformerTwoslash } from "@shikijs/twoslash";
+import {
+  parseMetaHighlightString,
+  transformerNotationDiff,
+  transformerNotationFocus,
+  transformerNotationHighlight,
+  transformerNotationWordHighlight
+} from "@shikijs/transformers";
+import { rendererRich, transformerTwoslash } from "@shikijs/twoslash";
 import type { Element, Root } from "hast";
 import lzString from "lz-string";
 import type { ShikiTransformer } from "shiki";
@@ -34,7 +41,8 @@ function articleCode(includes: Map<string, string>): ShikiTransformer {
       );
     },
     line(node, line) {
-      node.tagName = "div";
+      // Keep Shiki's span lines: word annotations inspect span text recursively.
+      // CSS makes only source lines block-level, preserving full-width highlights.
       const highlights = parseMetaHighlightString(this.options.meta?.__raw ?? "");
       if (highlights) this.addClassToHast(node, highlights.includes(line) ? "highlight" : "dim");
     },
@@ -109,10 +117,15 @@ export function rehypeCode() {
       fallbackLanguage: "text",
       transformers: [
         articleCode(includes),
+        transformerNotationDiff(),
+        transformerNotationFocus(),
+        transformerNotationHighlight(),
+        transformerNotationWordHighlight(),
+        transformerColorizedBrackets(),
         transformerTwoslash({
           explicitTrigger: true,
           includesMap: includes,
-          renderer: rendererClassic(),
+          renderer: rendererRich({ queryRendering: "line" }),
           twoslashOptions: {
             customTags: ["annotate", "log", "warn", "error"],
             compilerOptions: {

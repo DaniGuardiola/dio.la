@@ -79,11 +79,25 @@ before raw HTML processing so fence metadata reaches Twoslash. Highlighting and
 type analysis run at build time; the browser receives rendered code and hover
 text, not a TypeScript compiler or Shiki runtime.
 
-The classic Twoslash renderer preserves the existing hover, query, error and
-completion UI. Article fences keep `twoslash`, `{1, 3-4}`, `@include`, named include
+The rich Twoslash renderer syntax-highlights hover types and shows JSDoc using
+its official stylesheet. Queries stay on separate lines; errors and completions
+use the same renderer. Article fences keep `twoslash`, `{1, 3-4}`, `@include`, named include
 sections and cut markers. Hidden includes are scoped to each document. Playground
 links include the full source, including code hidden by cuts. The obsolete legacy
-wrapper and its newline patch are removed.
+wrapper and its newline patch are removed. Source lines retain Shiki's standard
+`span` markup with block layout in CSS, including horizontal scrolling and
+full-width highlights. Site CSS bounds rich tooltip widths and removes inactive
+hover popups from layout so hidden types cannot enlarge the scrollable area.
+
+Code fences also support Shiki's `[!code ++]` / `[!code --]` diff comments,
+`[!code highlight]`, `[!code focus]` and `[!code word:identifier]`. Matching brackets use VS Code-style nesting colors in all code fences. These features run at build time. For example:
+
+````md
+```ts
+const oldValue = { count: 1 }; // [!code --]
+const newValue = { count: 2 }; // [!code ++]
+```
+````
 
 `bun test` covers the actual MDX plugin pipeline, media imports, math, tables,
 includes, queries, highlighted rows and playground links. See the
