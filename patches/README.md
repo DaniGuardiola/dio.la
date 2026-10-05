@@ -47,6 +47,13 @@ diagnostics reproduced during development on October 5, 2026:
   runtime teardown is now returned from the effect, including its early-return
   branch. One-time prefetch teardown is retained by the existing component cleanup.
 
+Important scope: Start already called `cleanupHydrationRuntime()` from its outer
+component cleanup. The invalid effect registration therefore does not prove an
+unmount leak in this site's visible-comments flow. Returning teardown fixes cleanup
+before an effect reruns; no user-visible failure from that path was demonstrated.
+The snapshot annotations clarify intended one-time reads rather than repairing a
+demonstrated hydration failure.
+
 This is a dependency correction, not warning suppression. Both package source
 and distributed JavaScript are patched. The rules are documented in the installed
 `solid-js/skills/reactivity-diagnostics/SKILL.md` (`STRICT_READ_UNTRACKED` and
