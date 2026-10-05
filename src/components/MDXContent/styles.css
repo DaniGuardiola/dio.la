@@ -66,7 +66,49 @@
   --twoslash-error-color: #fca5a5;
   --twoslash-code-font-size: 0.875rem;
 }
-/* Browser popovers own visibility; official hover CSS must not expose closed ones. */
+/* CSS is the no-JS baseline. Fixed positioning escapes the code scroller;
+   anchors keep it attached to the hovered/focused token in supporting browsers. */
+.mdx-content .twoslash-hover {
+  anchor-name: --twoslash-token;
+  anchor-scope: --twoslash-token;
+}
+.mdx-content .twoslash-hover > .twoslash-popup-container:not([popover]) {
+  position: fixed;
+  inset: auto;
+  left: 12px;
+  bottom: 12px;
+  margin: 0;
+  transform: none;
+  visibility: hidden;
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+}
+.mdx-content .twoslash-hover:is(:hover, :focus-within) > .twoslash-popup-container:not([popover]) {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  user-select: text;
+}
+@supports (anchor-scope: --twoslash-token) and (top: anchor(bottom)) {
+  .mdx-content .twoslash-hover > .twoslash-popup-container:not([popover]) {
+    position-anchor: --twoslash-token;
+    inset: auto;
+    position-area: bottom span-right;
+    align-self: start;
+    justify-self: start;
+    /* Keep the CSS-only hover target contiguous with its popup. */
+    margin-top: 0;
+    /* Percentages use the space on this side of the anchor, not the viewport. */
+    max-height: calc(100% - 12px);
+    max-width: min(32rem, calc(100% - 24px));
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
+    position-try-order: most-height;
+  }
+}
+/* Enhanced popovers own visibility; hover CSS must not expose closed ones. */
 .mdx-content .twoslash-popup-container[popover]:not(:popover-open) {
   display: none;
 }

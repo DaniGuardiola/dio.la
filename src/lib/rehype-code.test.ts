@@ -111,7 +111,9 @@ test("rich Twoslash keeps documentation, errors, custom tags and completions", a
     )
   );
   expect(output).toContain("twoslash-popup-docs");
-  expect(output).toContain('popover="manual"');
+  // Native popovers are hidden until JS opens them: never put that dependency
+  // in the server markup, which must remain usable with scripts disabled.
+  expect(output).not.toContain('popover="manual"');
   expect(output).toContain('role="tooltip"');
   expect(renderedText(output)).toContain("Number of examples.");
   expect(output).toContain("twoslash-error-line");

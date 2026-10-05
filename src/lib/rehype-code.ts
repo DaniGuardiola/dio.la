@@ -125,7 +125,7 @@ export function rehypeCode() {
             renderMarkdownInline: renderTwoslashMarkdownInline,
             hast: {
               hoverToken: { properties: { tabIndex: 0 } },
-              hoverPopup: { properties: { popover: "manual", role: "tooltip" } }
+              hoverPopup: { properties: { role: "tooltip" } }
             }
           }),
           twoslashOptions: {

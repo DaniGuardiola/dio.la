@@ -3,6 +3,13 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/Popover_API
 // https://floating-ui.com/docs/autoupdate
 export function setupTwoslashPopovers(root: HTMLElement) {
+  // Server HTML uses CSS hover/focus. Only opt into JS-controlled visibility
+  // when this browser supports the top-layer enhancement.
+  if (typeof HTMLElement.prototype.showPopover !== "function") return () => {};
+  const popovers = root.querySelectorAll<HTMLElement>(
+    ".twoslash-hover > .twoslash-popup-container"
+  );
+  for (const element of popovers) element.setAttribute("popover", "manual");
   let active: HTMLElement | undefined;
   let popup: HTMLElement | undefined;
   let cleanupPosition: (() => void) | undefined;
@@ -81,19 +88,25 @@ export function setupTwoslashPopovers(root: HTMLElement) {
   }
 
   document.addEventListener("pointerdown", outside);
+  document.addEventListener("keydown", keydown);
   root.addEventListener("pointerover", enter);
   root.addEventListener("pointerout", leave);
   root.addEventListener("focusin", enter);
   root.addEventListener("focusout", leave);
-  root.addEventListener("keydown", keydown);
   return () => {
     disposed = true;
     close();
     document.removeEventListener("pointerdown", outside);
+    document.removeEventListener("keydown", keydown);
     root.removeEventListener("pointerover", enter);
     root.removeEventListener("pointerout", leave);
     root.removeEventListener("focusin", enter);
     root.removeEventListener("focusout", leave);
-    root.removeEventListener("keydown", keydown);
+    for (const element of popovers) {
+      element.removeAttribute("popover");
+      element.style.removeProperty("left");
+      element.style.removeProperty("top");
+      element.style.removeProperty("visibility");
+    }
   };
 }
