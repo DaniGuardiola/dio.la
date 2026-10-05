@@ -5,6 +5,7 @@
     "": {
       "name": "dio.la",
       "dependencies": {
+        "@floating-ui/dom": "^1.8.0",
         "@solidjs/web": "2.0.0-rc.13",
         "@tanstack/solid-router": "2.0.0-rc.8",
         "@tanstack/solid-start": "2.0.0-rc.8",
@@ -45,6 +46,8 @@
         "remark-frontmatter": "^5.0.0",
         "remark-gfm": "^4.0.1",
         "remark-math": "^6.0.0",
+        "remark-parse": "^11.0.0",
+        "remark-rehype": "^11.1.2",
         "shiki": "^4.5.0",
         "tailwindcss": "^4.3.3",
         "typescript": "~6.0.3",

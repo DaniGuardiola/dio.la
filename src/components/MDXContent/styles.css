@@ -66,9 +66,20 @@
   --twoslash-error-color: #fca5a5;
   --twoslash-code-font-size: 0.875rem;
 }
-/* Hidden hover types must not enlarge the code block's scrollable area. */
-.mdx-content .twoslash-hover:not(:hover) > .twoslash-popup-container {
+/* Browser popovers own visibility; official hover CSS must not expose closed ones. */
+.mdx-content .twoslash-popup-container[popover]:not(:popover-open) {
   display: none;
+}
+.mdx-content .twoslash-popup-container[popover]:popover-open {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+  user-select: text;
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
 }
 .mdx-content .twoslash-popup-container {
   width: max-content;
@@ -82,7 +93,16 @@
   @apply block m-0 p-0 bg-transparent overflow-visible rounded-none whitespace-pre-wrap;
 }
 .mdx-content .twoslash-popup-docs {
-  @apply whitespace-pre-wrap max-w-[32rem];
+  @apply whitespace-normal max-w-[32rem];
+}
+.mdx-content .twoslash-popup-docs :is(p, ul, ol) {
+  @apply my-2;
+}
+.mdx-content .twoslash-popup-docs > :first-child {
+  @apply mt-0;
+}
+.mdx-content .twoslash-popup-docs > :last-child {
+  @apply mb-0;
 }
 .mdx-content .twoslash-completion-list {
   @apply list-none m-0 p-1;

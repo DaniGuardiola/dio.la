@@ -86,8 +86,12 @@ sections and cut markers. Hidden includes are scoped to each document. Playgroun
 links include the full source, including code hidden by cuts. The obsolete legacy
 wrapper and its newline patch are removed. Source lines retain Shiki's standard
 `span` markup with block layout in CSS, including horizontal scrolling and
-full-width highlights. Site CSS bounds rich tooltip widths and removes inactive
-hover popups from layout so hidden types cannot enlarge the scrollable area.
+full-width highlights. Hover popups use the browser's native Popover API (top layer) to escape code
+block clipping, with Floating UI loaded on first interaction for positioning,
+scroll tracking and viewport bounds. Keyboard focus opens them; Escape dismisses
+them. The positioning observer exists only while a popup is open. Queries remain
+inline. JSDoc uses Shiki's Markdown renderer hooks, following its VitePress
+adapter, so links and formatting render rather than showing raw markup.
 
 Code fences also support Shiki's `[!code ++]` / `[!code --]` diff comments,
 `[!code highlight]`, `[!code focus]` and `[!code word:identifier]`. Matching brackets use VS Code-style nesting colors in all code fences. These features run at build time. For example:

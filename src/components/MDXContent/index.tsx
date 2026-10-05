@@ -4,8 +4,11 @@ import "katex/dist/katex.min.css";
 import { type ComponentProps, type JSX } from "@solidjs/web";
 import { Dynamic } from "@solidjs/web";
 import clsx from "clsx";
+import { createEffect } from "solid-js";
 
 import { MDXProvider } from "~/utils/mdx";
+
+import { setupTwoslashPopovers } from "./twoslash-popovers";
 
 const KATEX_TAGS = [
   "math",
@@ -105,8 +108,13 @@ function createHeading(type: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
 type MDXContentProps = { children?: JSX.Element };
 
 export function MDXContent(props: MDXContentProps) {
+  let root!: HTMLDivElement;
+  createEffect(
+    () => undefined,
+    () => setupTwoslashPopovers(root)
+  );
   return (
-    <div class="mdx-content">
+    <div ref={root} class="mdx-content">
       <MDXProvider
         components={{
           img: Image,

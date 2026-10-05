@@ -111,10 +111,32 @@ test("rich Twoslash keeps documentation, errors, custom tags and completions", a
     )
   );
   expect(output).toContain("twoslash-popup-docs");
+  expect(output).toContain('popover="manual"');
+  expect(output).toContain('role="tooltip"');
   expect(renderedText(output)).toContain("Number of examples.");
   expect(output).toContain("twoslash-error-line");
   expect(renderedText(output)).toContain("Type 'string' is not assignable to type 'number'.");
   expect(output).toContain("twoslash-tag-log-line");
   expect(renderedText(output)).toContain("Example message");
   expect(output).toContain("twoslash-completion-list");
+});
+
+test("rich hover docs render Markdown and multiline JSDoc links without raw syntax", async () => {
+  const output = String(
+    await compile(
+      [
+        "```ts twoslash",
+        "/** A **bold** description with {@link Number} and `inline code`. */",
+        "const value = 42;",
+        "value;",
+        "```"
+      ].join("\n"),
+      mdxOptions
+    )
+  );
+  expect(output).toContain("_components.strong");
+  expect(output).toContain("twoslash-popup-docs");
+  expect(renderedText(output)).toContain("bold");
+  expect(renderedText(output)).toContain("Number");
+  expect(output).not.toContain("{@link");
 });

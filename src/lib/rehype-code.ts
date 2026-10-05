@@ -21,6 +21,8 @@ import ts from "typescript";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";
 
+import { renderTwoslashMarkdown, renderTwoslashMarkdownInline } from "./twoslash-markdown";
+
 function element(
   tagName: string,
   properties: Element["properties"],
@@ -125,7 +127,15 @@ export function rehypeCode() {
         transformerTwoslash({
           explicitTrigger: true,
           includesMap: includes,
-          renderer: rendererRich({ queryRendering: "line" }),
+          renderer: rendererRich({
+            queryRendering: "line",
+            renderMarkdown: renderTwoslashMarkdown,
+            renderMarkdownInline: renderTwoslashMarkdownInline,
+            hast: {
+              hoverToken: { properties: { tabIndex: 0 } },
+              hoverPopup: { properties: { popover: "manual", role: "tooltip" } }
+            }
+          }),
           twoslashOptions: {
             customTags: ["annotate", "log", "warn", "error"],
             compilerOptions: {
