@@ -38,18 +38,17 @@ function ArticleHeader(props: ArticleHeaderProps) {
     };
   });
 
-  const [heightOffsetEl, setHeightOffsetEl] = createSignal<HTMLElement>();
-  const { animateBannerRef, animateBannerStyle } = useAnimateBanner({
-    heightOffsetEl: () => (props.metadata.imageUrl ? heightOffsetEl() : undefined)
+  const [headerEl, setHeaderEl] = createSignal<HTMLElement>();
+  const [imageBannerEl, setImageBannerEl] = createSignal<HTMLElement>();
+  const { animateBannerStyle } = useAnimateBanner({
+    bannerEl: () => (props.metadata.imageUrl ? imageBannerEl() : headerEl()),
+    heightOffsetEl: () => (props.metadata.imageUrl ? headerEl() : undefined)
   });
 
   return (
     <>
       <header
-        ref={(el) => {
-          if (props.metadata.imageUrl) setHeightOffsetEl(el);
-          else animateBannerRef(el);
-        }}
+        ref={setHeaderEl}
         style={props.metadata.imageUrl ? undefined : animateBannerStyle()}
         class="bg-accent pt-8 pb-6 text-white break-words"
       >
@@ -76,10 +75,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
       <Show when={props.metadata.imageUrl}>
         <div class="relative">
           <div
-            ref={(el) => {
-              if (props.metadata.imageUrl) animateBannerRef(el);
-              else setHeightOffsetEl(el);
-            }}
+            ref={setImageBannerEl}
             style={props.metadata.imageUrl ? animateBannerStyle() : undefined}
             class="absolute top-0 inset-x-0 -z-10 bg-accent h-[4rem] xs:h-[6rem] sm:h-[9rem] lg:h-[12rem]"
           />

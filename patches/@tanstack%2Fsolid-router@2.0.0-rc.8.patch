@@ -1,0 +1,52 @@
+diff --git a/dist/cjs/link.cjs b/dist/cjs/link.cjs
+index bac4795558c1a353159ff84123fef2eaa2144c4f..25a28ca0560e802e98115e7a04fbaa307adfca14 100644
+--- a/dist/cjs/link.cjs
++++ b/dist/cjs/link.cjs
+@@ -188,7 +188,7 @@ function useLinkProps(options) {
+ 		doPreload();
+ 	};
+ 	const handleLeave = () => {
+-		if (preload() === "intent") cancelPreload(ref);
++		if (solid_js.untrack(preload) === "intent") cancelPreload(ref);
+ 	};
+ 	const simpleStyling = solid_js.createMemo(() => activeProps() === STATIC_ACTIVE_PROPS_GET && inactiveProps() === STATIC_INACTIVE_PROPS_GET && local.class === void 0 && local.style === void 0, { lazy: true });
+ 	const onClick = createComposedHandler(() => local.onClick, handleClick);
+diff --git a/dist/esm/link.js b/dist/esm/link.js
+index 49f3ffb06ab25a1442ef1d8d3b17b82ee8588d92..8dbb0ebbca14a916f34d56ba4a0506f4593465c9 100644
+--- a/dist/esm/link.js
++++ b/dist/esm/link.js
+@@ -186,7 +186,7 @@ function useLinkProps(options) {
+ 		doPreload();
+ 	};
+ 	const handleLeave = () => {
+-		if (preload() === "intent") cancelPreload(ref);
++		if (Solid.untrack(preload) === "intent") cancelPreload(ref);
+ 	};
+ 	const simpleStyling = Solid.createMemo(() => activeProps() === STATIC_ACTIVE_PROPS_GET && inactiveProps() === STATIC_INACTIVE_PROPS_GET && local.class === void 0 && local.style === void 0, { lazy: true });
+ 	const onClick = createComposedHandler(() => local.onClick, handleClick);
+diff --git a/dist/source/link.jsx b/dist/source/link.jsx
+index fbde2cfc13134f0425dc94d172aa21432f6a13ca..3658cce5f78158276ec05a9549e9b5ff7ffe16d9 100644
+--- a/dist/source/link.jsx
++++ b/dist/source/link.jsx
+@@ -257,7 +257,7 @@ export function useLinkProps(options) {
+         doPreload();
+     };
+     const handleLeave = () => {
+-        if (preload() === 'intent') {
++        if (Solid.untrack(preload) === 'intent') {
+             cancelPreload(ref);
+         }
+     };
+diff --git a/src/link.tsx b/src/link.tsx
+index ce3251bc124e263d9f605c22810bbc1c2ffe9715..db9fef14137d4158cc3374a575c6044e0b98e261 100644
+--- a/src/link.tsx
++++ b/src/link.tsx
+@@ -403,7 +403,7 @@ export function useLinkProps<
+   }
+ 
+   const handleLeave = () => {
+-    if (preload() === 'intent') {
++    if (Solid.untrack(preload) === 'intent') {
+       cancelPreload(ref)
+     }
+   }

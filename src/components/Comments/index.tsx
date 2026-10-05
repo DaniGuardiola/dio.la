@@ -1,5 +1,5 @@
 import { useLocation } from "@tanstack/solid-router";
-import { createEffect, createSignal } from "solid-js";
+import { createEffect } from "solid-js";
 
 import { GH_DISCUSSIONS_CAT_ID, GH_DISCUSSIONS_DRAFTS_CAT_ID, REPO, REPO_ID } from "~/data/config";
 import { isDrafts, isLocalhost } from "~/utils/is-host";
@@ -9,19 +9,15 @@ import { Giscus } from "./Giscus";
 
 export function Comments() {
   const location = useLocation();
-  const [pathname, setPathname] = createSignal(location().pathname);
-  createEffect(
-    () => location().pathname,
-    (nextPathname) => {
-      setPathname(nextPathname);
-    }
-  );
   let giscusWidgetEl!: HTMLElement & { requestUpdate?: () => void };
 
-  createEffect(pathname, () => {
-    const timer = setTimeout(() => giscusWidgetEl?.requestUpdate?.(), 50);
-    return () => clearTimeout(timer);
-  });
+  createEffect(
+    () => location().pathname,
+    () => {
+      const timer = setTimeout(() => giscusWidgetEl?.requestUpdate?.(), 50);
+      return () => clearTimeout(timer);
+    }
+  );
 
   return (
     <Giscus

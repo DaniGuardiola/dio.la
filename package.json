@@ -93,6 +93,8 @@
   },
   "packageManager": "bun@1.4.2",
   "patchedDependencies": {
-    "@tanstack/solid-start@2.0.0-rc.8": "patches/@tanstack%2Fsolid-start@2.0.0-rc.8.patch"
+    "@tanstack/solid-start@2.0.0-rc.8": "patches/@tanstack%2Fsolid-start@2.0.0-rc.8.patch",
+    "@tanstack/solid-start-client@2.0.0-rc.8": "patches/@tanstack%2Fsolid-start-client@2.0.0-rc.8.patch",
+    "@tanstack/solid-router@2.0.0-rc.8": "patches/@tanstack%2Fsolid-router@2.0.0-rc.8.patch"
   }
 }

@@ -32,3 +32,48 @@ When a compatible release is published:
    deploy production using the draft build output.
 
 Do not remove this patch merely because the blog does not call server functions.
+
+## TODO: Remove the Solid Start client hydration lifecycle patch
+
+`@tanstack%2Fsolid-start-client@2.0.0-rc.8.patch` fixes two distinct Solid 2
+diagnostics reproduced during development on October 5, 2026:
+
+- `Hydrate` / `GenericHydrate` read reactive props and `useHydrated()` in the
+  component body. These select the initial renderer, marker ID and whether to
+  preserve initial server HTML; they are deliberately one-time snapshots, now
+  expressed with `untrack`. Runtime prefetch strategy reads remain tracked.
+- `GenericHydrate` called `onCleanup` inside `createEffect`'s unowned effect
+  callback. Solid explicitly reports that these callbacks will never run. The
+  runtime teardown is now returned from the effect, including its early-return
+  branch. One-time prefetch teardown is retained by the existing component cleanup.
+
+This is a dependency correction, not warning suppression. Both package source
+and distributed JavaScript are patched. The rules are documented in the installed
+`solid-js/skills/reactivity-diagnostics/SKILL.md` (`STRICT_READ_UNTRACKED` and
+`NO_OWNER_CLEANUP`). The owning upstream files are
+[Hydrate.tsx](https://github.com/TanStack/router/blob/main/packages/solid-start-client/src/Hydrate.tsx)
+and [GenericHydrate.tsx](https://github.com/TanStack/router/blob/main/packages/solid-start-client/src/GenericHydrate.tsx).
+No matching upstream issue was located; the server-function PR above does not
+track these client defects.
+
+Remove this separate patch only after a release handles initial snapshots and
+effect cleanup correctly. Test direct article hydration, navigating away before
+comments become visible, repeated article/home/article navigation, and scrolling
+comments into view. Confirm that comments remain deferred, initialize once with
+the current pathname, and emit neither Solid diagnostic. Verify production and
+draft builds and a frozen install. Other hydration strategies are not used by
+this site and have not been browser-tested here.
+
+## TODO: Remove the Router blur snapshot patch
+
+`@tanstack%2Fsolid-router@2.0.0-rc.8.patch` changes only `handleLeave`'s
+`preload()` read to `untrack(preload)` in the source and distributed builds.
+Captured browser console stack: `read` → `handleLeave` → the link's blur handler
+→ Solid DOM reconciliation. Removing the focused link during navigation fires
+synchronous blur while a DOM effect is still running. The event handler needs
+the current preload mode once, rather than a reactive dependency. This annotation
+preserves intent-preload cancellation; it does not disable diagnostics globally.
+
+Remove after upstream explicitly handles this event snapshot or Solid's event
+dispatch no longer diagnoses the read as an effect callback. Recheck focused-link
+article/home/article navigation, hover preloading and keyboard focus/blur.
