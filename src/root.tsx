@@ -26,9 +26,8 @@ function NavLink(props: ComponentProps<typeof A>) {
     >
       <span
         class={clsx(
-          "block overflow-hidden font-bold transition-[width,opacity,color]",
-          "[.enabled>&]:w-4",
-          "[.disabled>&]:w-0 [.disabled>&]:opacity-0"
+          "block w-0 opacity-0 overflow-hidden font-bold transition-[width,opacity,color]",
+          "[.enabled>&]:w-4 [.enabled>&]:opacity-100"
         )}
       >
         {"> "}
