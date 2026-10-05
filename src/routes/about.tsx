@@ -12,7 +12,7 @@ export const Route = createFileRoute("/about")({
   head: () =>
     seo({
       title: "About Dani Guardiola",
-      description: "Software engineer, math and physics enthusiast.",
+      description: "Engineering manager at Proton, leading Docs and Sheets.",
       path: "/about",
       image: "/img/me.webp",
       article: true

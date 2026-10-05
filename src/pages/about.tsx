@@ -5,7 +5,7 @@ import { SkipLink, SkipLinks } from "~/components/SkipLinks";
 import { useAnimateBanner } from "~/utils/animate-banner";
 
 const TITLE = "About Dani Guardiola";
-const DESCRIPTION = "Software engineer, math and physics enthusiast.";
+const DESCRIPTION = "Engineering manager at Proton, leading Docs and Sheets.";
 const IMAGE_URL: string | undefined = "/img/me.webp";
 
 function Header() {
