@@ -26,6 +26,8 @@ test("MDX preserves Twoslash metadata, hidden include sections, queries and play
   expect(output).toContain('lsp="const result: 42"');
   expect(output).toContain('class="popover"');
   expect(output).toContain("https://www.typescriptlang.org/play?#code/");
+  expect(output).toContain('>{"Open in playground"}</_components.a>');
+  expect(output).not.toContain('>{"Try"}</_components.a>');
   const compressed = output.match(/play\?#code\/([^"]+)/)?.[1];
   expect(compressed).toBeDefined();
   expect(lzString.decompressFromEncodedURIComponent(compressed!)).toContain("const answer = 42;");

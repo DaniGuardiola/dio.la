@@ -55,7 +55,7 @@ function articleCode(includes: Map<string, string>): ShikiTransformer {
               href: `https://www.typescriptlang.org/play?#code/${lzString.compressToEncodedURIComponent(playgroundCodes.get(this.meta) ?? "")}`,
               "aria-label": "Open code in TypeScript playground"
             },
-            [{ type: "text", value: "Try" }]
+            [{ type: "text", value: "Open in playground" }]
           )
         );
       }

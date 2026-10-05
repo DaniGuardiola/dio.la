@@ -24,17 +24,11 @@
 }
 .mdx-content pre .code-container > a {
   @apply transition-opacity ease-out opacity-0;
-  @apply absolute translate-x-[-.625rem] translate-y-[.625rem] text-[0] select-none;
-}
-.mdx-content pre .code-container > a:is(:hover, :focus-visible) {
-  @apply opacity-100 no-underline outline-white z-10;
-}
-.mdx-content pre .code-container > a::after {
-  @apply content-["Open_in_playground"] text-[1rem];
+  @apply absolute translate-x-[-.625rem] translate-y-[.625rem] text-[1rem] select-none;
   @apply focus-scroll-target rounded-sm font-bold bg-white border-2 border-blue-500 px-[.375rem] text-blue-500 shadow-sm;
 }
-.mdx-content pre .code-container > a:is(:hover, :focus-visible)::after {
-  @apply text-white bg-blue-500;
+.mdx-content pre .code-container > a:is(:hover, :focus-visible) {
+  @apply opacity-100 no-underline outline-white z-10 text-white bg-blue-500;
 }
 .mdx-content pre:hover .code-container > a {
   @apply opacity-100;

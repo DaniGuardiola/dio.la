@@ -62,3 +62,12 @@ Deployed Worker versions:
 
 - Production: `54083aef-fac8-4aff-90a6-d62007270feb`
 - Drafts: `839f9ac0-3227-404b-b745-f85ef5b8e9c8`
+
+## Playground link label correction
+
+A visual follow-up found a pre-existing Tailwind 4 migration mistake: the old
+`text-[0]` utility compiled to `color: 0`, not `font-size: 0`. It therefore failed
+to hide the link's old `Try` text beside the `::after` label. The link now contains
+its actual `Open in playground` text and owns its button styling directly;
+the hidden text and generated label are removed. Hover and keyboard focus retain
+the same reveal behavior. The compiler regression asserts the real link label.
