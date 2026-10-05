@@ -4,6 +4,12 @@ import { rendererClassic, transformerTwoslash } from "@shikijs/twoslash";
 import type { Element, Root } from "hast";
 import lzString from "lz-string";
 import type { ShikiTransformer } from "shiki";
+// TODO(twoslash-ts7): Retire the TypeScript 6 dependency once upstream supports TS7:
+// https://github.com/twoslashes/twoslash/issues/93
+// Then upgrade `typescript`, remove `@typescript/native`, simplify `typecheck`, and
+// verify both article builds plus hover/query/include/playground regression tests.
+// Today `bun run typecheck` uses TS7; this import supplies TS6's API for Twoslash.
+// Migration details and the alternative native renderer: docs/dependency-review.md.
 import ts from "typescript";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";

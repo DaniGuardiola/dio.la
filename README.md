@@ -88,7 +88,10 @@ wrapper and its newline patch are removed.
 `bun test` covers the actual MDX plugin pipeline, media imports, math, tables,
 includes, queries, highlighted rows and playground links. See the
 [dependency review](docs/dependency-review.md) for upgrades and intentional
-TypeScript, Lexical and KaTeX version holds.
+Twoslash compiler API, Lexical and KaTeX version holds. Project type checking
+explicitly uses native TypeScript 7; Twoslash retains ordinary TypeScript 6
+until its native migration. The removal TODO is beside the compiler import
+in `src/lib/rehype-code.ts`.
 
 ## Principles
 

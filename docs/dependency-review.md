@@ -26,11 +26,11 @@ Replacing them would add migration work without a demonstrated benefit.
 
 ## Intentional version holds
 
-| Package    | Version    | Reason and removal condition                                                                                                                                                                                                                                     |
-| ---------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| TypeScript | `~6.0.3`   | Twoslash uses the established JavaScript compiler API. TypeScript 7's native compiler does not provide that API. Upgrade when Twoslash supports the new API; verify every article and hover/query/include regression.                                            |
-| Lexical    | `0.12.6`   | Historical 2023 articles describe internal editor fields and `lexical/LexicalEditorState`. This dependency supplies example types, not a running editor. Keep the historical version unless the articles are deliberately rewritten for a newer Lexical release. |
-| KaTeX      | `^0.16.47` | `rehype-katex@7.0.1` declares `katex@^0.16.0`. The direct dependency supplies matching CSS. Upgrade both when the plugin supports newer KaTeX; verify inline and display equations.                                                                              |
+| Package                 | Version                  | Reason and removal condition                                                                                                                                                                                                                                     |
+| ----------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| TypeScript compiler API | `~6.0.3` (Twoslash only) | Only Twoslash retains the classic compiler API. Project checks use native TypeScript 7.0.2. Retire v6 after migrating Twoslash, following the TODO below.                                                                                                        |
+| Lexical                 | `0.12.6`                 | Historical 2023 articles describe internal editor fields and `lexical/LexicalEditorState`. This dependency supplies example types, not a running editor. Keep the historical version unless the articles are deliberately rewritten for a newer Lexical release. |
+| KaTeX                   | `^0.16.47`               | `rehype-katex@7.0.1` declares `katex@^0.16.0`. The direct dependency supplies matching CSS. Upgrade both when the plugin supports newer KaTeX; verify inline and display equations.                                                                              |
 
 Sources: [TypeScript 7 announcement](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/),
 [rehype-katex dependency declaration](https://github.com/remarkjs/remark-math/blob/main/packages/rehype-katex/package.json).
@@ -39,6 +39,49 @@ Solid 2 and TanStack Start release-candidate pins and the one upstream Start
 patch are documented separately in [the patch removal checklist](../patches/README.md).
 Do not blindly apply `bun update --latest`: the stable Start release uses a
 different Solid generation, and the holds above serve concrete compatibility needs.
+
+## TODO: retire the Twoslash TypeScript 6 dependency
+
+Project type checking now uses TypeScript 7.0.2. Following Microsoft's
+[side-by-side approach](https://devblogs.microsoft.com/typescript/announcing-typescript-7-0/),
+`@typescript/native` aliases the native `typescript@7.0.2` package while the ordinary
+`typescript@6.0.3` dependency supplies the classic API and standard libraries to
+Twoslash. `bun run typecheck` explicitly invokes `@typescript/native/bin/tsc`;
+it does not rely on which package last installed the shared `tsc` executable.
+No new compiler is shipped to the browser.
+
+The `@typescript/typescript6` compatibility wrapper was evaluated, but Twoslash's
+virtual filesystem resolves standard libraries beside the wrapper, which contains
+no `lib.esnext.full.d.ts`. Retaining the ordinary v6 package avoids additional
+library-path configuration or patches. Both compilers remain unmodified.
+
+The side-by-side setup passed native v7 type checking, lint, formatting, all five
+MDX/Twoslash tests (48 assertions), frozen-lockfile installation, and both full
+builds (eight public and 21 draft pages). The main Twoslash article chunk retains
+its previous hash; this is a development-tooling change.
+
+The actionable TODO is beside the TypeScript import in `src/lib/rehype-code.ts`.
+Track [Twoslash issue #93](https://github.com/twoslashes/twoslash/issues/93).
+As of October 5 it is open, with a contributor volunteering, but no native
+implementation PR found in the core repository. Directly passing TypeScript 7's
+root export to the current Twoslash reproduces failure on missing `ts.sys.readFile`.
+TypeScript 7 has a different unstable API, rather than the classic one.
+
+An alternative implementation already exists:
+[Fumadocs PR #3533](https://github.com/fuma-nama/fumadocs/pull/3533), merged
+September 4, uses `typescript/unstable/sync`. It changes rendering and configuration
+and is not a direct replacement for our classic renderer. Evaluate it only with
+verification of the existing UI, code hovers, queries, includes and playground links.
+
+When core Twoslash supports native TypeScript (or a verified replacement is adopted):
+
+1. Migrate the Twoslash integration and its compiler options to the supported API.
+2. Upgrade `typescript` to native TypeScript, remove `@typescript/native`, and
+   simplify the `typecheck` script to use `tsc`. Verify its version is native.
+3. Run `bun run check`, `bun test`, and both production/draft builds sequentially.
+4. Verify hover, query, error, include, highlighted-line and playground behavior in
+   the browser, including historical Lexical article examples.
+5. Remove the import TODO and this compatibility note after those checks pass.
 
 ## Verification
 
