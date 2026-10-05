@@ -135,9 +135,8 @@ without rewriting embedded Twoslash examples.
 | www, pgp, h, u, h-utils, install-xr under dio.la | Worker: dio-redirects       |
 
 Cloudflare Workers Builds is configured to deploy production and drafts on
-pushes to GitHub `main`. Setup is pending GitHub App access to this repository;
-the first automatic build and deployment still need verification. Each Worker
-has its own `main` trigger and isolated
+pushes to GitHub `main`. The Cloudflare GitHub App has access to this repository.
+Each Worker has its own `main` trigger and isolated
 build: production runs `bun run build`, drafts runs `bun run build:cloudflare:drafts`.
 Both install with `bun install --frozen-lockfile` and deploy with
 `bunx wrangler deploy --config dist/server/wrangler.json`. Build variables pin
