@@ -107,9 +107,16 @@ export function GoToTopButton() {
          transition-[transform,opacity] ease-out
          hover:-translate-y-2 active:-translate-y-1
          focus:outline-hidden focus-visible:-translate-y-2 focus-visible:outline-offset-2 focus-visible:outline-accent`,
-        articleScrolled() ? "opacity-100" : "opacity-0"
+        articleScrolled() ? "visible opacity-100" : "invisible opacity-0"
       )}
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      onClick={() =>
+        window.scrollTo({
+          top: 0,
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "instant"
+            : "smooth"
+        })
+      }
     >
       scroll(TOP)
     </button>

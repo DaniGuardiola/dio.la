@@ -1,8 +1,31 @@
 import { expect, test } from "bun:test";
+import path from "node:path";
 
 import { compile } from "@mdx-js/mdx";
 
 import { mdxOptions } from "./mdx-options";
+
+test("local image dimensions survive media imports without fetching remote images", async () => {
+  const result = await compile(
+    {
+      path: path.resolve("src/content/article/the-everything-bagel-of-components/index.mdx"),
+      value: [
+        "![Card](./card.png)",
+        "![Cover](/open-graph/the-everything-bagel-of-components.png)",
+        "![Remote](https://example.invalid/unavailable.png)"
+      ].join("\n\n")
+    },
+    mdxOptions
+  );
+  const output = String(result);
+  expect(output).toContain('from "./card.png"');
+  expect(output).toContain('width="1078"');
+  expect(output).toContain('height="666"');
+  expect(output).toContain('width="1200"');
+  expect(output).toContain('height="630"');
+  expect(output).toContain('src="https://example.invalid/unavailable.png"');
+  expect(result.messages).toHaveLength(0);
+});
 
 test("the build pipeline imports local media while preserving public URLs and image metadata", async () => {
   const result = await compile(
