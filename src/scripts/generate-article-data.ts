@@ -26,55 +26,64 @@ const PUBLIC_DIR = path.resolve(__dirname, "../../public");
 const RSS_FILE_PATH = path.resolve(__dirname, PUBLIC_DIR, "rss.xml");
 
 async function getArticleFilePaths() {
-  const pathList = await fs.readdir(ARTICLES_BASE_PATH);
-  const promises = pathList.map(async (fileOrDirPath) => {
-    const fullPath = path.resolve(ARTICLES_BASE_PATH, fileOrDirPath);
-    const isDir = (await fs.stat(fullPath)).isDirectory();
-    if (isDir) return path.join(fullPath, "index.mdx");
-    if (fileOrDirPath.endsWith(".mdx")) return fullPath;
+  const entries = await fs.readdir(ARTICLES_BASE_PATH, { withFileTypes: true });
+  return entries.flatMap((entry) => {
+    const fullPath = path.join(ARTICLES_BASE_PATH, entry.name);
+    if (entry.isDirectory()) return [path.join(fullPath, "index.mdx")];
+    return entry.isFile() && entry.name.endsWith(".mdx") ? [fullPath] : [];
   });
-  const resolvedPromises = await Promise.all(promises);
-  return resolvedPromises.filter(
-    <T>(value: T): value is Exclude<T, undefined> => value !== undefined
-  );
 }
 
-function validateMetadata({ id, ...data }: ArticleMetadata) {
-  if (REQUIRED_ARTICLE_FIELDS.some((key) => !(key in data) || key === ""))
+type ArticleFrontmatter = Pick<
+  ArticleMetadata,
+  "date" | "title" | "description" | "topics" | "imageUrl" | "draft"
+>;
+
+export function validateMetadata(
+  data: Record<string, unknown>,
+  id: string
+): asserts data is Record<string, unknown> & ArticleFrontmatter {
+  if (
+    REQUIRED_ARTICLE_FIELDS.some((key) => typeof data[key] !== "string" || data[key].trim() === "")
+  )
     throw new Error(`Missing or empty required metadata fields in article with id "${id}"`);
 
-  if (data.topics && !Array.isArray(data.topics))
-    throw new Error(`Topics must be an array, article id: "${id}"`);
+  if (!Number.isFinite(new Date(data.date as string).getTime()))
+    throw new Error(`Invalid date in article with id "${id}"`);
+  if (data.topics !== undefined) {
+    if (!Array.isArray(data.topics))
+      throw new Error(`Topics must be an array, article id: "${id}"`);
+    for (const topic of data.topics) {
+      if (!ALLOWED_TOPICS.some((allowed) => allowed === topic))
+        throw new Error(`Invalid topic "${topic}" in article with id "${id}"`);
+    }
+  }
+  if (data.draft !== undefined && typeof data.draft !== "boolean")
+    throw new Error(`Draft must be a boolean, article id: "${id}"`);
+  if (data.imageUrl !== undefined && typeof data.imageUrl !== "string")
+    throw new Error(`Image URL must be a string, article id: "${id}"`);
+}
 
-  let invalidTopic;
-  if (
-    data.topics &&
-    data.topics.some((topic) => {
-      const invalid = !ALLOWED_TOPICS.includes(topic);
-      if (invalid) invalidTopic = topic;
-      return invalid;
-    })
-  )
-    throw new Error(`Invalid topic "${invalidTopic}" in article with id "${id}"`);
+function getArticleId(articlePath: string) {
+  const filename = path.parse(articlePath).name;
+  return filename === "index" ? path.basename(path.dirname(articlePath)) : filename;
 }
 
 async function getArticleMetadata(articlePath: string) {
   const fileContents = await Bun.file(articlePath).text();
   const { data, content } = matter(fileContents);
-  const filename = path.parse(articlePath).name;
-  const id = filename === "index" ? path.basename(path.dirname(articlePath)) : filename;
+  const id = getArticleId(articlePath);
   if (!id) throw new Error("Could not obtain article ID");
+  validateMetadata(data, id);
   const metadata = {
     ...data,
-    id,
+    id: id as ArticleMetadata["id"],
     readingMinutes: getArticleReadingMinutes(content)
-  } as ArticleMetadata;
-  validateMetadata(metadata);
+  };
   return metadata;
 }
 
-async function getArticleMetadataList() {
-  const articleFilePaths = await getArticleFilePaths();
+async function getArticleMetadataList(articleFilePaths: string[]) {
   const promises = articleFilePaths.map(getArticleMetadata);
   const metadataList = (await Promise.all(promises)).sort((a, b) => {
     // sort by time and alphabetically
@@ -130,18 +139,22 @@ const RSS_FOOTER = `
 </rss>
 `;
 
-function generateRssItem({ title, id, description, date }: ArticleMetadata) {
+function escapeXml(text: string) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+export function generateRssItem({ title, id, description, date }: ArticleMetadata) {
   const localDate = new Date(date);
   const formattedUtcDate = new Date(
     Date.UTC(localDate.getFullYear(), localDate.getMonth(), localDate.getDate(), 9, 0, 0, 0)
   ).toUTCString();
   const url = `https://${CANONICAL_DOMAIN}/article/${id}`;
   return `    <item>
-      <title>${title}</title>
-      <link>${url}</link>
-      <description>${description}</description>
-      <author>hi@daniguardio.la (${NAME})</author>
-      <guid isPermaLink="true">${url}</guid>
+      <title>${escapeXml(title)}</title>
+      <link>${escapeXml(url)}</link>
+      <description>${escapeXml(description)}</description>
+      <author>${escapeXml(`hi@daniguardio.la (${NAME})`)}</author>
+      <guid isPermaLink="true">${escapeXml(url)}</guid>
       <pubDate>${formattedUtcDate}</pubDate>
     </item>`;
 }
@@ -156,26 +169,19 @@ async function generateRSS(articleMetadataList: ArticleMetadata[]) {
 }
 
 async function main() {
-  const articleMetadataList = await getArticleMetadataList();
+  const files = await getArticleFilePaths();
+  const articleMetadataList = await getArticleMetadataList(files);
   await generateOutputFile(articleMetadataList);
   await Bun.write(
     path.join(OUTPUT_DIR, "article-paths.json"),
     JSON.stringify(articleMetadataList.map(({ id }) => `/article/${id}`))
   );
   await generateRSS(articleMetadataList);
-  const files = await getArticleFilePaths();
+  const ids = new Set<string>(articleMetadataList.map(({ id }) => id));
   const entries = files
-    .filter((file) =>
-      articleMetadataList.some(
-        (article) =>
-          file.endsWith(`/${article.id}/index.mdx`) || file.endsWith(`/${article.id}.mdx`)
-      )
-    )
+    .filter((file) => ids.has(getArticleId(file)))
     .map((file) => {
-      const id =
-        path.basename(file) === "index.mdx"
-          ? path.basename(path.dirname(file))
-          : path.basename(file, ".mdx");
+      const id = getArticleId(file);
       const relative = path.relative(OUTPUT_DIR, file).split(path.sep).join("/");
       return `${JSON.stringify(id)}: lazy(() => import(${JSON.stringify(relative)}))`;
     });
@@ -185,4 +191,4 @@ async function main() {
   );
 }
 
-await main();
+if (import.meta.main) await main();

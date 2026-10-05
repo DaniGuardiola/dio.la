@@ -2,23 +2,12 @@ import { createSignal } from "solid-js";
 
 export function isDarkTheme() {
   if (typeof window === "undefined") return true;
-  if (!("theme" in localStorage)) return true;
-  if (localStorage.theme === "dark") return true;
-  if (localStorage.theme === "light") return false;
-  throw new Error("huh?");
-  // sadly, there is no way to do "dark mode by default,
-  // light theme if the user wants it" because the default for
-  // "prefers-color-scheme" is "light" and "no-preference" was
-  // removed from the spec, so this is the only way ¯\_(ツ)_/¯
-
-  // previous version:
-
-  // if (typeof window === "undefined") return false;
-  // if (localStorage.theme === "dark") return true;
-  // if (localStorage.theme === "light") return false;
-  // return (
-  //   !("theme" in localStorage) &&
-  //   window.matchMedia("(prefers-color-scheme: dark)").matches
+  // Dark by default; unavailable storage or an unknown value keeps that default.
+  try {
+    return localStorage.theme !== "light";
+  } catch {
+    return true;
+  }
 }
 
 export const [theme, setTheme] = createSignal<"light" | "dark">(isDarkTheme() ? "dark" : "light");
@@ -29,7 +18,11 @@ export function toggleTheme() {
     // Solid 2 queues signal writes; reading theme() after setTheme returns the old value.
     const nextTheme = theme() === "dark" ? "light" : "dark";
     setTheme(nextTheme);
-    localStorage.theme = nextTheme;
+    try {
+      localStorage.theme = nextTheme;
+    } catch {
+      // Theme switching still works when the browser blocks persistence.
+    }
   }
   if (!document.startViewTransition) return toggle();
   document.startViewTransition(toggle);

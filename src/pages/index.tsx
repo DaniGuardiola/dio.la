@@ -1,6 +1,7 @@
 import { type ComponentProps } from "@solidjs/web";
 import { Link, useNavigate, useSearch } from "@tanstack/solid-router";
 import clsx from "clsx";
+import { format } from "date-fns";
 import { createMemo, For, Match, Show, omit, Switch } from "solid-js";
 
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
@@ -14,9 +15,6 @@ import {
 } from "~/data/articles";
 import { ALLOWED_TOPICS } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
-
-// article url
-// -----------
 
 // date label
 // ----------
@@ -46,12 +44,7 @@ function DateLabel(props: DateLabelProps) {
 
   const date = createMemo(() => new Date(props.date));
 
-  const datetime = createMemo(() => {
-    const year = date().getFullYear();
-    const month = date().getMonth() + 1;
-    const day = date().getDate();
-    return `${year}-${month}-${day}`;
-  });
+  const datetime = createMemo(() => format(date(), "yyyy-MM-dd"));
 
   const label = createMemo(() => {
     const day = date().getDate();

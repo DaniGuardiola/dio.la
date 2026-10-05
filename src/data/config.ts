@@ -16,7 +16,7 @@ export const ALLOWED_TOPICS = [
   "design-systems",
   "frontend"
 ] as const;
-export const REQUIRED_ARTICLE_FIELDS = ["date", "title", "description"];
+export const REQUIRED_ARTICLE_FIELDS = ["date", "title", "description"] as const;
 export const REPO = "DaniGuardiola/dio.la";
 export const REPO_ID = "R_kgDOITIE3g";
 // GitHub Discussions category IDs (for Giscus comments)

@@ -9,17 +9,16 @@ const TEXT_TO_APPEND = " - not found!";
 
 export default function NotFound() {
   const [text, setText] = createSignal("404");
-  const [remainingText, setRemainingText] = createSignal(TEXT_TO_APPEND);
   const [blinking, setBlinking] = createSignal(true);
 
   onSettled(() => {
+    let index = 0;
     let intervalId: ReturnType<typeof setInterval> | undefined;
     const timeoutId = setTimeout(() => {
       intervalId = setInterval(() => {
         setBlinking(false);
-        setText(`${text()}${remainingText().charAt(0)}`);
-        setRemainingText(remainingText().slice(1));
-        if (remainingText().length > 0) return;
+        setText(`404${TEXT_TO_APPEND.slice(0, ++index)}`);
+        if (index < TEXT_TO_APPEND.length) return;
         clearInterval(intervalId);
         setBlinking(true);
       }, CURSOR_EFFECT_INTERVAL);
