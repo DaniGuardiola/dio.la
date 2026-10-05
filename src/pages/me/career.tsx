@@ -8,7 +8,7 @@ import dataTrendsLogo from "./img/data-trends-logo.png";
 import guideLogo from "./img/guide-logo.png";
 import horbitoLogo from "./img/horbito-logo.jpg";
 import milingualLogo from "./img/milingual.png";
-import paperkitDocs from "./img/paperkit-docs.gif";
+import paperkitDocsPoster from "./img/paperkit-docs-poster.jpg";
 import paperkitWeb from "./img/paperkit-web.png";
 import timedoserDesktop from "./img/timedoser-desktop.png";
 import timedoserOptions from "./img/timedoser-options.jpg";
@@ -17,6 +17,7 @@ import timedoser from "./img/timedoser.png";
 import transparentLogo from "./img/transparent-logo.png";
 import { Link } from "./shared";
 import incubator from "./video/incubator.mp4";
+import paperkitDocs from "./video/paperkit-docs.mp4";
 import timedoser2 from "./video/timedoser-2.mp4";
 import timedoserSneakPeek from "./video/timedoser-sneak-peek.mp4";
 
@@ -145,7 +146,19 @@ export const CAREER: CareerEntry[] = [
         <div class="flex flex-wrap gap-4">
           <Details label="Paperkit framework">
             <img src={paperkitWeb} alt="The Paperkit website" />
-            <img src={paperkitDocs} alt="A demo of the Paperkit docs" loading="lazy" />
+            <video
+              src={paperkitDocs}
+              poster={paperkitDocsPoster}
+              width="546"
+              height="306"
+              aria-label="A demo of the Paperkit docs"
+              autoplay
+              loop
+              muted
+              playsinline
+              controls
+              preload="none"
+            />
           </Details>
         </div>
       </>

@@ -87,6 +87,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
             <img
               alt="This article's main image"
               src={props.metadata.imageUrl}
+              fetchpriority="high"
               class="bg-white w-full object-cover aspect-[1.91/1] rounded-sm shadow-lg"
             />
           </div>

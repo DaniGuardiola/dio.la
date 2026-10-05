@@ -81,3 +81,36 @@ with the assets. Direct live XML opening was blocked by the verification browser
 the separate terminal HTTP check received 403, including for article URLs that
 worked in the browser. A live sitemap response was therefore not independently
 verified in this environment.
+
+## Media and loading follow-up
+
+The two large animated GIF references now use H.264 MP4s with first-frame JPEG
+posters. Original GIFs remain in source control for future re-encoding; they are
+not emitted in the build. Dimensions are unchanged. Both videos are muted,
+looping, inline and have native pause/play controls and accessible labels.
+`preload="none"` avoids eager preloading when possible; autoplay may still trigger
+loading under the browser's own policy. No custom viewport player was added.
+
+| Animation           | Original GIF |        MP4 + poster | Reduction |
+| ------------------- | -----------: | ------------------: | --------: |
+| Avatar permutations |  4,744,238 B | 664,344 + 105,167 B |     83.8% |
+| Paperkit docs       |  1,002,165 B |  134,814 + 15,021 B |     85.0% |
+
+Encoded once with FFmpeg 6, libx264 CRF 18, slow preset, yuv420p and faststart.
+The avatar retains its 998×298 size, 20 fps and 7.55s duration. The Paperkit GIF
+had variable frame delays; its 546×306 MP4 uses 25 fps, yielding 7.80s versus the
+original 7.81s. Avatar frame SSIM measured 0.9981 after converting the GIF to
+the encoded pixel format. This is a compression check, not a user-perceived
+performance measurement. The encoder was temporary tooling, not a site dependency.
+
+The home highlight and article hero images have `fetchpriority="high"`; these
+are the prominent above-the-fold images. Below-the-fold MDX images retain lazy
+loading. Browser priority hints do not guarantee a measured LCP improvement.
+
+Router's `defaultPendingComponent` provides an accessible loading status using
+the framework's existing delay/minimum-duration behavior. No extra timers or
+custom navigation interception were introduced. Controlled client loader and
+render failures recovered during investigation, but initial SSR error hydration
+failed with both custom and stock framework error components. Custom retry UI
+was therefore deferred, with a reproduction and acceptance checklist in
+[router-error-hydration.md](./router-error-hydration.md).

@@ -11,6 +11,8 @@ imageUrl: /open-graph/colorful-avatars.png
 ---
 
 import { createSignal } from "solid-js";
+import avatarPermutations from "./avatar-permutations.mp4";
+import avatarPermutationsPoster from "./avatar-permutations-poster.jpg";
 
 export function getInitialsMagicNumberIncomplete(initials) {
   const numbers = initials
@@ -293,4 +295,17 @@ export function getInitialsFromName(name: string) {
 
 Finally, [here's a demo](https://atlas.guide.co/?path=/story/components-avatar--colors) of the `Avatar` component I built for [Guide](https://guide.co) that displays all permutations of initials using a-z and a few non-English characters:
 
-![Demo displaying all permutations of initials and their colors](avatar-permutations.gif)
+<video
+  src={avatarPermutations}
+  poster={avatarPermutationsPoster}
+  width="998"
+  height="298"
+  aria-label="Demo displaying all permutations of initials and their colors"
+  autoplay
+  loop
+  muted
+  playsinline
+  controls
+  preload="none"
+  class="w-full"
+/>
