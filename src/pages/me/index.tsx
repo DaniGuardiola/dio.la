@@ -279,7 +279,9 @@ function Career() {
             <>
               {index() !== 0 && <hr class="border-black-invert/20" />}
               <article class="flex flex-col gap-6">
-                {entry.logo && <img src={entry.logo} class="max-h-12 rounded-sm self-start" />}
+                {entry.logo && (
+                  <img src={entry.logo} alt="" class="max-h-12 rounded-sm self-start" />
+                )}
                 <div>
                   <h1>
                     <span class="font-bold">{entry.at}</span>

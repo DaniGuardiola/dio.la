@@ -1,5 +1,5 @@
 import { type ComponentProps } from "@solidjs/web";
-import { Link, useNavigate, useSearch } from "@tanstack/solid-router";
+import { Link, useSearch } from "@tanstack/solid-router";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { createMemo, For, Match, Show, omit, Switch } from "solid-js";
@@ -240,42 +240,43 @@ type ArticleItemProps = ArticleMetadata & {
 };
 
 function ArticleItem(props: ArticleItemProps) {
-  const navigate = useNavigate();
   return (
-    <Link
-      to="/article/$id"
-      params={{ id: props.id }}
-      class="block rounded-md focus-ring focus-scroll-target group"
-    >
-      <article class="space-y-[.25rem]">
-        <div class="flex gap-4">
-          <DateLabel
-            class="text-[.875rem] uppercase text-accent-invert font-bold"
-            date={props.date}
-            includeYear={props.includeYear}
-          />
-          <Show when={Boolean(props.topics)}>
-            <ul class="flex items-center gap-2 overflow-hidden opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100">
-              <For each={props.topics?.slice(0, 2)}>
-                {(topic) => (
-                  <li
-                    onClick={(event) => {
-                      event.preventDefault();
-                      void navigate({ to: "/", search: { topic }, hash: "articles" });
-                    }}
-                    class="hover-exclude text-[.9rem] leading-none text-subtle-invert hover:underline"
-                  >{`#${topic}`}</li>
-                )}
-              </For>
-            </ul>
-          </Show>
-        </div>
-        <h2 class="text-[1.125rem] leading-[1.375rem] [.group:hover:not(:has(.hover-exclude:hover))_&]:underline group-focus-visible:underline">
+    <article class="relative group space-y-[.25rem]">
+      <div class="flex gap-4">
+        <DateLabel
+          class="text-[.875rem] uppercase text-accent-invert font-bold"
+          date={props.date}
+          includeYear={props.includeYear}
+        />
+        <Show when={Boolean(props.topics)}>
+          <ul class="flex items-center gap-2 overflow-hidden opacity-0 group-hover:opacity-100 group-focus-within:opacity-100">
+            <For each={props.topics?.slice(0, 2)}>
+              {(topic) => (
+                <li class="text-[.9rem] leading-none text-subtle-invert">
+                  <Link
+                    to="/"
+                    search={{ topic }}
+                    hash="articles"
+                    class="relative z-10 hover-exclude hover:underline focus-ring focus-visible:outline-offset-[-2px] focus-scroll-target rounded-xs"
+                  >{`#${topic}`}</Link>
+                </li>
+              )}
+            </For>
+          </ul>
+        </Show>
+      </div>
+      <h2 class="text-[1.125rem] leading-[1.375rem] [.group:hover:not(:has(.hover-exclude:hover))_&]:underline">
+        {/* Stretch the article link over its card, with topic links above it as siblings. */}
+        <Link
+          to="/article/$id"
+          params={{ id: props.id }}
+          class="focus-scroll-target focus:outline-transparent focus-visible:underline after:absolute after:inset-0 after:rounded-md focus-visible:after:outline-2 focus-visible:after:outline-accent focus-visible:after:outline-offset-2"
+        >
           {props.title}
-        </h2>
-        <p class="text-subtle-invert text-[1rem] leading-[1.1875rem]">{props.description}</p>
-      </article>
-    </Link>
+        </Link>
+      </h2>
+      <p class="text-subtle-invert text-[1rem] leading-[1.1875rem]">{props.description}</p>
+    </article>
   );
 }
 
@@ -316,13 +317,19 @@ function ArticleList(props: ArticleListProps) {
               </For>
             </Match>
             <Match when={topicExists()}>
-              <For
-                each={ARTICLES.filter(
-                  (article) => props.topic && article.topics?.includes(props.topic)
-                )}
-              >
-                {(article) => <ArticleItem {...article} includeYear="always" />}
-              </For>
+              <ul class="space-y-6">
+                <For
+                  each={ARTICLES.filter(
+                    (article) => props.topic && article.topics?.includes(props.topic)
+                  )}
+                >
+                  {(article) => (
+                    <li>
+                      <ArticleItem {...article} includeYear="always" />
+                    </li>
+                  )}
+                </For>
+              </ul>
             </Match>
           </Switch>
         </div>

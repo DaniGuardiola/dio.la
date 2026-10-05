@@ -54,6 +54,7 @@ export function Blitz(props: BlitzProps) {
   };
   return (
     <iframe
+      title="Interactive code example on StackBlitz"
       loading="lazy"
       src={`https://stackblitz.com/edit/${props.blitzId}?${searchParams()}`}
       {...htmlProps}

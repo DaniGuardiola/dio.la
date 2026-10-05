@@ -86,11 +86,16 @@ export function Subscribe() {
         </button>
       </div>
       <Show when={error()}>
-        <p class="text-sm text-red-500">{error()}</p>
+        <p role="alert" class="text-sm text-red-500">
+          {error()}
+        </p>
       </Show>
       <Show when={success()}>
         <p class="text-sm text-accent-invert">{success()}</p>
       </Show>
+      <span role="status" aria-atomic="true" class="sr-only">
+        {loading() ? "Subscribing..." : success()}
+      </span>
 
       <input type="hidden" name="ml-submit" value="1" />
       <input type="hidden" name="anticsrf" value="true" />
