@@ -6,6 +6,7 @@ import { useAnimateBanner } from "~/utils/animate-banner";
 
 const TITLE = "About Dani Guardiola";
 const DESCRIPTION = "Engineering manager at Proton, leading Docs and Sheets.";
+// TODO: Replace the about-page image with a more recent photo of Dani.
 const IMAGE_URL: string | undefined = "/img/me.webp";
 
 function Header() {
