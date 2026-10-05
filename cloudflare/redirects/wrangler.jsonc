@@ -10,7 +10,15 @@
     { "pattern": "h.dio.la", "custom_domain": true },
     { "pattern": "u.dio.la", "custom_domain": true },
     { "pattern": "h-utils.dio.la", "custom_domain": true },
-    { "pattern": "install-xr.dio.la", "custom_domain": true }
+    { "pattern": "install-xr.dio.la", "custom_domain": true },
+    { "pattern": "daniguardio.la", "custom_domain": true },
+    { "pattern": "www.daniguardio.la", "custom_domain": true },
+    { "pattern": "beta.daniguardio.la", "custom_domain": true },
+    { "pattern": "pgp.daniguardio.la", "custom_domain": true },
+    { "pattern": "pop-os.daniguardio.la", "custom_domain": true },
+    { "pattern": "notmylinkedin.com", "custom_domain": true },
+    { "pattern": "www.notmylinkedin.com", "custom_domain": true },
+    { "pattern": "linkedin.com.notmylinkedin.com", "custom_domain": true }
   ],
   "observability": { "enabled": true, "head_sampling_rate": 1 }
 }

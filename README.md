@@ -132,6 +132,8 @@ without rewriting embedded Twoslash examples.
 | drafts.dio.la                                    | Worker: dio-la-drafts-start |
 | rpc-anywhere.dio.la                              | Pages: dio-rpc-anywhere-git |
 | www, pgp, h, u, h-utils, install-xr under dio.la | Worker: dio-redirects       |
+| daniguardio.la, www, beta, pgp, pop-os           | Worker: dio-redirects       |
+| notmylinkedin.com, www, linkedin.com             | Worker: dio-redirects       |
 
 Cloudflare Workers Builds is configured to deploy production and drafts on
 pushes to GitHub `main`. The Cloudflare GitHub App has access to this repository.
@@ -164,6 +166,25 @@ in MDX must use components so rendering happens inside the Solid owner.
 redirect status codes, paths, and query strings. `pgp` redirects to `/pgp.txt`;
 `h` and `u` link to their GitHub repositories or raw files. The two installer
 shortcuts accept only the root path. Unrecognized hosts or paths return 404.
+
+The same Worker contains the legacy `daniguardio.la` and `notmylinkedin.com`
+redirects. Changes deploy from this repository's `main` branch through its
+existing Workers Builds trigger. `daniguardio.la` redirects to `https://dio.la/`
+without preserving the path; `www` and `beta` first redirect to the legacy apex.
+Its `pgp` and `pop-os` shortcuts retain their previous destinations.
+`notmylinkedin.com` and `linkedin.com.notmylinkedin.com` redirect to `/me` with
+the `notmylinkedin` query flag; `www` first redirects to that domain's apex.
+Incoming queries and legacy status codes are preserved, including removal of
+an incoming `notmylinkedin` flag. The historical Next.js project and its source
+repository remain on Vercel at the owner's request; they are not deployment
+sources for these redirects. `shishang-web` also remains on Vercel.
+
+The two additional Cloudflare zones have their redirects and DNS records staged.
+Registrar delegation and live verification must finish before removing their
+obsolete redirect projects. Proton Mail, MailerLite, verification TXT records,
+and existing CAA records were copied without changing their values. Mail CNAMEs
+remain DNS-only. Nameservers are `amit.ns.cloudflare.com` and
+`rihana.ns.cloudflare.com`; the registrar remains Porkbun.
 
 See [the static sites deployment notes](cloudflare/sites/README.md) for the
 RPC demo, which now builds automatically from its own source repository. Default Pages URLs and

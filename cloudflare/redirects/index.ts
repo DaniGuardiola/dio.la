@@ -6,9 +6,38 @@ export default {
 
     switch (url.hostname) {
       case "pgp.dio.la":
+      case "pgp.daniguardio.la":
         destination = "https://dio.la/pgp.txt";
         status = 308;
         break;
+      case "daniguardio.la":
+        destination = "https://dio.la/";
+        status = 308;
+        break;
+      case "www.daniguardio.la":
+      case "beta.daniguardio.la":
+        destination = `https://daniguardio.la${url.pathname}`;
+        break;
+      case "pop-os.daniguardio.la":
+        destination =
+          "https://raw.githubusercontent.com/DaniGuardiola/pop-os-setup/main/downloader.sh";
+        status = 308;
+        break;
+      case "www.notmylinkedin.com":
+        destination = `https://notmylinkedin.com${url.pathname}`;
+        break;
+      case "notmylinkedin.com":
+      case "linkedin.com.notmylinkedin.com":
+        // The existing redirect removes an incoming marker instead of
+        // appending it twice; preserve that behavior as well as other queries.
+        if (url.searchParams.has("notmylinkedin")) {
+          url.searchParams.delete("notmylinkedin");
+          return Response.redirect(`https://dio.la/me${url.search}`, 308);
+        }
+        return Response.redirect(
+          `https://dio.la/me${url.search ? `${url.search}&` : "?"}notmylinkedin`,
+          308
+        );
       case "www.dio.la":
         destination = `https://dio.la${url.pathname}`;
         status = 308;
