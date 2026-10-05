@@ -27,8 +27,9 @@ Welcome to my blog's source code!
 Solid and its compiler/runtime packages are pinned to `2.0.0-rc.13`; TanStack
 Start and Router use their Solid 2 release candidate, `2.0.0-rc.8`. These are
 prerelease versions. The Bun patch for TanStack Start applies the
-[upstream server-function URL rename](https://github.com/TanStack/router/blob/solid-v2/packages/solid-start/src/server-functions-handler.ts)
-required by Solid RC 13. Remove it when a TanStack release includes that change.
+[upstream server-function URL rename](https://github.com/TanStack/router/pull/8467)
+required by Solid RC 13. See the [patch removal TODO](patches/README.md) for
+release tracking, removal steps, and required verification.
 
 The local MDX provider supplies Solid 2 dynamic components for native HTML tags.
 MDX 3, existing Shiki/Twoslash styles, Giscus, and article assets remain supported.

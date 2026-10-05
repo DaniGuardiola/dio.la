@@ -117,6 +117,8 @@ return types in development and invokes stored cleanup during disposal.
 - The existing Solid Start server-function patch is unrelated: the installed
   prerelease imports API names renamed by the Solid runtime. It remains until a
   matching published Start release includes those names.
+  See [patch removal TODO](../patches/README.md) for the merged upstream fix,
+  release tracking, and the verification checklist.
 
 Upstream reference for version alignment:
 https://github.com/solidjs/solid-vite-plugin/releases/tag/%40solidjs%2Fvite-plugin%403.0.0-next.47
