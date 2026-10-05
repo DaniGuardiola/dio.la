@@ -14,9 +14,9 @@ import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import remarkMdxImages from "remark-mdx-images";
-import remarkShikiTwoslash from "remark-shiki-twoslash";
-import typescript, { type CompilerOptions } from "typescript";
 import { defineConfig } from "vite";
+
+import { rehypeCode } from "./src/lib/rehype-code.ts";
 
 export default defineConfig({
   resolve: { tsconfigPaths: true, alias: { "~": new URL("./src", import.meta.url).pathname } },
@@ -36,17 +36,6 @@ export default defineConfig({
         elementAttributeNameCase: "html",
         stylePropertyNameCase: "css",
         remarkPlugins: [
-          [
-            (remarkShikiTwoslash as any).default,
-            {
-              theme: "dark-plus",
-              addTryButton: true,
-              defaultCompilerOptions: {
-                target: typescript.ScriptTarget.ESNext,
-                ignoreDeprecations: "6.0"
-              } satisfies CompilerOptions
-            }
-          ],
           // a11yEmoji,
           remarkGfm,
           remarkFrontmatter,
@@ -54,6 +43,7 @@ export default defineConfig({
           remarkMath
         ],
         rehypePlugins: [
+          rehypeCode,
           [rehypeRaw, { passThrough: nodeTypes }],
           rehypeSlug,
           [rehypeExternalLinks, { target: "_blank", rel: ["noreferrer"] }],

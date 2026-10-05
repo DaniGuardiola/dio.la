@@ -19,7 +19,7 @@ Welcome to my blog's source code!
 - Built on Solid 2 and [TanStack Start](https://tanstack.com/start/latest).
 - Styled with [Tailwind CSS 4](https://tailwindcss.com/) and plain CSS through its Vite plugin.
 - Content authored using [MDX](https://mdxjs.com/) v3.
-- Code highlighting (including interactive TypeScript blocks) powered by [`shiki-twoslash`](https://shikijs.github.io/twoslash/).
+- Code highlighting (including interactive TypeScript blocks) powered by [Shiki 4](https://shiki.style/) with its official Rehype and Twoslash integrations.
 - Hosted on [Cloudflare Workers](https://workers.cloudflare.com/) through the Cloudflare Vite plugin.
 
 ## Solid 2 compatibility
@@ -47,6 +47,22 @@ MDX styling uses `@reference` to share the root theme and utilities without
 emitting another Tailwind bundle. Styles and font faces are plain CSS; Sass,
 Autoprefixer, the old PostCSS config, and JavaScript Tailwind plugins are removed.
 Highlight stacks use flex gaps so inline dates retain their spacing in v4.
+
+## Code highlighting
+
+MDX stays on v3. `src/lib/rehype-code.ts` runs the official Shiki Rehype plugin
+before raw HTML processing so fence metadata reaches Twoslash. Highlighting and
+type analysis run at build time; the browser receives rendered code and hover
+text, not a TypeScript compiler or Shiki runtime.
+
+The classic Twoslash renderer preserves the existing hover, query, error and
+completion UI. Article fences keep `twoslash`, `{1, 3-4}`, `@include`, named include
+sections and cut markers. Hidden includes are scoped to each document. Playground
+links include the full source, including code hidden by cuts. The obsolete legacy
+wrapper and its newline patch are removed.
+
+`bun test src/lib/rehype-code.test.ts` covers the MDX plugin pipeline, includes,
+queries, highlighted rows and playground links.
 
 ## Principles
 
@@ -112,4 +128,4 @@ public IPv4 changes. See [DDNS setup](cloudflare/ddns/README.md).
 
 ## Next upgrade stages
 
-The MDX/highlighting pipeline and remaining dependency upgrades are the next stages.
+Remaining dependency upgrades and the wider project review are the next stages.

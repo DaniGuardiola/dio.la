@@ -39,10 +39,14 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.62.5",
     "@fec/remark-a11y-emoji": "^4.0.0",
-    "@mdx-js/mdx": "^3.0.0",
-    "@mdx-js/rollup": "^3.0.0",
+    "@mdx-js/mdx": "^3.1.1",
+    "@mdx-js/rollup": "^3.1.1",
+    "@shikijs/rehype": "^4.5.0",
+    "@shikijs/transformers": "^4.5.0",
+    "@shikijs/twoslash": "^4.5.0",
     "@solidjs/vite-plugin": "3.0.0-next.35",
     "@tailwindcss/vite": "^4.3.3",
+    "@types/hast": "^3.0.5",
     "@types/node": "^24.0.0",
     "@types/react": "^18.2.37",
     "bun-types": "^1.0.11",
@@ -51,6 +55,7 @@
     "gray-matter": "^4.0.3",
     "katex": "^0.16.9",
     "lexical": "^0.12.2",
+    "lz-string": "^1.5.0",
     "oxfmt": "^0.71.0",
     "oxlint": "^1.86.0",
     "rehype-external-links": "^3.0.0",
@@ -61,11 +66,13 @@
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
     "remark-mdx-images": "^2.0.0",
-    "remark-shiki-twoslash": "^3.1.3",
     "rollup": "^4.4.1",
+    "shiki": "^4.5.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^6.0.0",
     "undici": "^5.27.2",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.1.0",
     "vite": "^8.0.0",
     "watch": "^1.0.2",
     "wrangler": "^4.147.0",
@@ -83,11 +90,6 @@
     "node": ">=22"
   },
   "packageManager": "bun@1.4.2",
-  "pnpm": {
-    "patchedDependencies": {
-      "shiki-twoslash@3.1.1": "patches/shiki-twoslash@3.1.1.patch"
-    }
-  },
   "patchedDependencies": {
     "@tanstack/solid-start@2.0.0-rc.8": "patches/@tanstack%2Fsolid-start@2.0.0-rc.8.patch"
   }

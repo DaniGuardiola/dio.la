@@ -59,16 +59,7 @@ function Anchor(props: ComponentProps<typeof A>) {
 }
 
 function DataLSP(props: ComponentProps<"span"> & { lsp: string }) {
-  const lspAttr = () => props.lsp.replaceAll("&quot;", '"');
-  return (
-    <span
-      {...props}
-      data-lsp={lspAttr()
-        // workaround for shiki-twoslash, see file: patches/shiki-twoslash@x.x.x.patch
-        .replaceAll("--LINEBREAK--", "\n")}
-      class={clsx("data-lsp", props.class)}
-    />
-  );
+  return <span {...props} data-lsp={props.lsp} class={clsx("data-lsp", props.class)} />;
 }
 
 function DataErr(props: ComponentProps<"span">) {
