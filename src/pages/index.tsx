@@ -1,4 +1,5 @@
 import { type ComponentProps } from "@solidjs/web";
+import { Link, useNavigate, useSearch } from "@tanstack/solid-router";
 import clsx from "clsx";
 import { createMemo, For, Match, Show, omit, Switch } from "solid-js";
 
@@ -13,16 +14,9 @@ import {
 } from "~/data/articles";
 import { ALLOWED_TOPICS } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
-import { A, useNavigate, useSearchParams } from "~/utils/routing";
 
 // article url
 // -----------
-
-const ARTICLE_URL_PREFIX = "/article/";
-
-function getArticleUrl(id: string) {
-  return `${ARTICLE_URL_PREFIX}${id}`;
-}
 
 // date label
 // ----------
@@ -81,8 +75,9 @@ function DateLabel(props: DateLabelProps) {
 
 function MainHighlight(props: ArticleMetadata) {
   return (
-    <A
-      href={getArticleUrl(props.id)}
+    <Link
+      to="/article/$id"
+      params={{ id: props.id }}
       class="block rounded-md focus-ring-white focus-scroll-target group"
     >
       <article class="bg-white dark:bg-neutral-950 rounded-md space-y-1 overflow-hidden">
@@ -104,14 +99,15 @@ function MainHighlight(props: ArticleMetadata) {
           </Show>
         </div>
       </article>
-    </A>
+    </Link>
   );
 }
 
 function Highlight(props: ArticleMetadata) {
   return (
-    <A
-      href={getArticleUrl(props.id)}
+    <Link
+      to="/article/$id"
+      params={{ id: props.id }}
       class="block rounded-md focus-ring-white focus-scroll-target group"
     >
       <article class="flex flex-col gap-[.375rem] text-white">
@@ -121,7 +117,7 @@ function Highlight(props: ArticleMetadata) {
         </h2>
         <p class="text-[1.125rem] text-subtle-white leading-[1.375rem]">{props.description}</p>
       </article>
-    </A>
+    </Link>
   );
 }
 
@@ -155,12 +151,8 @@ function Highlights() {
 // topics
 // ------
 
-function getTopicUrl(id: string) {
-  return `/?topic=${id}#articles`;
-}
-
 function Topics() {
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearch({ from: "/" });
   const topic = () => searchParams().topic;
   return (
     <>
@@ -184,8 +176,10 @@ function Topics() {
             <For each={TOPICS_SORTED}>
               {([id, amount]) => (
                 <li>
-                  <A
-                    href={getTopicUrl(id)}
+                  <Link
+                    to="/"
+                    search={{ topic: id }}
+                    hash="articles"
                     aria-label={`${id} (${amount} article${amount === 1 ? "" : "s"})`}
                     class={clsx(
                       "text-[1.125rem] leading-none hover:underline focus-ring focus-scroll-target rounded-xs",
@@ -195,7 +189,7 @@ function Topics() {
                     )}
                   >
                     {`#${id}`} <span class="text-accent-invert font-bold">{amount}</span>
-                  </A>
+                  </Link>
                 </li>
               )}
             </For>
@@ -207,7 +201,7 @@ function Topics() {
 }
 
 function TopicBanner() {
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearch({ from: "/" });
   const topic = () => searchParams().topic as Topic | undefined;
 
   const topicExists = createMemo(() => topic() && ALLOWED_TOPICS.includes(topic()!));
@@ -224,15 +218,17 @@ function TopicBanner() {
           <span class="font-bold">{`#${topic()}`}</span>
         </p>
         <div class="grow" />
-        <A
-          href="#topics"
+        <Link
+          to="/"
+          search={{ topic: undefined }}
+          hash="topics"
           class={clsx(
             "border border-white p-2 lg:py-0 rounded-sm focus-ring-white",
             "hover:bg-white hover:text-dark focus-visible:bg-white focus-visible:text-dark"
           )}
         >
           Clear filter
-        </A>
+        </Link>
       </section>
     </Show>
   );
@@ -248,7 +244,11 @@ type ArticleItemProps = ArticleMetadata & {
 function ArticleItem(props: ArticleItemProps) {
   const navigate = useNavigate();
   return (
-    <A href={getArticleUrl(props.id)} class="block rounded-md focus-ring focus-scroll-target group">
+    <Link
+      to="/article/$id"
+      params={{ id: props.id }}
+      class="block rounded-md focus-ring focus-scroll-target group"
+    >
       <article class="space-y-[.25rem]">
         <div class="flex gap-4">
           <DateLabel
@@ -263,7 +263,7 @@ function ArticleItem(props: ArticleItemProps) {
                   <li
                     onClick={(event) => {
                       event.preventDefault();
-                      navigate(getTopicUrl(topic));
+                      void navigate({ to: "/", search: { topic }, hash: "articles" });
                     }}
                     class="hover-exclude text-[.9rem] leading-none text-subtle-invert hover:underline"
                   >{`#${topic}`}</li>
@@ -277,7 +277,7 @@ function ArticleItem(props: ArticleItemProps) {
         </h2>
         <p class="text-subtle-invert text-[1rem] leading-[1.1875rem]">{props.description}</p>
       </article>
-    </A>
+    </Link>
   );
 }
 
@@ -337,7 +337,7 @@ function ArticleList(props: ArticleListProps) {
 // ----
 
 export default function Home() {
-  const [searchParams] = useSearchParams();
+  const searchParams = useSearch({ from: "/" });
   const topic = () => searchParams().topic as Topic | undefined;
 
   return (

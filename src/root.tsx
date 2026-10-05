@@ -1,10 +1,8 @@
 // @refresh reload
 import { type ComponentProps } from "@solidjs/web";
-import { HeadContent, Scripts } from "@tanstack/solid-router";
+import { HeadContent, Link, Scripts, useLocation } from "@tanstack/solid-router";
 import clsx from "clsx";
 import { createMemo, Show } from "solid-js";
-
-import { A, useLocation } from "~/utils/routing";
 
 import { DarkThemeIcon, LightThemeIcon } from "./components/icons";
 import { SkipLinkArea } from "./components/SkipLinks";
@@ -16,13 +14,18 @@ import { theme, ThemeScript, toggleTheme } from "./utils/theme";
 import "./fonts.css";
 import "./root.css";
 
-function NavLink(props: ComponentProps<typeof A>) {
+function NavLink(
+  props: Pick<ComponentProps<"a">, "children" | "aria-label"> & {
+    to: "/" | "/about";
+    activeOptions?: { exact: boolean };
+  }
+) {
   return (
-    <A
+    <Link
       rel="noreferrer"
       {...props}
-      activeClass="enabled font-bold text-accent-invert pointer-events-none"
-      inactiveClass="disabled hover:underline"
+      activeProps={{ class: "enabled font-bold text-accent-invert pointer-events-none" }}
+      inactiveProps={{ class: "disabled hover:underline" }}
       class="text-[1.1rem] leading-[1.3rem] focus-ring rounded-xs flex"
     >
       <span
@@ -34,7 +37,7 @@ function NavLink(props: ComponentProps<typeof A>) {
         {"> "}
       </span>
       {props.children}
-    </A>
+    </Link>
   );
 }
 
@@ -67,7 +70,12 @@ function Header() {
       )}
     >
       <div class="main-container px-4 w-full mx-auto flex">
-        <A href="/" aria-label="go to homepage" class="group focus-ring rounded-xs" end>
+        <Link
+          to="/"
+          aria-label="go to homepage"
+          class="group focus-ring rounded-xs"
+          activeOptions={{ exact: true }}
+        >
           <p
             class={clsx(
               clsx(
@@ -95,19 +103,21 @@ function Header() {
           >
             Dani Guardio<span class="text-accent-invert">la</span>’s blog
           </p>
-        </A>
+        </Link>
         <nav class={clsx("ml-auto flex items-end gap-2", "sm:gap-4")}>
-          <NavLink href="/" end aria-label="articles">
+          <NavLink to="/" activeOptions={{ exact: true }} aria-label="articles">
             articles
           </NavLink>
-          <NavLink
+          <a
             href="https://twitter.com/daniguardio_la"
             target="_blank"
+            rel="noreferrer"
             aria-label="twitter profile"
+            class="disabled hover:underline text-[1.1rem] leading-[1.3rem] focus-ring rounded-xs flex"
           >
             twitter
-          </NavLink>
-          <NavLink href="/about" aria-label="about Dani">
+          </a>
+          <NavLink to="/about" aria-label="about Dani">
             about
           </NavLink>
         </nav>

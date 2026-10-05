@@ -7,7 +7,6 @@ import pDebounce from "p-debounce";
 import { createSignal } from "solid-js";
 
 import { MDXProvider } from "~/utils/mdx";
-import { type A } from "~/utils/routing";
 
 const KATEX_TAGS = [
   "math",
@@ -41,22 +40,6 @@ const KATEX_TAGS = [
   "line",
   "path"
 ];
-
-function Anchor(props: ComponentProps<typeof A>) {
-  // unfortunately, client-side navigation doesn't work with solid-start inside MDX content
-  return <a {...(props as ComponentProps<"a">)} />;
-
-  // return (
-  //   <Switch fallback={<A {...props} />}>
-  //     <Match when={props.href.startsWith("mailto:")}>
-  //       <a target="_blank" {...(props as ComponentProps<"a">)} />
-  //     </Match>
-  //     <Match when={props.href.startsWith("#")}>
-  //       <a {...(props as ComponentProps<"a">)} />
-  //     </Match>
-  //   </Switch>
-  // );
-}
 
 function DataLSP(props: ComponentProps<"span"> & { lsp: string }) {
   return <span {...props} data-lsp={props.lsp} class={clsx("data-lsp", props.class)} />;
@@ -149,7 +132,6 @@ export function MDXContent(props: MDXContentProps) {
     <div class="mdx-content">
       <MDXProvider
         components={{
-          a: Anchor,
           img: Image,
           "data-lsp": DataLSP,
           "data-err": DataErr,

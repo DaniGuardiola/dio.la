@@ -1,6 +1,5 @@
+import { Link } from "@tanstack/solid-router";
 import { createSignal, createEffect } from "solid-js";
-
-import { A } from "~/utils/routing";
 
 import tRexSvg from "./404-t-rex.svg";
 
@@ -43,9 +42,9 @@ export default function NotFound() {
         </h1>
       </div>
       <div class="p-4 min-h-[65vh] lg:main-container flex flex-col items-center justify-center space-y-8">
-        <A href="/" class="text-accent-invert hover:underline">
+        <Link to="/" class="text-accent-invert hover:underline">
           Check out the homepage?
-        </A>
+        </Link>
         <img
           class="w-48 motion-safe:animate-pulse"
           src={tRexSvg}

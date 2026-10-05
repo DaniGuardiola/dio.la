@@ -18,6 +18,11 @@ import { defineConfig } from "vite";
 
 import { rehypeCode } from "./src/lib/rehype-code.ts";
 
+const drafts = process.env.VITE_IS_DRAFTS === "true";
+const articlePaths: string[] = JSON.parse(
+  readFileSync(new URL("./src/data/generated/article-paths.json", import.meta.url), "utf8")
+);
+
 export default defineConfig({
   resolve: { tsconfigPaths: true, alias: { "~": new URL("./src", import.meta.url).pathname } },
   plugins: [
@@ -27,7 +32,21 @@ export default defineConfig({
         process.env.VITE_IS_DRAFTS === "true" ? "wrangler.drafts.jsonc" : "wrangler.jsonc",
       viteEnvironment: { name: "ssr" }
     }),
-    tanstackStart(),
+    tanstackStart({
+      prerender: {
+        enabled: true,
+        autoStaticPathsDiscovery: false,
+        crawlLinks: false,
+        failOnError: true
+      },
+      pages: [
+        // Search-dependent pages keep SSR so direct links preserve their initial content.
+        { path: "/", prerender: { enabled: false } },
+        { path: "/me", prerender: { enabled: false } },
+        ...["/about", ...articlePaths].map((path) => ({ path }))
+      ],
+      sitemap: { enabled: !drafts, host: "https://dio.la" }
+    }),
     {
       ...mdx({
         jsx: true,
@@ -55,3 +74,4 @@ export default defineConfig({
     solid({ ssr: true, extensions: [".mdx"] })
   ]
 });
+import { readFileSync } from "node:fs";

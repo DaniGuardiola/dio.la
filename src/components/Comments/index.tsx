@@ -1,8 +1,8 @@
+import { useLocation } from "@tanstack/solid-router";
 import { createEffect, createSignal } from "solid-js";
 
 import { GH_DISCUSSIONS_CAT_ID, GH_DISCUSSIONS_DRAFTS_CAT_ID, REPO, REPO_ID } from "~/data/config";
 import { isDrafts, isLocalhost } from "~/utils/is-host";
-import { useLocation } from "~/utils/routing";
 import { theme } from "~/utils/theme";
 
 import { Giscus } from "./Giscus";
@@ -25,7 +25,9 @@ export function Comments() {
 
   return (
     <Giscus
-      ref={giscusWidgetEl!}
+      ref={(element) => {
+        giscusWidgetEl = element;
+      }}
       repo={REPO}
       repoId={REPO_ID}
       categoryId={

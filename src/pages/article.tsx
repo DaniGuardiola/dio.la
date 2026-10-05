@@ -1,3 +1,6 @@
+import { Link } from "@tanstack/solid-router";
+import { Hydrate } from "@tanstack/solid-start";
+import { visible } from "@tanstack/solid-start/hydration";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { createEffect, createMemo, createSignal, For, Show } from "solid-js";
@@ -10,7 +13,6 @@ import { type ArticleMetadata, getArticlePath } from "~/data/articles";
 import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
 import { articleScrolled } from "~/utils/page-scroll";
-import { A } from "~/utils/routing";
 
 // reading speed
 const WORDS_PER_MINUTE = 250;
@@ -122,10 +124,12 @@ function Footer(props: { metadata: ArticleMetadata }) {
             <For each={props.metadata.topics}>
               {(topic) => (
                 <li class="text-[.9rem] leading-none hover:underline">
-                  <A
+                  <Link
                     class="focus-ring-white rounded-sm"
-                    href={`/?topic=${topic}#topic-banner`}
-                  >{`#${topic}`}</A>
+                    to="/"
+                    search={{ topic }}
+                    hash="topic-banner"
+                  >{`#${topic}`}</Link>
                 </li>
               )}
             </For>
@@ -133,25 +137,27 @@ function Footer(props: { metadata: ArticleMetadata }) {
         </Show>
         <Show when={props.metadata.prev}>
           <p>
-            <A
+            <Link
               class="group scroll-focus-target focus-ring-white rounded-sm"
-              href={getArticlePath(props.metadata.prev!.id)}
+              to="/article/$id"
+              params={{ id: props.metadata.prev!.id }}
             >
               <span class="font-bold">{"<-"} Previous:</span>{" "}
               <span class="group-hover:underline">{props.metadata.prev?.title}</span>
-            </A>
+            </Link>
           </p>
         </Show>
         <Show when={props.metadata.next}>
           <p class="text-right">
-            <A
+            <Link
               class="group scroll-focus-target focus-ring-white rounded-sm"
-              href={getArticlePath(props.metadata.next!.id)}
+              to="/article/$id"
+              params={{ id: props.metadata.next!.id }}
             >
               <span class="font-bold">Next:</span>{" "}
               <span class="group-hover:underline">{props.metadata.next?.title}</span>
               <span class="font-bold">{" ->"}</span>{" "}
-            </A>
+            </Link>
           </p>
         </Show>
         <p class="pt-8">
@@ -217,7 +223,9 @@ export default function ArticleLayout(props: {
             <section aria-label="Comments">
               {/* see https://github.com/giscus/giscus/blob/main/CHANGELOG.md#2022-03-19 */}
               <SkipLink id="comments" class="giscus" />
-              <Comments />
+              <Hydrate when={visible({ rootMargin: "400px" })}>
+                <Comments />
+              </Hydrate>
             </section>
           </div>
           <Footer metadata={metadata()} />

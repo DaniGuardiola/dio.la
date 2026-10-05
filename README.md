@@ -36,6 +36,24 @@ MDX 3, existing Shiki/Twoslash styles, Giscus, and article assets remain support
 Resume display options use route search state and component context, avoiding
 shared server state across requests.
 
+## Rendering and loading
+
+Articles and the about page use TanStack Start's built-in prerendering and are
+served as Cloudflare static assets. The home page and resume retain SSR because
+their query parameters affect the initial content. Article paths are generated
+from the same filtered metadata as each production/drafts build. Production gets
+Start's sitemap; drafts remain noindex and do not publish a sitemap.
+
+Comments use Start's experimental viewport hydration boundary, including code
+splitting, with a 400px margin. Newsletter controls and navigation hydrate normally.
+Cloudflare drops trailing slashes to preserve existing URLs and Giscus discussion
+mapping. Internal links use typed Router paths, params and search directly.
+
+Run `bun run analyze:build` after either build to validate prerendered output and
+inspect JavaScript gzip sizes and large media. See
+[framework optimization notes](docs/framework-optimizations.md) for evidence and
+remaining opportunities.
+
 ## Styles
 
 `src/root.css` imports Tailwind and owns custom utilities and variants.

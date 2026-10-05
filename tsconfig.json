@@ -9,7 +9,6 @@
     "jsxImportSource": "@solidjs/web",
     "jsx": "preserve",
     "types": ["vite/client", "node", "bun-types"],
-    "baseUrl": "./",
     "paths": {
       "~/*": ["./src/*"]
     },

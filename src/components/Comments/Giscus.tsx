@@ -77,20 +77,21 @@ export interface GiscusProps {
 // -------------------
 
 export interface GiscusWidgetAttributes {
+  // Lit maps camelCase properties to lowercase attributes (repoId -> repoid).
   ref?: Ref<HTMLElement>;
   id?: string;
   host?: string;
   repo: `${string}/${string}`;
-  "repo-id": string;
+  repoid: string;
   category?: string;
-  "category-id"?: string;
+  categoryid?: string;
   mapping: Mapping;
   term?: string;
   theme?: Theme;
   strict?: BooleanString;
-  "reactions-enabled"?: BooleanString;
-  "emit-metadata"?: BooleanString;
-  "input-position"?: InputPosition;
+  reactionsenabled?: BooleanString;
+  emitmetadata?: BooleanString;
+  inputposition?: InputPosition;
   lang?: AvailableLanguage;
   loading?: Loading;
 }
@@ -129,15 +130,15 @@ export function Giscus(props: GiscusProps) {
         id={props.id}
         host={props.host}
         repo={props.repo}
-        repo-id={props.repoId}
+        repoid={props.repoId}
         category={props.category}
-        category-id={props.categoryId}
+        categoryid={props.categoryId}
         mapping={props.mapping}
         term={props.term}
         strict={props.strict}
-        reactions-enabled={props.reactionsEnabled}
-        emit-metadata={props.emitMetadata}
-        input-position={props.inputPosition}
+        reactionsenabled={props.reactionsEnabled}
+        emitmetadata={props.emitMetadata}
+        inputposition={props.inputPosition}
         theme={props.theme}
         lang={props.lang}
         loading={props.loading}

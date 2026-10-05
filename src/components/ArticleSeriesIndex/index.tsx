@@ -1,13 +1,12 @@
+import { Link } from "@tanstack/solid-router";
 import { For } from "solid-js";
 
 import {
   articleMetadataExists,
   findArticleMetadataById,
-  getArticlePath,
   useArticleLocation
 } from "~/data/articles";
 import { type ArticleId } from "~/data/generated/articles";
-import { A } from "~/utils/routing";
 
 type ArticleSeriesIndexProps = {
   name: string;
@@ -32,9 +31,9 @@ export function ArticleSeriesIndex(props: ArticleSeriesIndexProps) {
                   <u>{title}</u> (you're here)
                 </>
               ) : (
-                <A href={getArticlePath(id)} class="inactive">
+                <Link to="/article/$id" params={{ id }} class="inactive">
                   {title}
-                </A>
+                </Link>
               )}
             </li>
           )}

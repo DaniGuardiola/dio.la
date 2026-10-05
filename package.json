@@ -2,6 +2,7 @@
   "name": "dio.la",
   "type": "module",
   "scripts": {
+    "analyze:build": "bun src/scripts/analyze-build.ts",
     "gen:article-data": "bun src/scripts/generate-article-data.ts",
     "gen": "bun gen:article-data",
     "watch:article-data": "watch 'bun gen:article-data' src/content/article",

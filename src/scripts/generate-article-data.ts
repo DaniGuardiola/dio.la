@@ -155,6 +155,10 @@ async function generateRSS(articleMetadataList: ArticleMetadata[]) {
 async function main() {
   const articleMetadataList = await getArticleMetadataList();
   await generateOutputFile(articleMetadataList);
+  await Bun.write(
+    path.join(OUTPUT_DIR, "article-paths.json"),
+    JSON.stringify(articleMetadataList.map(({ id }) => `/article/${id}`))
+  );
   await generateRSS(articleMetadataList);
   const files = await getArticleFilePaths();
   const entries = files
