@@ -152,6 +152,42 @@
 .mdx-content .twoslash-completion-list li {
   @apply my-0;
 }
+/* Completion lists are always visible. Keep older browsers in flow so the
+   code scroller cannot clip them; anchors preserve the dropdown layout. */
+.mdx-content .twoslash-completion-cursor {
+  display: inline-block;
+  width: 0;
+  vertical-align: top;
+}
+.mdx-content .twoslash-completion-cursor .twoslash-completion-list {
+  position: relative;
+  transform: none;
+  margin: 1.2em 0 0 -1px;
+  max-height: 9rem;
+  overflow: auto;
+}
+@supports (anchor-scope: --twoslash-completion) and (top: anchor(bottom)) {
+  .mdx-content {
+    position: relative;
+  }
+  .mdx-content .twoslash-completion-cursor {
+    position: static;
+    display: inline;
+    anchor-name: --twoslash-completion;
+    anchor-scope: --twoslash-completion;
+  }
+  .mdx-content .twoslash-completion-cursor .twoslash-completion-list {
+    /* The containing block is outside the scrolling pre, escaping its clip. */
+    position: absolute;
+    position-anchor: --twoslash-completion;
+    inset: auto;
+    position-area: bottom span-right;
+    align-self: start;
+    justify-self: start;
+    margin-top: 3px;
+    max-width: min(240px, calc(100% - 12px));
+  }
+}
 /* Opt-in Shiki annotations; existing {1, 3-4} highlights still work. */
 .mdx-content pre .line:is(.highlighted, .diff) {
   @apply -mx-4 px-4;
