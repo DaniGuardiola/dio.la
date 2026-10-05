@@ -11,7 +11,7 @@ export default {
         status = 308;
         break;
       case "daniguardio.la":
-        destination = "https://dio.la/";
+        destination = `https://dio.la${url.pathname}`;
         status = 308;
         break;
       case "www.daniguardio.la":

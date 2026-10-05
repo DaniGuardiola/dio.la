@@ -169,8 +169,8 @@ shortcuts accept only the root path. Unrecognized hosts or paths return 404.
 
 The same Worker contains the legacy `daniguardio.la` and `notmylinkedin.com`
 redirects. Changes deploy from this repository's `main` branch through its
-existing Workers Builds trigger. `daniguardio.la` redirects to `https://dio.la/`
-without preserving the path; `www` and `beta` first redirect to the legacy apex.
+existing Workers Builds trigger. `daniguardio.la` redirects to the same path and
+query on `https://dio.la`; `www` and `beta` first redirect to the legacy apex.
 Its `pgp` and `pop-os` shortcuts retain their previous destinations.
 `notmylinkedin.com` and `linkedin.com.notmylinkedin.com` redirect to `/me` with
 the `notmylinkedin` query flag; `www` first redirects to that domain's apex.
