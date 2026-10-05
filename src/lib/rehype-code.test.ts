@@ -1,10 +1,9 @@
 import { expect, test } from "bun:test";
 
-import { compile, nodeTypes } from "@mdx-js/mdx";
+import { compile } from "@mdx-js/mdx";
 import lzString from "lz-string";
-import rehypeRaw from "rehype-raw";
 
-import { rehypeCode } from "./rehype-code";
+import { mdxOptions } from "./mdx-options";
 
 test("MDX preserves Twoslash metadata, hidden include sections, queries and playground links", async () => {
   const source = [
@@ -21,16 +20,11 @@ test("MDX preserves Twoslash metadata, hidden include sections, queries and play
     "//    ^?",
     "```"
   ].join("\n");
-  const output = String(
-    await compile(source, {
-      jsx: true,
-      rehypePlugins: [rehypeCode, [rehypeRaw, { passThrough: nodeTypes }]]
-    })
-  );
+  const output = String(await compile(source, mdxOptions));
   expect(output).toContain("twoslash lsp");
-  expect(output).toContain('className="line highlight"');
+  expect(output).toContain('class="line highlight"');
   expect(output).toContain('lsp="const result: 42"');
-  expect(output).toContain('className="popover"');
+  expect(output).toContain('class="popover"');
   expect(output).toContain("https://www.typescriptlang.org/play?#code/");
   const compressed = output.match(/play\?#code\/([^"]+)/)?.[1];
   expect(compressed).toBeDefined();
@@ -44,10 +38,7 @@ test("multiline hover types survive raw HTML processing", async () => {
   const output = String(
     await compile(
       ["```ts twoslash", "const record = { name: 'Dani', count: 1 };", "```"].join("\n"),
-      {
-        jsx: true,
-        rehypePlugins: [rehypeCode, [rehypeRaw, { passThrough: nodeTypes }]]
-      }
+      mdxOptions
     )
   );
   expect(output).toContain("const record: {");

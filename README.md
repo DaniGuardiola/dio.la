@@ -72,7 +72,9 @@ Highlight stacks use flex gaps so inline dates retain their spacing in v4.
 
 ## Code highlighting
 
-MDX stays on v3. `src/lib/rehype-code.ts` runs the official Shiki Rehype plugin
+MDX stays on v3. The shared pipeline in `src/lib/mdx-options.ts` renders math
+with KaTeX before syntax highlighting. Relative Markdown media uses the maintained
+`rehype-mdx-import-media` plugin. `src/lib/rehype-code.ts` runs the official Shiki Rehype plugin
 before raw HTML processing so fence metadata reaches Twoslash. Highlighting and
 type analysis run at build time; the browser receives rendered code and hover
 text, not a TypeScript compiler or Shiki runtime.
@@ -83,8 +85,10 @@ sections and cut markers. Hidden includes are scoped to each document. Playgroun
 links include the full source, including code hidden by cuts. The obsolete legacy
 wrapper and its newline patch are removed.
 
-`bun test src/lib/rehype-code.test.ts` covers the MDX plugin pipeline, includes,
-queries, highlighted rows and playground links.
+`bun test` covers the actual MDX plugin pipeline, media imports, math, tables,
+includes, queries, highlighted rows and playground links. See the
+[dependency review](docs/dependency-review.md) for upgrades and intentional
+TypeScript, Lexical and KaTeX version holds.
 
 ## Principles
 
@@ -150,4 +154,6 @@ public IPv4 changes. See [DDNS setup](cloudflare/ddns/README.md).
 
 ## Next upgrade stages
 
-Remaining dependency upgrades and the wider project review are the next stages.
+Dependency and MDX upgrades are complete within the compatibility limits above.
+The wider project review remains, prioritizing demonstrated improvements over
+replacing working libraries.
