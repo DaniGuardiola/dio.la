@@ -134,12 +134,22 @@ without rewriting embedded Twoslash examples.
 | ariakit-solid.dio.la                             | Pages: dio-ariakit-solid    |
 | www, pgp, h, u, h-utils, install-xr under dio.la | Worker: dio-redirects       |
 
-Production and drafts share this branch. Run `bun run deploy:cloudflare` or
+Pushes to GitHub `main` automatically deploy production and drafts through
+Cloudflare Workers Builds. Each Worker has its own `main` trigger and isolated
+build: production runs `bun run build`, drafts runs `bun run build:cloudflare:drafts`.
+Both install with `bun install --frozen-lockfile` and deploy with
+`bunx wrangler deploy --config dist/server/wrangler.json`. Build variables pin
+`BUN_VERSION=1.4.2`, `NODE_VERSION=22.23.2`, and `SKIP_DEPENDENCY_INSTALL=true`
+so the explicit install command owns dependency installation. Build settings live
+in each Worker's Cloudflare dashboard under Settings > Builds. Other branches
+do not deploy. The old GitHub action that synchronized a `drafts` branch is removed.
+
+For manual deployments, run `bun run deploy:cloudflare` or
 `bun run deploy:cloudflare:drafts` to build and deploy their Workers.
 For local checks, build first, then run `bun run preview:cloudflare` or
 `bun run preview:cloudflare:drafts`. Deployment uses the generated `dist/server/wrangler.json`, including the bundled
-server and client assets. Git pushes do not trigger deployments. Build and deploy
-one environment at a time: both builds share `dist` and generated article data.
+server and client assets. When building locally, build and deploy one environment
+at a time: both builds share `dist` and generated article data.
 Custom domains are committed in Wrangler config; default `workers.dev` routes
 and version preview URLs are disabled.
 
