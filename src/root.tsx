@@ -1,6 +1,4 @@
 // @refresh reload
-import "./root.css";
-import "./fonts.css";
 import { type ComponentProps } from "@solidjs/web";
 import { HeadContent, Scripts } from "@tanstack/solid-router";
 import clsx from "clsx";
@@ -14,6 +12,9 @@ import { UMAMI_DRAFTS_ID, UMAMI_ID } from "./data/config";
 import { isDrafts, isLocalhost } from "./utils/is-host";
 import { headerScrolled, scrolledAtTop, setUpPageScroll } from "./utils/page-scroll";
 import { theme, ThemeScript, toggleTheme } from "./utils/theme";
+
+import fontStyles from "./fonts.css?url";
+import rootStyles from "./root.css?url";
 
 function NavLink(props: ComponentProps<typeof A>) {
   return (
@@ -66,13 +67,7 @@ function Header() {
       )}
     >
       <div class="main-container px-4 w-full mx-auto flex">
-        <A
-          href="/"
-          aria-label="go to homepage"
-          class="group focus-ring rounded-xs"
-          activeClass="pointer-events-none"
-          end
-        >
+        <a href="/" aria-label="go to homepage" class="group focus-ring rounded-xs">
           <p
             class={clsx(
               clsx(
@@ -100,7 +95,7 @@ function Header() {
           >
             Dani Guardio<span class="text-accent-invert">la</span>’s blog
           </p>
-        </A>
+        </a>
         <nav class={clsx("ml-auto flex items-end gap-2", "sm:gap-4")}>
           <NavLink href="/" end aria-label="articles">
             articles
@@ -150,7 +145,9 @@ export default function Root(props: { children: import("@solidjs/web").JSX.Eleme
   return (
     <html class={theme()} lang="en" prefix="og: http://ogp.me/ns#">
       <head>
-        {/* Refresh head registration when navigating between article IDs. */}
+        <link rel="stylesheet" href={rootStyles} />
+        <link rel="stylesheet" href={fontStyles} />
+        {/* Keep route metadata fresh while document styles stay mounted. */}
         <Show when={location().pathname} keyed>
           {(_pathname) => <HeadContent />}
         </Show>
