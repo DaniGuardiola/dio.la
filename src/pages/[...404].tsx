@@ -43,7 +43,7 @@ export default function NotFound() {
         </h1>
       </div>
       <div class="p-4 min-h-[65vh] lg:main-container flex flex-col items-center justify-center space-y-8">
-        <A href="/" class="text-accent hover:underline">
+        <A href="/" class="text-accent-invert hover:underline">
           Check out the homepage?
         </A>
         <img

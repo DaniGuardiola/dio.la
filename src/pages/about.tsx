@@ -43,7 +43,7 @@ function Header() {
             <img
               alt="This article's main image"
               src={IMAGE_URL}
-              class="bg-white w-full object-cover aspect-[1.91/1] rounded shadow-lg"
+              class="bg-white w-full object-cover aspect-[1.91/1] rounded-sm shadow-lg"
             />
           </div>
         </div>

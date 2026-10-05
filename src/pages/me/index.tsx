@@ -123,7 +123,7 @@ function Introduction() {
         }
         fallback={
           <div class="flex gap-2 flex-wrap">
-            <details class="border-2 border-accent rounded p-2">
+            <details class="border-2 border-accent rounded-sm p-2">
               <summary class="select-none">A brief history of me</summary>
               <div class="flex flex-col gap-8 text-base pt-4">
                 <p>
@@ -167,7 +167,7 @@ function Introduction() {
                 </p>
               </div>
             </details>
-            <details class="border-2 border-accent rounded p-2">
+            <details class="border-2 border-accent rounded-sm p-2">
               <summary class="select-none">Skills and knowledge</summary>
               <div class="flex flex-col gap-8 text-base pt-4">
                 <p>
@@ -207,7 +207,7 @@ function CareerTldr() {
   return (
     <section class="space-y-8 text-dark-invert md:columns-2 gap-10">
       <div class="flex items-baseline gap-4">
-        <h1 class="text-2xl font-bold text-accent">Career</h1>
+        <h1 class="text-2xl font-bold text-accent-invert">Career</h1>
         <span class="text-subtle-invert text-sm print:hidden">
           {recentFirst() ? "recent first" : "chronological"} -{" "}
           <button
@@ -235,7 +235,7 @@ function CareerTldr() {
                   <span>{entry.duration && ` · ${entry.duration}`}</span>
                 </p>
                 <Show when={entry.stack?.length}>
-                  <p class="mt-1 text-sm text-accent font-bold dark:font-normal">
+                  <p class="mt-1 text-sm text-accent-invert font-bold dark:font-normal">
                     {entry.stack
                       ?.map((s) => {
                         if (s === "JavaScript") return "JS";
@@ -262,7 +262,7 @@ function Career() {
   return (
     <section class="flex flex-col gap-4 text-dark-invert">
       <div class="flex items-baseline justify-between gap-4">
-        <h1 class="text-2xl font-bold text-accent">Career</h1>
+        <h1 class="text-2xl font-bold text-accent-invert">Career</h1>
         <span class="text-subtle-invert text-sm">
           Showing {recentFirst() ? "most recent first" : "chronologically"} -{" "}
           <button
@@ -279,7 +279,7 @@ function Career() {
             <>
               {index() !== 0 && <hr class="border-black-invert/20" />}
               <article class="flex flex-col gap-6">
-                {entry.logo && <img src={entry.logo} class="max-h-12 rounded self-start" />}
+                {entry.logo && <img src={entry.logo} class="max-h-12 rounded-sm self-start" />}
                 <div>
                   <h1>
                     <span class="font-bold">{entry.at}</span>
@@ -296,7 +296,7 @@ function Career() {
                     <div class="flex gap-2 flex-wrap mt-2">
                       <For each={entry.stack}>
                         {(tech) => (
-                          <span class="text-sm text-subtle-white-invert bg-accent text-white rounded px-2">
+                          <span class="text-sm text-subtle-white-invert bg-accent text-white rounded-sm px-2">
                             {tech}
                           </span>
                         )}
@@ -317,7 +317,7 @@ function Career() {
 function Notes() {
   return (
     <section class="flex flex-col gap-2">
-      <h1 class="text-2xl font-bold text-accent">Notes</h1>
+      <h1 class="text-2xl font-bold text-accent-invert">Notes</h1>
       <h2 class="font-bold text-dark-invert mt-6">Remote work</h2>
       <p>
         I've spent about half of my career working remotely, and I love it. I've gotten good at
@@ -374,7 +374,7 @@ function Notes() {
 function BackgroundTexture() {
   return (
     <div class="absolute -z-10 top-0 w-full h-[11rem] sm:h-[16rem] bg-[radial-gradient(circle_at_1px_1px,var(--subtle-invert)_1px,transparent_0)] bg-[length:30px_30px]">
-      <div class="absolute w-full h-full bg-gradient-to-b from-transparent to-gray-100 dark:to-neutral-900" />
+      <div class="absolute w-full h-full bg-linear-to-b from-transparent to-gray-100 dark:to-neutral-900" />
     </div>
   );
 }
@@ -405,7 +405,7 @@ export default function Me() {
   return (
     <MeContext value={{ tldr, recentFirst, setTldr, setRecentFirst }}>
       <BackgroundTexture />
-      <div class="main-container px-4 py-16 sm:py-32 flex flex-col gap-8 text-dark-invert print:px-12 print:!py-16">
+      <div class="main-container px-4 py-16 sm:py-32 flex flex-col gap-8 text-dark-invert print:px-12 print:py-16!">
         <Heading />
         <Introduction />
         <Show when={tldr()} children={<CareerTldr />} fallback={<Career />} />

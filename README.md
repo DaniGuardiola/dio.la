@@ -17,7 +17,7 @@ Welcome to my blog's source code!
 
 - Coded in [TypeScript](https://www.typescriptlang.org/).
 - Built on Solid 2 and [TanStack Start](https://tanstack.com/start/latest).
-- Styled with [Tailwind CSS](https://tailwindcss.com/) and, in some cases, [SASS](https://sass-lang.com/).
+- Styled with [Tailwind CSS 4](https://tailwindcss.com/) and plain CSS through its Vite plugin.
 - Content authored using [MDX](https://mdxjs.com/) v3.
 - Code highlighting (including interactive TypeScript blocks) powered by [`shiki-twoslash`](https://shikijs.github.io/twoslash/).
 - Hosted on [Cloudflare Workers](https://workers.cloudflare.com/) through the Cloudflare Vite plugin.
@@ -34,6 +34,19 @@ The local MDX provider supplies Solid 2 dynamic components for native HTML tags.
 MDX 3, existing Shiki/Twoslash styles, Giscus, and article assets remain supported.
 Resume display options use route search state and component context, avoiding
 shared server state across requests.
+
+## Styles
+
+`src/root.css` imports Tailwind and owns custom utilities and variants.
+`src/theme.css` defines fonts, breakpoints, animation, and the existing palette.
+Theme-aware text uses `text-accent-invert`; backgrounds and outlines use the
+fixed `accent` color. Dark mode follows the `.dark` class, and the resume keeps
+its `print` and `not-print` variants.
+
+MDX styling uses `@reference` to share the root theme and utilities without
+emitting another Tailwind bundle. Styles and font faces are plain CSS; Sass,
+Autoprefixer, the old PostCSS config, and JavaScript Tailwind plugins are removed.
+Highlight stacks use flex gaps so inline dates retain their spacing in v4.
 
 ## Principles
 
@@ -99,5 +112,4 @@ public IPv4 changes. See [DDNS setup](cloudflare/ddns/README.md).
 
 ## Next upgrade stages
 
-Tailwind 4, the MDX/highlighting pipeline, and remaining dependency upgrades
-are the next stages.
+The MDX/highlighting pipeline and remaining dependency upgrades are the next stages.

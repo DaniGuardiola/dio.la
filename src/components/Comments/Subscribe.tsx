@@ -63,7 +63,7 @@ export function Subscribe() {
       <div class="flex gap-4">
         <input
           disabled={loading()}
-          class="grow shrink min-w-0 rounded text-dark-invert placeholder:text-subtle-invert dark:text-white px-4 focus:outline-2 focus:outline-accent dark:focus:outline-white ring ring-2 ring-inset ring-gray-200 dark:[color-scheme:dark]"
+          class="grow shrink min-w-0 rounded-sm text-dark-invert placeholder:text-subtle-invert dark:text-white px-4 focus:outline-2 focus:outline-accent dark:focus:outline-white ring-2 ring-inset ring-gray-200 dark:[color-scheme:dark]"
           ref={emailInput!}
           type="email"
           name="fields[email]"
@@ -77,7 +77,7 @@ export function Subscribe() {
         <button
           disabled={loading()}
           class={clsx(
-            "text-white py-2 px-4 rounded focus-ring",
+            "text-white py-2 px-4 rounded-sm focus-ring",
             loading() ? "pointer-events-none bg-accent/80" : "bg-accent hover:bg-accent/90"
           )}
           type="submit"
@@ -89,7 +89,7 @@ export function Subscribe() {
         <p class="text-sm text-red-500">{error()}</p>
       </Show>
       <Show when={success()}>
-        <p class="text-sm text-accent">{success()}</p>
+        <p class="text-sm text-accent-invert">{success()}</p>
       </Show>
 
       <input type="hidden" name="ml-submit" value="1" />

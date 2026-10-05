@@ -1,4 +1,4 @@
-import "./styles.sass";
+import "./styles.css";
 import "katex/dist/katex.min.css";
 import { type ComponentProps, type JSX } from "@solidjs/web";
 import { Dynamic } from "@solidjs/web";

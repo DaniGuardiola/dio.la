@@ -79,7 +79,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
             <span class="font-bold"> · </span>
             <a
               href={tweetIntentUrl()}
-              class="hover:underline focus-ring-white focus-scroll-target rounded-sm"
+              class="hover:underline focus-ring-white focus-scroll-target rounded-xs"
               target="_blank"
               rel="noreferrer"
             >
@@ -104,7 +104,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
             <img
               alt="This article's main image"
               src={props.metadata.imageUrl}
-              class="bg-white w-full object-cover aspect-[1.91/1] rounded shadow-lg"
+              class="bg-white w-full object-cover aspect-[1.91/1] rounded-sm shadow-lg"
             />
           </div>
         </div>
@@ -122,7 +122,7 @@ export function GoToTopButton() {
          bg-accent text-white p-3 lg:p-4 rounded-xl font-fira-code shadow-lg border-2 border-white
          transition-[transform,opacity] ease-out
          hover:-translate-y-2 active:-translate-y-1
-         focus:outline-none focus-visible:-translate-y-2 focus-visible:outline-offset-2 focus-visible:outline-accent`,
+         focus:outline-hidden focus-visible:-translate-y-2 focus-visible:outline-offset-2 focus-visible:outline-accent`,
         articleScrolled() ? "opacity-100" : "opacity-0"
       )}
       onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -142,7 +142,7 @@ function Footer(props: { metadata: ArticleMetadata }) {
               {(topic) => (
                 <li class="text-[.9rem] leading-none hover:underline">
                   <A
-                    class="focus-ring-white rounded"
+                    class="focus-ring-white rounded-sm"
                     href={`/?topic=${topic}#topic-banner`}
                   >{`#${topic}`}</A>
                 </li>
@@ -153,7 +153,7 @@ function Footer(props: { metadata: ArticleMetadata }) {
         <Show when={props.metadata.prev}>
           <p>
             <A
-              class="group scroll-focus-target focus-ring-white rounded"
+              class="group scroll-focus-target focus-ring-white rounded-sm"
               href={getArticlePath(props.metadata.prev!.id)}
             >
               <span class="font-bold">{"<-"} Previous:</span>{" "}
@@ -164,7 +164,7 @@ function Footer(props: { metadata: ArticleMetadata }) {
         <Show when={props.metadata.next}>
           <p class="text-right">
             <A
-              class="group scroll-focus-target focus-ring-white rounded"
+              class="group scroll-focus-target focus-ring-white rounded-sm"
               href={getArticlePath(props.metadata.next!.id)}
             >
               <span class="font-bold">Next:</span>{" "}
@@ -176,14 +176,14 @@ function Footer(props: { metadata: ArticleMetadata }) {
         <p class="pt-8">
           Follow me on Twitter:{" "}
           <a
-            class="font-bold hover:underline focus-ring-white rounded"
+            class="font-bold hover:underline focus-ring-white rounded-sm"
             target="_blank"
             href="https://twitter.com/daniguardio_la"
           >
             @daniguardio_la
           </a>
           {" · "}
-          <a class="hover:underline focus-ring-white rounded" target="_blank" href="/rss.xml">
+          <a class="hover:underline focus-ring-white rounded-sm" target="_blank" href="/rss.xml">
             RSS feed
           </a>
         </p>

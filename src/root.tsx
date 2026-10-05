@@ -1,6 +1,6 @@
 // @refresh reload
-import "./root.sass";
-import "./fonts.sass";
+import "./root.css";
+import "./fonts.css";
 import { type ComponentProps } from "@solidjs/web";
 import { HeadContent, Scripts } from "@tanstack/solid-router";
 import clsx from "clsx";
@@ -20,9 +20,9 @@ function NavLink(props: ComponentProps<typeof A>) {
     <A
       rel="noreferrer"
       {...props}
-      activeClass="enabled font-bold text-accent pointer-events-none"
+      activeClass="enabled font-bold text-accent-invert pointer-events-none"
       inactiveClass="disabled hover:underline"
-      class="text-[1.1rem] leading-[1.3rem] focus-ring rounded-sm flex"
+      class="text-[1.1rem] leading-[1.3rem] focus-ring rounded-xs flex"
     >
       <span
         class={clsx(
@@ -44,7 +44,7 @@ function ThemeToggle(props: ComponentProps<"div">) {
       <button
         title="Toggle theme"
         aria-label="toggle theme"
-        class="focus-ring rounded w-8 h-6 flex items-center justify-center -mr-[.375rem]"
+        class="focus-ring rounded-sm w-8 h-6 flex items-center justify-center -mr-[.375rem]"
         onClick={toggleTheme}
       >
         <LightThemeIcon class="w-5 hidden dark:block" />
@@ -70,7 +70,7 @@ function Header() {
         <A
           href="/"
           aria-label="go to homepage"
-          class="group focus-ring rounded-sm"
+          class="group focus-ring rounded-xs"
           activeClass="pointer-events-none"
           end
         >
@@ -88,7 +88,7 @@ function Header() {
             )}
           >
             <span class="group-hover:underline">dio</span>
-            <span class="text-accent decoration-accent">
+            <span class="text-accent-invert decoration-accent">
               <span>.</span>
               <span class="group-hover:underline">la</span>
             </span>
@@ -99,7 +99,7 @@ function Header() {
               "h-0 opacity-0": headerScrolled()
             })}
           >
-            Dani Guardio<span class="text-accent">la</span>’s blog
+            Dani Guardio<span class="text-accent-invert">la</span>’s blog
           </p>
         </A>
         <nav class={clsx("ml-auto flex items-end gap-2", "sm:gap-4")}>
@@ -133,7 +133,8 @@ function DraftsNotice() {
         You're looking at my <span class="font-bold">drafts</span>!
       </p>
       <p>
-        Visit the main site: <span class="group-hover:underline font-bold text-accent">dio.la</span>
+        Visit the main site:{" "}
+        <span class="group-hover:underline font-bold text-accent-invert">dio.la</span>
       </p>
     </a>
   );

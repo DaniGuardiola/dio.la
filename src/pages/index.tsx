@@ -89,9 +89,9 @@ function MainHighlight(props: ArticleMetadata) {
         <Show when={props.imageUrl}>
           <img alt="This article's main image" class="w-full aspect-[40/21]" src={props.imageUrl} />
         </Show>
-        <div class="p-6 space-y-3">
+        <div class="p-6 flex flex-col gap-3">
           <DateLabel
-            class="text-[1rem] text-accent font-bold uppercase"
+            class="text-[1rem] text-accent-invert font-bold uppercase"
             date={props.date}
             includeYear
           />
@@ -114,8 +114,8 @@ function Highlight(props: ArticleMetadata) {
       href={getArticleUrl(props.id)}
       class="block rounded-md focus-ring-white focus-scroll-target group"
     >
-      <article class="space-y-[.375rem] text-white">
-        <DateLabel class="text-[.875rem] uppercase" date={props.date} includeYear />
+      <article class="flex flex-col gap-[.375rem] text-white">
+        <DateLabel class="text-[.875rem] leading-6 uppercase" date={props.date} includeYear />
         <h2 class="text-[1.25rem] font-bold leading-[1.5rem] group-hover:underline group-focus-visible:underline">
           {props.title}
         </h2>
@@ -188,13 +188,13 @@ function Topics() {
                     href={getTopicUrl(id)}
                     aria-label={`${id} (${amount} article${amount === 1 ? "" : "s"})`}
                     class={clsx(
-                      "text-[1.125rem] leading-none hover:underline focus-ring focus-scroll-target rounded-sm",
+                      "text-[1.125rem] leading-none hover:underline focus-ring focus-scroll-target rounded-xs",
                       {
                         "font-bold pointer-events-none": topic() === id
                       }
                     )}
                   >
-                    {`#${id}`} <span class="text-accent font-bold">{amount}</span>
+                    {`#${id}`} <span class="text-accent-invert font-bold">{amount}</span>
                   </A>
                 </li>
               )}
@@ -217,17 +217,17 @@ function TopicBanner() {
       <section
         id="topic-banner"
         aria-label={`filtering by topic: ${topic()}`}
-        class="bg-accent/75 text-white px-4 py-2 lg:py-4 mb-8 rounded flex items-center justify-center gap-4 flex-wrap focus-scroll-target sticky top-20 lg:top-24"
+        class="bg-accent/75 text-white px-4 py-2 lg:py-4 mb-8 rounded-sm flex items-center justify-center gap-4 flex-wrap focus-scroll-target sticky top-20 lg:top-24"
       >
         <p>
           <span class="max-sm:sr-only">Filtering by topic: </span>
           <span class="font-bold">{`#${topic()}`}</span>
         </p>
-        <div class="flex-grow" />
+        <div class="grow" />
         <A
           href="#topics"
           class={clsx(
-            "border border-white p-2 lg:py-0 rounded focus-ring-white",
+            "border border-white p-2 lg:py-0 rounded-sm focus-ring-white",
             "hover:bg-white hover:text-dark focus-visible:bg-white focus-visible:text-dark"
           )}
         >
@@ -252,7 +252,7 @@ function ArticleItem(props: ArticleItemProps) {
       <article class="space-y-[.25rem]">
         <div class="flex gap-4">
           <DateLabel
-            class="text-[.875rem] uppercase text-accent font-bold"
+            class="text-[.875rem] uppercase text-accent-invert font-bold"
             date={props.date}
             includeYear={props.includeYear}
           />

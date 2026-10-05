@@ -625,7 +625,7 @@ type DetailsProps = {
 
 function Details(props: DetailsProps) {
   return (
-    <details class="p-2 mt-2 bg-black-invert/5 rounded">
+    <details class="p-2 mt-2 bg-black-invert/5 rounded-sm">
       <summary class="select-none">{props.label}</summary>
       <div class="flex flex-col gap-8 text-base pt-4">{props.children}</div>
     </details>

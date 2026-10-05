@@ -4,6 +4,7 @@ import { cloudflare } from "@cloudflare/vite-plugin";
 import { nodeTypes } from "@mdx-js/mdx";
 import mdx from "@mdx-js/rollup";
 import solid from "@solidjs/vite-plugin";
+import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/solid-start/plugin/vite";
 import rehypeExternalLinks from "rehype-external-links";
 import rehypeKatex from "rehype-katex";
@@ -20,6 +21,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   resolve: { tsconfigPaths: true, alias: { "~": new URL("./src", import.meta.url).pathname } },
   plugins: [
+    tailwindcss(),
     cloudflare({
       configPath:
         process.env.VITE_IS_DRAFTS === "true" ? "wrangler.drafts.jsonc" : "wrangler.jsonc",
