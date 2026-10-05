@@ -130,8 +130,7 @@ without rewriting embedded Twoslash examples.
 | ------------------------------------------------ | --------------------------- |
 | dio.la                                           | Worker: dio-la-start        |
 | drafts.dio.la                                    | Worker: dio-la-drafts-start |
-| rpc-anywhere.dio.la                              | Pages: dio-rpc-anywhere     |
-| ariakit-solid.dio.la                             | Pages: dio-ariakit-solid    |
+| rpc-anywhere.dio.la                              | Pages: dio-rpc-anywhere-git |
 | www, pgp, h, u, h-utils, install-xr under dio.la | Worker: dio-redirects       |
 
 Cloudflare Workers Builds is configured to deploy production and drafts on
@@ -167,8 +166,7 @@ redirect status codes, paths, and query strings. `pgp` redirects to `/pgp.txt`;
 shortcuts accept only the root path. Unrecognized hosts or paths return 404.
 
 See [the static sites deployment notes](cloudflare/sites/README.md) for the
-RPC demo and legacy Ariakit playground, including source revisions and the
-playground repairs. Their verified deployment artifacts are committed here. Default Pages URLs and
+RPC demo, which now builds automatically from its own source repository. Default Pages URLs and
 preview URLs redirect to custom domains. The obsolete blog and drafts Pages
 projects were deleted after Worker verification.
 
