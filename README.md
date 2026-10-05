@@ -179,12 +179,27 @@ an incoming `notmylinkedin` flag. The historical Next.js project and its source
 repository remain on Vercel at the owner's request; they are not deployment
 sources for these redirects. `shishang-web` also remains on Vercel.
 
-The two additional Cloudflare zones have their redirects and DNS records staged.
-Registrar delegation and live verification must finish before removing their
-obsolete redirect projects. Proton Mail, MailerLite, verification TXT records,
+Both additional zones are active on Cloudflare, and Porkbun nameservers were
+updated on October 5, 2026. All certificates are active. All eight hostnames
+passed HTTPS checks with their previous redirect status codes, destinations,
+and query behavior. The three obsolete Vercel redirect projects
+(`pgp-daniguardio-la`, `pop-os-daniguardio-la`, `notmylinkedin-com`) were deleted
+after verification. Their GitHub repositories were not changed.
+Proton Mail, MailerLite, verification TXT records,
 and existing CAA records were copied without changing their values. Mail CNAMEs
 remain DNS-only. Nameservers are `amit.ns.cloudflare.com` and
 `rihana.ns.cloudflare.com`; the registrar remains Porkbun.
+
+Temporary certificate-validation TXT records were added to the old Vercel DNS
+zones during issuance, then removed after all certificates became active.
+The old DNS zones temporarily point migrated web hostnames at Cloudflare so
+clients with cached nameserver delegations still work; both DNS paths were
+verified against Cloudflare HTTPS. They do not serve a Vercel hosting fallback.
+TODO after October 8, 2026: confirm both registries and public resolvers delegate
+to Cloudflare, then remove only the ten temporary records listed in
+[`legacy-dns-bridge.json`](cloudflare/redirects/legacy-dns-bridge.json) and delete
+that manifest. Keep the historical Next.js project and its domain bindings
+untouched. The old `notmylinkedin.com` DNS zone can then be retired separately.
 
 See [the static sites deployment notes](cloudflare/sites/README.md) for the
 RPC demo, which now builds automatically from its own source repository. Default Pages URLs and

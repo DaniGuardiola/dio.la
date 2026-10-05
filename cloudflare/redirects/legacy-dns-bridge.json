@@ -1,0 +1,85 @@
+{
+  "removeAfter": "2026-10-08",
+  "purpose": "Temporary DNS overlap during nameserver cache expiry; every target is Cloudflare. Preserve the historical Next.js Vercel project and its domain bindings.",
+  "records": [
+    {
+      "domain": "notmylinkedin.com",
+      "id": "rec_43cba4cb2ed9512e3e92c18a",
+      "name": "",
+      "type": "A",
+      "value": "104.21.35.135"
+    },
+    {
+      "domain": "daniguardio.la",
+      "id": "rec_47880741945f25a37ab954d6",
+      "name": "",
+      "type": "A",
+      "value": "104.21.64.171",
+      "ttl": 60
+    },
+    {
+      "domain": "daniguardio.la",
+      "id": "rec_9198bf54fbb86f9a6659f60a",
+      "name": "",
+      "type": "A",
+      "value": "172.67.187.48",
+      "ttl": 60
+    },
+    {
+      "domain": "daniguardio.la",
+      "id": "rec_f4532465077b60a5c79b882a",
+      "name": "www",
+      "type": "CNAME",
+      "value": "daniguardio.la",
+      "ttl": 60
+    },
+    {
+      "domain": "daniguardio.la",
+      "id": "rec_dd23ce9c0dbb7803ffb25fe4",
+      "name": "beta",
+      "type": "CNAME",
+      "value": "daniguardio.la",
+      "ttl": 60
+    },
+    {
+      "domain": "daniguardio.la",
+      "id": "rec_31e70817e2eaa81944585aae",
+      "name": "pgp",
+      "type": "CNAME",
+      "value": "daniguardio.la",
+      "ttl": 60
+    },
+    {
+      "domain": "daniguardio.la",
+      "id": "rec_b193fb38167e9e953e85a9cf",
+      "name": "pop-os",
+      "type": "CNAME",
+      "value": "daniguardio.la",
+      "ttl": 60
+    },
+    {
+      "domain": "notmylinkedin.com",
+      "id": "rec_3ed0d9d899cca47f561ad8b2",
+      "name": "",
+      "type": "A",
+      "value": "172.67.223.42",
+      "ttl": 60
+    },
+    {
+      "domain": "notmylinkedin.com",
+      "id": "rec_d41ccc102b6046033cb4029d",
+      "name": "www",
+      "type": "CNAME",
+      "value": "notmylinkedin.com",
+      "ttl": 60
+    },
+    {
+      "domain": "notmylinkedin.com",
+      "id": "rec_16594c6fa282fc84589a289d",
+      "name": "linkedin.com",
+      "type": "CNAME",
+      "value": "notmylinkedin.com",
+      "ttl": 60
+    }
+  ]
+}
