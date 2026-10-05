@@ -107,26 +107,22 @@ function createHeading(type: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
 
 type MDXContentProps = { children?: JSX.Element };
 
+// Component definitions are static; share them across article mounts.
+const components = {
+  img: Image,
+  YoutubeVideo,
+  ...Object.fromEntries(KATEX_TAGS.map((tag) => [tag, stub(tag)])),
+  ...Object.fromEntries(
+    (["h1", "h2", "h3", "h4", "h5", "h6"] as const).map((type) => [type, createHeading(type)])
+  )
+};
+
 export function MDXContent(props: MDXContentProps) {
   let root!: HTMLDivElement;
   onSettled(() => setupTwoslashPopovers(root));
   return (
     <div ref={root} class="mdx-content">
-      <MDXProvider
-        components={{
-          img: Image,
-          YoutubeVideo,
-          ...KATEX_TAGS.reduce((obj, component) => ({ ...obj, [component]: stub(component) }), {}),
-          ...Object.fromEntries(
-            (["h1", "h2", "h3", "h4", "h5", "h6"] as const).map((type) => [
-              type,
-              createHeading(type)
-            ])
-          )
-        }}
-      >
-        {props.children}
-      </MDXProvider>
+      <MDXProvider components={components}>{props.children}</MDXProvider>
     </div>
   );
 }

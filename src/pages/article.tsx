@@ -3,7 +3,7 @@ import { Hydrate } from "@tanstack/solid-start";
 import { visible } from "@tanstack/solid-start/hydration";
 import clsx from "clsx";
 import { format } from "date-fns";
-import { onSettled, createMemo, createSignal, For, Show } from "solid-js";
+import { createMemo, createSignal, For, Show } from "solid-js";
 
 import { Comments } from "~/components/Comments";
 import { Subscribe } from "~/components/Comments/Subscribe";
@@ -14,13 +14,9 @@ import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
 import { articleScrolled } from "~/utils/page-scroll";
 
-// reading speed
-const WORDS_PER_MINUTE = 250;
-
 type ArticleHeaderProps = {
   metadata: ArticleMetadata;
   articleUrl: string;
-  readingMinutes: number;
 };
 
 function ArticleHeader(props: ArticleHeaderProps) {
@@ -57,7 +53,7 @@ function ArticleHeader(props: ArticleHeaderProps) {
             <span class="sm:hidden">{date().short}</span>
             <span class="max-sm:hidden">{date().long}</span>
             <span class="font-bold"> · </span>
-            {props.readingMinutes} min<span class="max-sm:hidden">ute</span> read
+            {props.metadata.readingMinutes} min<span class="max-sm:hidden">ute</span> read
             <span class="font-bold"> · </span>
             <a
               href={tweetIntentUrl()}
@@ -190,14 +186,6 @@ export default function ArticleLayout(props: {
   const metadata = () => props.metadata;
   const articleUrl = () => `https://${CANONICAL_DOMAIN}${getArticlePath(props.metadata.id)}`;
 
-  let contentDiv!: HTMLDivElement;
-  const [readingMinutes, setReadingMinutes] = createSignal(1);
-  onSettled(() => {
-    const words = contentDiv.textContent?.trim().split(/\s+/).length ?? 0;
-    const minutes = Math.max(1, Math.floor(words / WORDS_PER_MINUTE));
-    setReadingMinutes(minutes);
-  });
-
   return (
     <>
       <SkipLinks
@@ -208,12 +196,8 @@ export default function ArticleLayout(props: {
       />
       <div>
         <article>
-          <ArticleHeader
-            metadata={metadata()}
-            articleUrl={articleUrl()}
-            readingMinutes={readingMinutes()}
-          />
-          <div class="article-container p-4 space-y-16" ref={contentDiv!}>
+          <ArticleHeader metadata={metadata()} articleUrl={articleUrl()} />
+          <div class="article-container p-4 space-y-16">
             <MDXContent>
               <SkipLink id="article-content" />
               {props.children}

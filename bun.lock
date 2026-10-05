@@ -51,6 +51,7 @@
         "remark-rehype": "^11.1.2",
         "shiki": "^4.5.0",
         "tailwindcss": "^4.3.3",
+        "twoslash": "0.3.9",
         "typescript": "~6.0.3",
         "unified": "^11.0.5",
         "unist-util-visit": "^5.1.0",

@@ -13,6 +13,7 @@ import {
   REQUIRED_ARTICLE_FIELDS,
   SITE_DESCRIPTION
 } from "~/data/config";
+import { getArticleReadingMinutes } from "~/lib/article-reading-time";
 import { isDrafts, isLocalhost } from "~/utils/is-host";
 
 const __filename = Bun.fileURLToPath(new URL(import.meta.url));
@@ -59,15 +60,17 @@ function validateMetadata({ id, ...data }: ArticleMetadata) {
 
 async function getArticleMetadata(articlePath: string) {
   const fileContents = await Bun.file(articlePath).text();
-  const { data } = matter(fileContents) as unknown as {
-    data: Omit<ArticleMetadata, "id">;
-  };
+  const { data, content } = matter(fileContents);
   const filename = path.parse(articlePath).name;
   const id = filename === "index" ? path.basename(path.dirname(articlePath)) : filename;
   if (!id) throw new Error("Could not obtain article ID");
-  // @ts-expect-error This is fine.
-  validateMetadata({ id, ...data });
-  return { id, ...data } as ArticleMetadata;
+  const metadata = {
+    ...data,
+    id,
+    readingMinutes: getArticleReadingMinutes(content)
+  } as ArticleMetadata;
+  validateMetadata(metadata);
+  return metadata;
 }
 
 async function getArticleMetadataList() {

@@ -21,6 +21,7 @@ import ts from "typescript";
 import { unified } from "unified";
 import { visit } from "unist-util-visit";
 
+import { collectCodeInclude, expandCodeIncludes } from "./code-includes";
 import { renderTwoslashMarkdown, renderTwoslashMarkdownInline } from "./twoslash-markdown";
 
 function element(
@@ -37,10 +38,7 @@ function articleCode(includes: Map<string, string>): ShikiTransformer {
   return {
     name: "dio:article-code",
     preprocess(code) {
-      playgroundCodes.set(
-        this.meta,
-        code.replace(/\/\/\s*@include:\s*(\S+)/g, (_, key: string) => includes.get(key) ?? "")
-      );
+      playgroundCodes.set(this.meta, expandCodeIncludes(code, includes));
     },
     line(node, line) {
       // Keep Shiki's span lines: word annotations inspect span text recursively.
@@ -101,16 +99,10 @@ export function rehypeCode() {
         !code.properties.className.includes("language-twoslash")
       )
         return;
-      const lines: string[] = [];
       const source = code.children
         .map((child) => (child.type === "text" ? child.value : ""))
         .join("");
-      for (const line of source.split("\n")) {
-        const section = line.trim().match(/^\/\/ - (\S+)/)?.[1];
-        if (section) includes.set(`${key}-${section}`, lines.join("\n"));
-        else lines.push(line);
-      }
-      includes.set(key, lines.join("\n"));
+      collectCodeInclude(includes, key, source);
       parent.children.splice(index, 1);
       return index;
     });

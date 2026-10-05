@@ -9,15 +9,23 @@ test("article loader metadata has serializable neighbor summaries without circul
       id: "the-everything-bagel-of-components",
       title: "Newest",
       date: "2024/7/10",
-      description: "First"
+      description: "First",
+      readingMinutes: 1
     },
     {
       id: "the-open-closed-component-part-1",
       title: "Middle",
       date: "2024/6/13",
-      description: "Second"
+      description: "Second",
+      readingMinutes: 1
     },
-    { id: "try-return-finally", title: "Oldest", date: "2023/11/28", description: "Third" }
+    {
+      id: "try-return-finally",
+      title: "Oldest",
+      date: "2023/11/28",
+      description: "Third",
+      readingMinutes: 1
+    }
   ];
   const linked = linkArticles(articles);
   for (const article of linked) {

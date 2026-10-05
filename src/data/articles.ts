@@ -13,6 +13,7 @@ export type ArticleMetadata = {
   date: string;
   title: string;
   description: string;
+  readingMinutes: number;
   topics?: Topic[];
   imageUrl?: string;
   draft?: boolean;
