@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 
-test("client scroll subscriptions and pending banner animation stop on disposal", async () => {
+test("client lifecycle cleanup and queued theme persistence follow Solid 2 semantics", async () => {
   const child = Bun.spawn(
     [
       process.execPath,

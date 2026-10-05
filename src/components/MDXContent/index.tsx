@@ -4,7 +4,7 @@ import "katex/dist/katex.min.css";
 import { type ComponentProps, type JSX } from "@solidjs/web";
 import { Dynamic } from "@solidjs/web";
 import clsx from "clsx";
-import { createEffect } from "solid-js";
+import { onSettled } from "solid-js";
 
 import { MDXProvider } from "~/utils/mdx";
 
@@ -109,10 +109,7 @@ type MDXContentProps = { children?: JSX.Element };
 
 export function MDXContent(props: MDXContentProps) {
   let root!: HTMLDivElement;
-  createEffect(
-    () => undefined,
-    () => setupTwoslashPopovers(root)
-  );
+  onSettled(() => setupTwoslashPopovers(root));
   return (
     <div ref={root} class="mdx-content">
       <MDXProvider

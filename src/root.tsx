@@ -6,10 +6,11 @@ import { createMemo, Show } from "solid-js";
 
 import { DarkThemeIcon, LightThemeIcon } from "./components/icons";
 import { SkipLinkArea } from "./components/SkipLinks";
+import { ThemeScript } from "./components/ThemeScript";
 import { UMAMI_DRAFTS_ID, UMAMI_ID } from "./data/config";
 import { isDrafts, isLocalhost } from "./utils/is-host";
 import { headerScrolled, scrolledAtTop, setUpPageScroll } from "./utils/page-scroll";
-import { theme, ThemeScript, toggleTheme } from "./utils/theme";
+import { theme, toggleTheme } from "./utils/theme";
 
 import "./fonts.css";
 import "./root.css";

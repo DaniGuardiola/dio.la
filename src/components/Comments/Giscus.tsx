@@ -1,4 +1,4 @@
-import { createEffect, createSignal, type Ref, Show } from "solid-js";
+import { onSettled, createSignal, type Ref, Show } from "solid-js";
 
 // adapted from https://github.com/giscus/giscus-component/tree/main/solid
 // MIT licensed: https://github.com/giscus/giscus-component/blob/main/LICENSE
@@ -110,18 +110,15 @@ declare module "@solidjs/web" {
 export function Giscus(props: GiscusProps) {
   const [mounted, setMounted] = createSignal(false);
 
-  createEffect(
-    () => undefined,
-    () => {
-      let disposed = false;
-      void import("giscus").then(() => {
-        if (!disposed) setMounted(true);
-      });
-      return () => {
-        disposed = true;
-      };
-    }
-  );
+  onSettled(() => {
+    let disposed = false;
+    void import("giscus").then(() => {
+      if (!disposed) setMounted(true);
+    });
+    return () => {
+      disposed = true;
+    };
+  });
 
   return (
     <Show when={mounted()}>

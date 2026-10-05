@@ -21,31 +21,15 @@ export function isDarkTheme() {
   //   window.matchMedia("(prefers-color-scheme: dark)").matches
 }
 
-export function ThemeScript() {
-  return (
-    <script>
-      {`{
-        function isDarkTheme() {
-          if (typeof window === "undefined") return true;
-          if (!("theme" in localStorage)) return true;
-          if (localStorage.theme === "dark") return true;
-          if (localStorage.theme === "light") return false;
-          throw new Error("huh?");
-        }
-        document.documentElement.classList.remove("dark", "light");
-        document.documentElement.classList.add(isDarkTheme() ? "dark": "light");
-      }`}
-    </script>
-  );
-}
-
 export const [theme, setTheme] = createSignal<"light" | "dark">(isDarkTheme() ? "dark" : "light");
 
 export function toggleTheme() {
   if (typeof window === "undefined") return;
   function toggle() {
-    setTheme((previousTheme) => (previousTheme === "dark" ? "light" : "dark"));
-    localStorage.theme = theme();
+    // Solid 2 queues signal writes; reading theme() after setTheme returns the old value.
+    const nextTheme = theme() === "dark" ? "light" : "dark";
+    setTheme(nextTheme);
+    localStorage.theme = nextTheme;
   }
   if (!document.startViewTransition) return toggle();
   document.startViewTransition(toggle);

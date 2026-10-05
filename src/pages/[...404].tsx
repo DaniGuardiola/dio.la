@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/solid-router";
-import { createSignal, createEffect } from "solid-js";
+import { createSignal, onSettled } from "solid-js";
 
 import tRexSvg from "./404-t-rex.svg";
 
@@ -12,26 +12,23 @@ export default function NotFound() {
   const [remainingText, setRemainingText] = createSignal(TEXT_TO_APPEND);
   const [blinking, setBlinking] = createSignal(true);
 
-  createEffect(
-    () => undefined,
-    () => {
-      let intervalId: ReturnType<typeof setInterval> | undefined;
-      const timeoutId = setTimeout(() => {
-        intervalId = setInterval(() => {
-          setBlinking(false);
-          setText(`${text()}${remainingText().charAt(0)}`);
-          setRemainingText(remainingText().slice(1));
-          if (remainingText().length > 0) return;
-          clearInterval(intervalId);
-          setBlinking(true);
-        }, CURSOR_EFFECT_INTERVAL);
-      }, CURSOR_EFFECT_DELAY);
-      return () => {
-        clearTimeout(timeoutId);
+  onSettled(() => {
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+    const timeoutId = setTimeout(() => {
+      intervalId = setInterval(() => {
+        setBlinking(false);
+        setText(`${text()}${remainingText().charAt(0)}`);
+        setRemainingText(remainingText().slice(1));
+        if (remainingText().length > 0) return;
         clearInterval(intervalId);
-      };
-    }
-  );
+        setBlinking(true);
+      }, CURSOR_EFFECT_INTERVAL);
+    }, CURSOR_EFFECT_DELAY);
+    return () => {
+      clearTimeout(timeoutId);
+      clearInterval(intervalId);
+    };
+  });
 
   return (
     <>

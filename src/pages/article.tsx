@@ -3,7 +3,7 @@ import { Hydrate } from "@tanstack/solid-start";
 import { visible } from "@tanstack/solid-start/hydration";
 import clsx from "clsx";
 import { format } from "date-fns";
-import { createEffect, createMemo, createSignal, For, Show } from "solid-js";
+import { onSettled, createMemo, createSignal, For, Show } from "solid-js";
 
 import { Comments } from "~/components/Comments";
 import { Subscribe } from "~/components/Comments/Subscribe";
@@ -192,14 +192,11 @@ export default function ArticleLayout(props: {
 
   let contentDiv!: HTMLDivElement;
   const [readingMinutes, setReadingMinutes] = createSignal(1);
-  createEffect(
-    () => undefined,
-    () => {
-      const words = contentDiv.textContent?.trim().split(/\s+/).length ?? 0;
-      const minutes = Math.max(1, Math.floor(words / WORDS_PER_MINUTE));
-      setReadingMinutes(minutes);
-    }
-  );
+  onSettled(() => {
+    const words = contentDiv.textContent?.trim().split(/\s+/).length ?? 0;
+    const minutes = Math.max(1, Math.floor(words / WORDS_PER_MINUTE));
+    setReadingMinutes(minutes);
+  });
 
   return (
     <>

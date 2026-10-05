@@ -44,6 +44,23 @@ windowStub.dispatchEvent(new Event("scroll"));
 flush();
 assert.equal(untrack(articleScrolled), true, "disposed scroll listener must stop updating state");
 
+const storage = { theme: "dark" };
+Object.defineProperty(globalThis, "localStorage", { value: storage });
+const documentStub = {
+  startViewTransition: undefined as undefined | ((callback: () => void) => void)
+};
+Object.defineProperty(globalThis, "document", { value: documentStub });
+const { theme, toggleTheme } = await import("./theme");
+toggleTheme();
+assert.equal(storage.theme, "light", "persist the new theme, not the queued signal's old value");
+flush();
+assert.equal(untrack(theme), "light");
+documentStub.startViewTransition = (callback) => callback();
+toggleTheme();
+assert.equal(storage.theme, "dark");
+flush();
+assert.equal(untrack(theme), "dark");
+
 function mountBanner(height: number) {
   const element = Object.assign(new EventTarget(), {
     offsetHeight: height
