@@ -29,7 +29,7 @@ function ArticlePage() {
   const article = Route.useLoaderData();
   const Content = dynamic(() => ARTICLE_COMPONENTS[article().id]);
   return (
-    <ArticleLayout>
+    <ArticleLayout metadata={article()}>
       <Content />
     </ArticleLayout>
   );

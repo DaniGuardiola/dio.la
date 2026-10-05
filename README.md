@@ -38,9 +38,9 @@ shared server state across requests.
 ## Styles
 
 `src/root.css` imports Tailwind and owns custom utilities and variants.
-The document shell links global styles and fonts directly so refreshing route
-metadata cannot unload them. The logo uses ordinary document navigation while
-the Solid/TanStack prerelease client-navigation behavior is being stabilized.
+Global styles use normal imports and a stable `HeadContent`. The logo uses
+client navigation. Article data comes from its route loader with acyclic neighbor
+summaries, and comments effects return only cleanup functions or void. See [navigation investigation](docs/navigation-investigation.md).
 `src/theme.css` defines fonts, breakpoints, animation, and the existing palette.
 Theme-aware text uses `text-accent-invert`; backgrounds and outlines use the
 fixed `accent` color. Dark mode follows the `.dark` class, and the resume keeps

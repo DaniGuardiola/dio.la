@@ -7,6 +7,7 @@ import {
   useArticleLocation
 } from "~/data/articles";
 import { type ArticleId } from "~/data/generated/articles";
+import { A } from "~/utils/routing";
 
 type ArticleSeriesIndexProps = {
   name: string;
@@ -31,10 +32,9 @@ export function ArticleSeriesIndex(props: ArticleSeriesIndexProps) {
                   <u>{title}</u> (you're here)
                 </>
               ) : (
-                // TODO: should be <A> but there's a Solid Start bug :(
-                <a href={getArticlePath(id)} class="inactive">
+                <A href={getArticlePath(id)} class="inactive">
                   {title}
-                </a>
+                </A>
               )}
             </li>
           )}

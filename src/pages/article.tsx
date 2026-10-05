@@ -6,33 +6,14 @@ import { Comments } from "~/components/Comments";
 import { Subscribe } from "~/components/Comments/Subscribe";
 import { MDXContent } from "~/components/MDXContent";
 import { SkipLink, SkipLinks } from "~/components/SkipLinks";
-import {
-  type ArticleMetadata,
-  articleMetadataExists,
-  findArticleMetadataById,
-  getArticlePath,
-  useArticleLocation
-} from "~/data/articles";
+import { type ArticleMetadata, getArticlePath } from "~/data/articles";
 import { CANONICAL_DOMAIN, TWITTER_USERNAME } from "~/data/config";
 import { useAnimateBanner } from "~/utils/animate-banner";
 import { articleScrolled } from "~/utils/page-scroll";
-import { A, useNavigate } from "~/utils/routing";
+import { A } from "~/utils/routing";
 
 // reading speed
 const WORDS_PER_MINUTE = 250;
-
-function useArticleData() {
-  const { articleId, articlePathname } = useArticleLocation();
-
-  if (!articleMetadataExists(articleId())) return "not-found";
-
-  const metadata = () => findArticleMetadataById(articleId());
-  const host = typeof document !== "undefined" ? document.location.host : CANONICAL_DOMAIN;
-  const protocol = typeof document !== "undefined" ? document.location.protocol : "https";
-  const articleUrl = () => `${protocol}//${host}${articlePathname()}`;
-
-  return { metadata, articleUrl, articlePathname };
-}
 
 type ArticleHeaderProps = {
   metadata: ArticleMetadata;
@@ -192,12 +173,12 @@ function Footer(props: { metadata: ArticleMetadata }) {
   );
 }
 
-export default function ArticleLayout(props: { children: import("@solidjs/web").JSX.Element }) {
-  const articleData = useArticleData();
-  if (articleData === "not-found")
-    // eslint-disable-next-line solid/components-return-once
-    return useNavigate()("/404", { replace: true });
-  const { metadata, articleUrl } = articleData;
+export default function ArticleLayout(props: {
+  metadata: ArticleMetadata;
+  children: import("@solidjs/web").JSX.Element;
+}) {
+  const metadata = () => props.metadata;
+  const articleUrl = () => `https://${CANONICAL_DOMAIN}${getArticlePath(props.metadata.id)}`;
 
   let contentDiv!: HTMLDivElement;
   const [readingMinutes, setReadingMinutes] = createSignal(1);

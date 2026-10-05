@@ -1,4 +1,4 @@
-import { useLocation } from "~/utils/routing";
+import { useMatch } from "@tanstack/solid-router";
 
 import { type ALLOWED_TOPICS } from "./config";
 import { type ArticleId, ARTICLES } from "./generated/articles";
@@ -73,14 +73,12 @@ export const ARTICLES_BY_YEAR_SORTED = Object.entries(ARTICLES_BY_YEAR).sort(
 // -----
 
 export function useArticleLocation() {
-  const location = useLocation();
-  const articlePathname = () => location().pathname.replace(/\/*$/, "");
-  const articleId = () => {
-    const match = articlePathname().match(/\S*\/([\S]*)/);
-    if (!match) throw new Error("Missing article id");
-    return match[1];
-  };
-  return { articlePathname, articleId };
+  const articleId = useMatch({
+    from: "/article/$id",
+    shouldThrow: false,
+    select: (match) => match.params.id
+  });
+  return { articleId };
 }
 
 export function getArticlePath(id: ArticleId) {

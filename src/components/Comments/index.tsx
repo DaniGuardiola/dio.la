@@ -10,7 +10,12 @@ import { Giscus } from "./Giscus";
 export function Comments() {
   const location = useLocation();
   const [pathname, setPathname] = createSignal(location().pathname);
-  createEffect(() => location().pathname, setPathname);
+  createEffect(
+    () => location().pathname,
+    (nextPathname) => {
+      setPathname(nextPathname);
+    }
+  );
   let giscusWidgetEl!: HTMLElement & { requestUpdate?: () => void };
 
   createEffect(pathname, () => {

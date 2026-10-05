@@ -13,8 +13,8 @@ import { isDrafts, isLocalhost } from "./utils/is-host";
 import { headerScrolled, scrolledAtTop, setUpPageScroll } from "./utils/page-scroll";
 import { theme, ThemeScript, toggleTheme } from "./utils/theme";
 
-import fontStyles from "./fonts.css?url";
-import rootStyles from "./root.css?url";
+import "./fonts.css";
+import "./root.css";
 
 function NavLink(props: ComponentProps<typeof A>) {
   return (
@@ -67,7 +67,7 @@ function Header() {
       )}
     >
       <div class="main-container px-4 w-full mx-auto flex">
-        <a href="/" aria-label="go to homepage" class="group focus-ring rounded-xs">
+        <A href="/" aria-label="go to homepage" class="group focus-ring rounded-xs" end>
           <p
             class={clsx(
               clsx(
@@ -95,7 +95,7 @@ function Header() {
           >
             Dani Guardio<span class="text-accent-invert">la</span>’s blog
           </p>
-        </a>
+        </A>
         <nav class={clsx("ml-auto flex items-end gap-2", "sm:gap-4")}>
           <NavLink href="/" end aria-label="articles">
             articles
@@ -145,12 +145,7 @@ export default function Root(props: { children: import("@solidjs/web").JSX.Eleme
   return (
     <html class={theme()} lang="en" prefix="og: http://ogp.me/ns#">
       <head>
-        <link rel="stylesheet" href={rootStyles} />
-        <link rel="stylesheet" href={fontStyles} />
-        {/* Keep route metadata fresh while document styles stay mounted. */}
-        <Show when={location().pathname} keyed>
-          {(_pathname) => <HeadContent />}
-        </Show>
+        <HeadContent />
         <meta charset="utf-8" />
         {/* prevent indexing drafts website */}
         {isDrafts() && <meta name="robots" content="noindex" />}
